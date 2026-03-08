@@ -1,22 +1,29 @@
+//Definindo Consts
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session')
+const path = require('path');
+
 const logger = require('morgan');
 const helmet = require('helmet');
-const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT;
 
+//App.set diretórios
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'src/views'))
 app.set(express.static, path.join(__dirname, 'public'))
 
+//App.use imports
 app.use(logger('dev'))
 app.use(helmet())
 
+//Body parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//Session
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
@@ -27,7 +34,7 @@ app.use(session({
 })
 )
 
-
+//Rotas
 app.get('/', (req, res) => {
     res.render('index')
 })
