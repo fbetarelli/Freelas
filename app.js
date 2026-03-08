@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session')
+const LoginRoutes = require('./src/routes/LoginRoutes');
 const path = require('path');
 
 const logger = require('morgan');
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
+app.use('/', LoginRoutes)
 
 app.listen(PORT, (err) => {
     if (err) {
