@@ -1,7 +1,7 @@
 CREATE TABLE users (
     codigo SERIAL PRIMARY KEY,  
     login VARCHAR(50) NOT NULL,  
-    senha VARCHAR(255) NOT NULL  
+    senha VARCHAR(100) NOT NULL  
 );
 
 CREATE TABLE clientes (
