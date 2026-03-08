@@ -4,7 +4,8 @@ const path = require('path')
 const app = express();
 const PORT = process.env.PORT;
 
-
+app.use('view engine', 'ejs')
+app.use('views', path.join(__dirname, 'src/views'))
 
 
 
