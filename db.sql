@@ -1,57 +1,61 @@
 CREATE TABLE users (
-    codigo SERIAL PRIMARY KEY,  
+    id SERIAL PRIMARY KEY,  
     login VARCHAR(50) NOT NULL,  
-    senha VARCHAR(100) NOT NULL  
+    hashpassword VARCHAR(100) NOT NULL  
 );
 
-CREATE TABLE clientes (
-    codigo SERIAL PRIMARY KEY,  
-    nome VARCHAR(50) NOT NULL,
-    endereco VARCHAR(255), 
-    contato VARCHAR(150),
-	coduser INT REFERENCES users (codigo) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+CREATE TABLE clients (
+    id SERIAL PRIMARY KEY,  
+    name VARCHAR(50) NOT NULL,
+    address VARCHAR(255), 
+    contact VARCHAR(150),
+	userId INT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
-CREATE TABLE servicos (
-	codigo SERIAL PRIMARY KEY,
-	dataServico DATE,
+CREATE TABLE jobs (
+	id SERIAL PRIMARY KEY,
+	jobDate DATE,
 	descr VARCHAR(150),
-	pago BOOLEAN,
-	valorTotal FLOAT,
-	codcliente INT REFERENCES clientes (codigo) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-	coduser INT REFERENCES users (codigo) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+	payed BOOLEAN,
+	totalValue FLOAT,
+	clientId INT REFERENCES clients (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+	userId INT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
-CREATE TABLE pagamentos (
-	codigo SERIAL PRIMARY KEY,
-	metodo VARCHAR(50),
-	dataPagamento DATE,
-	valor FLOAT,
-	parcela INT,
-	codservico INT REFERENCES servicos (codigo) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+CREATE TABLE payments (
+	id SERIAL PRIMARY KEY,
+	method VARCHAR(50),
+	paymentDate DATE,
+	value FLOAT,
+	installment INT,
+	jobId INT REFERENCES jobs (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
-CREATE TABLE materiais (
-	codigo SERIAL PRIMARY KEY,
+CREATE TABLE materials (
+	id SERIAL PRIMARY KEY,
 	descr VARCHAR(50),
-	fornecedor VARCHAR(250),
-	QTDE INT,
-	valorUni FLOAT,
-	codservico INT REFERENCES servicos (codigo) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+	supplier VARCHAR(250),
+	qnt INT,
+	unitaryVal FLOAT,
+	jobId INT REFERENCES jobs (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
 
 
 select * from users;
-select * from clientes;
-select * from servicos;
-select * from pagamentos;
-select * from materiais;
+select * from clients;
+select * from jobs;
+select * from payments;
+select * from materials;
 
+drop table materials;
+drop table payments;
+drop table jobs;
+drop table clients;
 drop table users;
-drop table clientes;
-drop table servicos;
-drop table pagamentos;
-drop table materiais;
+
+
+
+
 
 
