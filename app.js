@@ -1,14 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session')
-const path = require('path')
+const logger = require('morgan');
+const helmet = require('helmet');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT;
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'src/views'))
-app.use(express.static, path.join(__dirname, 'public'))
+app.set(express.static, path.join(__dirname, 'public'))
 
+app.use(logger('dev'))
+app.use(helmet())
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
