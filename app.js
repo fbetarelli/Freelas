@@ -2,7 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session')
-const LoginRoutes = require('./src/routes/LoginRoutes');
+const UserRoutes = require('./src/routes/UserRoutes');
 const path = require('path');
 
 const logger = require('morgan');
@@ -37,10 +37,10 @@ app.use(session({
 
 //Rotas
 app.get('/', (req, res) => {
-    res.render('index')
+    res.redirect('/register')
 })
 
-app.use('/', LoginRoutes)
+app.use('/', UserRoutes)
 
 app.listen(PORT, (err) => {
     if (err) {
