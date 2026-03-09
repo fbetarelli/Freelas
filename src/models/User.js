@@ -3,10 +3,10 @@ class User {
     #login
     #hashPassword
 
-    constructor({ id, login, hash }) {
+    constructor({ id, login, hashPassword }) {
         this.#id = id;
         this.#login = login;
-        this.#hashPassword = hash;
+        this.#hashPassword = hashPassword;
     }
 
     getId() { return this.#id }

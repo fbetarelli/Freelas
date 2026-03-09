@@ -23,18 +23,24 @@ class UserDAO {
         }
     }
 
-    async loginExists(login) {
+    async findByLogin(login) {
         try {
-            const query = `SELECT 1 FROM users WHERE login=$1 LIMIT 1`
+            const query = `SELECT * FROM users WHERE login=$1 LIMIT 1`
             const params = [login]
 
             const res = await pool.query(query, params);
 
             if (res.rows.length > 0) {
-                return true
+                let user = new User({
+                    id: res.rows[0].id,
+                    login: res.rows[0].login,
+                    hashPassword: res.rows[0].hashpassword
+                });
+                return user
             }
 
-            return false
+            return null
+
         } catch (error) {
             console.error('Erro no UserDAO loginExiste' + error);
             throw error
