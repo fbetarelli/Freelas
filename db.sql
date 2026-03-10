@@ -48,6 +48,9 @@ select * from jobs;
 select * from payments;
 select * from materials;
 
+
+
+
 drop table materials;
 drop table payments;
 drop table jobs;
