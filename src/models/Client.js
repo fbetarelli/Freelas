@@ -33,6 +33,15 @@ class Client {
         return this.#userId
     }
 
+    toJSON() {
+        return {
+            id: this.#id,
+            name: this.#name,
+            contact: this.#contact,
+            address: this.#address,
+            userId: this.#userId
+        }
+    }
 
 }
 

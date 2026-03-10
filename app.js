@@ -15,7 +15,7 @@ const PORT = process.env.PORT;
 //App.set diretórios
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'src/views'))
-app.set(express.static, path.join(__dirname, 'public'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 //App.use imports
 app.use(logger('dev'))

@@ -21,3 +21,20 @@ exports.addClient = async (req, res) => {
         console.error('Erro no addClient controller ' + error)
     }
 }
+exports.getClients = async (req, res) => {
+    try {
+
+        const result = await ClientServices.getClients(req.session.user.id);
+
+        if (result.success) {
+            res.json({
+                success: true,
+                clients: result.clientsArray.map(c => c.toJSON())
+            })
+        } else {
+            res.render('erro', { errorMessage: result.errMsg })
+        }
+    } catch (error) {
+        console.error('Erro no getClient controller ' + error)
+    }
+}
