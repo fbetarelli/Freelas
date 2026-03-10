@@ -52,6 +52,36 @@ class ClientDAO {
         }
 
     }
+    async getClientById(clientId) {
+        const query = `SELECT * FROM clients WHERE id=$1`
+        const params = [clientId]
+
+        try {
+            const res = await pool.query(query, params);
+
+            if (res.rows.length > 0) {
+
+
+                let client = new Client({
+                    id: res.rows[0].id,
+                    name: res.rows[0].name,
+                    address: res.rows[0].address,
+                    contact: res.rows[0].contact,
+                    userId: res.rows[0].userid
+                })
+
+                return client;
+            } else {
+                return null
+            }
+        } catch (error) {
+            console.error('Erro no ClienteDAO getClients ' + error)
+            throw error
+        }
+
+    }
+
+
 
 
 }

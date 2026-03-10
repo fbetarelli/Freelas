@@ -29,3 +29,14 @@ exports.getClients = async (userId) => {
         return { success: false, errMsg: error };
     }
 }
+
+exports.getClientById = async (id) => {
+    let dao = new ClientDAO;
+    try {
+        const client = await dao.getClientById(id);
+        return { success: true, client };
+
+    } catch (error) {
+        return { success: false, errMsg: error };
+    }
+} 

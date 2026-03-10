@@ -4,6 +4,7 @@ const express = require('express');
 const session = require('express-session')
 const UserRoutes = require('./src/routes/UserRoutes');
 const DashboardRoutes = require('./src/routes/DashboardRoutes');
+const ClientRoutes = require('./src/routes/ClientRoutes');
 const path = require('path');
 
 const logger = require('morgan');
@@ -43,6 +44,7 @@ app.get('/', (req, res) => {
 
 app.use('/', UserRoutes)
 app.use('/', DashboardRoutes)
+app.use('/', ClientRoutes)
 
 app.listen(PORT, (err) => {
     if (err) {

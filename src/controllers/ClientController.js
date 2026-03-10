@@ -1,5 +1,6 @@
 const Client = require('../models/Client');
 const ClientServices = require('../services/ClientServices')
+const JobServices = require('../services/JobServices')
 
 exports.addClient = async (req, res) => {
     const client = new Client({
@@ -41,3 +42,23 @@ exports.getClients = async (req, res) => {
         console.error('Erro no getClient controller ' + error)
     }
 }
+
+exports.getClientPage = async (req, res) => {
+    const clientId = req.params.id;
+
+    try {
+        const clientResult = await ClientServices.getClientById(clientId);
+        const jobsResult = await JobServices.getJobsByClient(clientId);
+
+        if (clientResult.success && jobsResult.success) {
+            res.render('clientPage', { client: clientResult.client, jobs: jobsResult.jobsArray })
+
+        } else {
+            res.render('erro', { errorMessage: clientResult.errMsg || jobsResult.errMsg })
+        }
+    } catch (error) {
+        console.error('Erro no getClientPage controller ' + error)
+    }
+
+}
+
