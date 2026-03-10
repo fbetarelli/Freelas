@@ -37,11 +37,14 @@ function createCard(client) {
         <h3>${client.name}</h3>
         <p>${client.contact}</p>
         <p>${client.address}</p>
-        <a class="listServicesByClientBtn" href="/getServices?client=${client.id}">Ver serviços</a> </br>
+        <a class="listServicesByClientBtn" href="/client/${client.id}">Ver serviços</a> </br>
         
         `)
     return div;
 }
+
+
+// rota para serviços de um cliente especifico /services?client=${client.id}
 
 
 document.addEventListener('DOMContentLoaded', () => {
