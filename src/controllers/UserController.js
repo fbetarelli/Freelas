@@ -16,7 +16,7 @@ exports.login = async (req, res) => {
             login: result.user.login,
         }
         // res.redirect('dashboard', { user: result.user })
-        res.render('dashboard')
+        res.redirect('/dashboard')
     } else {
         res.render('erro', { errorMessage: result.errMsg })
     }
@@ -38,8 +38,14 @@ exports.register = async (req, res) => {
             login: result.user.login,
         }
         // res.redirect('dashboard', { user: result.user })
-        res.render('dashboard')
+        res.redirect('/dashboard')
     } else {
         res.render('erro', { errorMessage: result.errMsg })
     }
+}
+
+exports.logout = (req, res) => {
+    req.session.user = null;
+    res.redirect('/login');
+
 }
