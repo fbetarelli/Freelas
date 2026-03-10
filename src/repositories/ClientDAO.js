@@ -39,8 +39,6 @@ class ClientDAO {
                         contact: obj.contact,
                         userId: obj.userid
                     })
-                    console.log(client.getId())
-                    console.log(clientsArray)
                     clientsArray.push(client);
 
                 });

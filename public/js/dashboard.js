@@ -1,5 +1,6 @@
 const clientList = document.getElementById('clientList')
 
+//função que busca clientes por fetch
 async function getClients() {
     try {
         const dados = await fetch('/getClients');
@@ -18,6 +19,7 @@ async function getClients() {
 
 }
 
+//função que lista clientes e cria cards
 async function listClients() {
     const clientsArray = await getClients();
     clientsArray.forEach(client => {

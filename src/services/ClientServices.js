@@ -21,7 +21,7 @@ exports.getClients = async (userId) => {
             return { success: true, clientsArray }
         } else {
 
-            return { success: false, errMsg: 'Nenhum cliente encontrado' }
+            return { success: false, errMsg: 'Nenhum cliente encontrado.' }
         }
 
     } catch (error) {

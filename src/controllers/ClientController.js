@@ -21,6 +21,8 @@ exports.addClient = async (req, res) => {
         console.error('Erro no addClient controller ' + error)
     }
 }
+
+
 exports.getClients = async (req, res) => {
     try {
 
@@ -29,6 +31,7 @@ exports.getClients = async (req, res) => {
         if (result.success) {
             res.json({
                 success: true,
+                //transforma obj de classe privada em obj json, impedindo o objeto de ser salvo sem dados
                 clients: result.clientsArray.map(c => c.toJSON())
             })
         } else {
