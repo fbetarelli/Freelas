@@ -12,8 +12,8 @@ exports.login = async (req, res) => {
 
     if (result.success === true) {
         req.session.user = {
-            id: result.user.id,
-            login: result.user.login,
+            id: result.user.getId(),
+            login: result.user.getLogin(),
         }
         // res.redirect('dashboard', { user: result.user })
         res.redirect('/dashboard')

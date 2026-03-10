@@ -10,6 +10,19 @@
 <body>
     <h1>dashboards</h1> </br>
     <a href="/logout">Sair</a>
+    <h3>Adicionar Cliente</h3> </br>
+    <form method="POST" action="/addClient">
+        *Obrigatório </br>
+        * Nome: </br>
+        <input type="text" name="name" placeholder="insira o nome do cliente" required /> </br>
+        Endereço (opcional): </br>
+        <input type="text" name="address" placeholder="insira o ednereço do cliente" /> </br>
+        * Contato: </br>
+        <input type="text" name="contact" placeholder="insira o contato do cliente" required /> </br>
+        <button type="submit">
+            Enviar
+        </button>
+    </form>
 </body>
 
 </html>

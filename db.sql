@@ -48,7 +48,7 @@ select * from jobs;
 select * from payments;
 select * from materials;
 
-
+INSERT INTO clients(name,address,contact,userID) VALUES ('nome','endereco','contato','2') RETURNING 1
 
 
 drop table materials;

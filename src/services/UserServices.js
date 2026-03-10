@@ -8,7 +8,6 @@ exports.login = async (login, password) => {
 
         let user = await dao.findByLogin(login)
         if (user) {
-            console.log(user.gethashPassword())
             let validate = await bcrypt.compare(password, user.gethashPassword())
             if (validate) {
                 return { success: true, user }
