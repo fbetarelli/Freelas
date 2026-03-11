@@ -30,11 +30,12 @@ exports.getClients = async (req, res) => {
         const result = await ClientServices.getClients(req.session.user.id);
 
         if (result.success) {
-            res.json({
+            return ({
                 success: true,
-                //transforma obj de classe privada em obj json, impedindo o objeto de ser salvo sem dados
-                clients: result.clientsArray.map(c => c.toJSON())
+                clients: result.clientsArray
             })
+
+
         } else {
             res.render('erro', { errorMessage: result.errMsg })
         }
