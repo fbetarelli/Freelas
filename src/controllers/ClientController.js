@@ -52,7 +52,7 @@ exports.getClients = async (req, res) => {
         if (result.success) {
             return ({
                 success: true,
-                clients: result.clientsArray
+                clients: result.clients
             })
 
 

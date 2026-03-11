@@ -12,20 +12,22 @@
     <h1>dashboards</h1> </br>
     <a href="/logout">Sair</a>
 
-    <% for(let i=0; i < clients.length; i++) { %>
+    <% clients.forEach(client=> {
+
+        %>
         <div class="">
             <h3>
-                <%= clients[i].getName() %>
+                <%= client.name %>
             </h3>
             <p>
-                <%= clients[i].getContact() %>
+                <%= client.contact%>
             </p>
             <p>
-                <%= clients[i].getAddress() %>
+                <%= client.address %>
             </p>
-            <a href="/client/<%=clients[i].getId()%>">Ver informações e serviços</a> </br>
+            <a href="/client/<%= client.id %>">Ver informações e serviços</a> </br>
         </div>
-        <% } %>
+        <% })%>
 
 
             <h3>Adicionar Cliente</h3> </br>

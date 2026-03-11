@@ -9,10 +9,10 @@
 
 <body>
     <h1>
-        <%= client.getName()%>
-            <%= client.getId()%>
+        <%= client.name%>
+            <%= client.id%>
     </h1>
-    <form method="POST" action="/client/<%=client.getId()%>/edit">
+    <form method="POST" action="/client/<%=client.id%>/edit">
         Nome: </br>
         <input type="text" name="name" placeholder="editar o nome do cliente" /> </br>
         Endereço: </br>

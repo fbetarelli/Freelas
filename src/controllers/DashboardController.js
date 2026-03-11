@@ -5,7 +5,7 @@ exports.showDashboard = async (req, res) => {
         const result = await ClientServices.getClients(req.session.user.id);
 
         if (result.success) {
-            res.render('dashboard', { clients: result.clientsArray })
+            res.render('dashboard', { clients: result.clients })
         } else {
             res.render('erro', { errorMessage: result.errMsg })
         }

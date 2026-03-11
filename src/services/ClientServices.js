@@ -1,5 +1,6 @@
 const Client = require('../models/Client');
 const ClientDAO = require('../repositories/ClientDAO');
+const ClientDTO = require('../DTO/ClientDTO');
 
 exports.addClient = async (client) => {
     let dao = new ClientDAO
@@ -14,7 +15,6 @@ exports.addClient = async (client) => {
 exports.editClient = async (client) => {
     let dao = new ClientDAO
 
-
     try {
         await dao.editClient(client);
         return { success: true };
@@ -27,14 +27,22 @@ exports.editClient = async (client) => {
 exports.getClients = async (userId) => {
     let dao = new ClientDAO;
     try {
-        const clientsArray = await dao.getClients(userId)
-        if (clientsArray && clientsArray.length > 0) {
+        const result = await dao.getClients(userId)
+        const DTOArray = []
 
-            return { success: true, clientsArray }
-        } else {
-
-            return { success: false, errMsg: 'Nenhum cliente encontrado.' }
+        if (result && result.length > 0) {
+            result.forEach(entity => {
+                let dto = new ClientDTO({
+                    id: entity.getId(),
+                    name: entity.getName(),
+                    address: entity.getAddress(),
+                    contact: entity.getContact()
+                })
+                DTOArray.push(dto)
+            })
         }
+
+        return { success: true, clients: DTOArray }
 
     } catch (error) {
 
@@ -46,7 +54,13 @@ exports.getClientById = async (id) => {
     let dao = new ClientDAO;
     try {
         const client = await dao.getClientById(id);
-        return { success: true, client };
+        let dto = new ClientDTO({
+            id: client.getId(),
+            name: client.getName(),
+            address: client.getAddress(),
+            contact: client.getContact()
+        })
+        return { success: true, client: dto };
 
     } catch (error) {
         return { success: false, errMsg: error };

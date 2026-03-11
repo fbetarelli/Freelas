@@ -9,6 +9,7 @@ CREATE TABLE clients (
     name VARCHAR(50) NOT NULL,
     address VARCHAR(255), 
     contact VARCHAR(150),
+	lastservice TIMESTAMP,
 	userId INT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
@@ -21,6 +22,8 @@ CREATE TABLE jobs (
 	clientId INT REFERENCES clients (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 	userId INT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
+
+
 
 CREATE TABLE payments (
 	id SERIAL PRIMARY KEY,
@@ -50,6 +53,7 @@ select * from materials;
 
 INSERT INTO clients(name,address,contact,userID) VALUES ('nome','endereco','contato','2') RETURNING 1
 
+SELECT * FROM clients WHERE userId=1
 
 drop table materials;
 drop table payments;
