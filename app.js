@@ -39,7 +39,7 @@ app.use(session({
 
 //Rotas
 app.get('/', (req, res) => {
-    res.redirect('/register')
+    res.redirect('/dashboard')
 })
 
 app.use('/', UserRoutes)

@@ -6,5 +6,6 @@ const authenticate = require('../middlewares/authenticationMiddleware');
 
 
 router.get('/client/:id', authenticate, ClientController.getClientPage);
+router.post('/client/:id/edit', authenticate, ClientController.editClient);
 
 module.exports = router;

@@ -10,14 +10,26 @@
 <body>
     <h1>
         <%= client.getName()%>
+            <%= client.getId()%>
     </h1>
-    
+    <form method="POST" action="/client/<%=client.getId()%>/edit">
+        Nome: </br>
+        <input type="text" name="name" placeholder="editar o nome do cliente" /> </br>
+        Endereço: </br>
+        <input type="text" name="address" placeholder="editar o endereço do cliente" /> </br>
+        Contato: </br>
+        <input type="text" name="contact" placeholder="editar o contato do cliente" /> </br>
+        <button type="submit">
+            Enviar
+        </button>
+    </form>
     <h3>serviços</h3>
-    <% jobs.forEach(job=> { %>
-        <p>
-            <%=job.getDescription()%>
-        </p>
-        <% }); %>
+    <% if(jobs.length>0 ) { %>
+        <% jobs.forEach(job=> { %>
+            <p>
+                <%=job.getDescription()%>
+            </p>
+            <% })}; %>
 
 </body>
 

@@ -22,6 +22,26 @@ exports.addClient = async (req, res) => {
         console.error('Erro no addClient controller ' + error)
     }
 }
+exports.editClient = async (req, res) => {
+    const client = ({
+        id: req.params.id,
+        name: req.body.name,
+        address: req.body.address,
+        contact: req.body.contact
+    })
+
+    try {
+        const result = await ClientServices.editClient(client);
+
+        if (result.success) {
+            res.redirect(`/client/${req.params.id}`)
+        } else {
+            res.render('erro', { errorMessage: result.errMsg })
+        }
+    } catch (error) {
+        console.error('Erro no addClient controller ' + error)
+    }
+}
 
 
 exports.getClients = async (req, res) => {

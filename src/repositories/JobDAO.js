@@ -11,9 +11,9 @@ class JobDAO {
 
         try {
             const res = await pool.query(query, params);
-
+            const jobsArray = [];
             if (res.rows.length > 0) {
-                const jobsArray = [];
+
 
                 res.rows.forEach(obj => {
                     let job = new Job({
@@ -28,7 +28,7 @@ class JobDAO {
                 });
                 return jobsArray;
             } else {
-                return null
+                return jobsArray;
             }
         } catch (error) {
             console.error('Erro no JobDAO getJobsByClient ' + error)

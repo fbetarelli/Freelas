@@ -11,6 +11,18 @@ exports.addClient = async (client) => {
         return { success: false, errMsg: error };
     }
 }
+exports.editClient = async (client) => {
+    let dao = new ClientDAO
+
+
+    try {
+        await dao.editClient(client);
+        return { success: true };
+
+    } catch (error) {
+        return { success: false, errMsg: error };
+    }
+}
 
 exports.getClients = async (userId) => {
     let dao = new ClientDAO;

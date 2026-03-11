@@ -21,6 +21,36 @@ class ClientDAO {
         }
 
     }
+    async editClient(client) {
+
+        const fields = [];
+        const values = [];
+        let index = 1
+
+        //Object entries: separa objeto em dois atributos: chave e valor;
+        Object.entries(client).forEach(([key, value]) => {
+            console.log(key, value);
+            if (value) {
+                //cria fields dinamicamente, EX: key=name, index=1, field gerado: name = $1;
+                fields.push(`${key} = $${index++}`);
+                values.push(value);
+            }
+
+
+        });
+        values.push(client.id)
+        console.log(`UPDATE clients SET ${fields.join(', ')} WHERE id=$${index}`)
+        const query = `UPDATE clients SET ${fields.join(', ')} WHERE id=$${index}`
+
+        try {
+            const res = await pool.query(query, values);
+        } catch (error) {
+
+            console.error('Erro no ClienteDAO addClient ' + error)
+            throw error
+        }
+
+    }
     async getClients(userId) {
         const query = `SELECT * FROM clients WHERE userId=$1`
         const params = [userId]
