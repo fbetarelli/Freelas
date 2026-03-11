@@ -42,6 +42,21 @@ exports.editClient = async (req, res) => {
         console.error('Erro no addClient controller ' + error)
     }
 }
+exports.deleteClient = async (req, res) => {
+    const clientId = req.params.id
+
+    try {
+        const result = await ClientServices.deleteClient(clientId);
+
+        if (result.success) {
+            res.redirect('/dashboard')
+        } else {
+            res.render('erro', { errorMessage: result.errMsg })
+        }
+    } catch (error) {
+        console.error('Erro no deleteClient controller ' + error)
+    }
+}
 
 
 exports.getClients = async (req, res) => {

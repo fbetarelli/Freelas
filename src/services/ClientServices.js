@@ -23,6 +23,17 @@ exports.editClient = async (client) => {
         return { success: false, errMsg: error };
     }
 }
+exports.deleteClient = async (clientId) => {
+    let dao = new ClientDAO
+
+    try {
+        await dao.deleteClient(clientId);
+        return { success: true };
+
+    } catch (error) {
+        return { success: false, errMsg: error };
+    }
+}
 
 exports.getClients = async (userId) => {
     let dao = new ClientDAO;

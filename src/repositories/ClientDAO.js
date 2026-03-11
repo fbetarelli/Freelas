@@ -21,6 +21,19 @@ class ClientDAO {
         }
 
     }
+    async deleteClient(clientId) {
+        const query = `DELETE FROM clients WHERE userId=$1`
+        const params = [clientId]
+
+        try {
+            const res = await pool.query(query, params);
+
+        } catch (error) {
+            console.error('Erro no ClienteDAO deleteClient ' + error)
+            throw error
+        }
+
+    }
     async editClient(client) {
 
         const fields = [];
