@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router();
 const ClientController = require('../controllers/ClientController')
-const authenticate = require('../middlewares/authenticationMiddleware');
+const authorize = require('../middlewares/authorizationMiddleware');
 
 
 
-router.get('/client/:id', authenticate, ClientController.getClientPage);
-router.post('/client/:id/edit', authenticate, ClientController.editClient);
+router.get('/client/:id', authorize, ClientController.getClientPage);
+router.post('/client/:id/edit', authorize, ClientController.editClient);
 
 module.exports = router;
