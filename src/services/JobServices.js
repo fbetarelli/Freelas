@@ -24,9 +24,10 @@ exports.getJobsByClient = async (clientId) => {
 
         if (result && result.length > 0) {
             result.forEach(entity => {
+
                 let dto = new JobDTO({
                     id: entity.getId(),
-                    jobDate: entity.getJobDate(),
+                    jobDate: formatarData(entity.getJobDate()),
                     descr: entity.getDescription(),
                     payed: entity.isPayed(),
                     totalValue: entity.getTotalValue()
@@ -40,4 +41,16 @@ exports.getJobsByClient = async (clientId) => {
 
         return { success: false, errMsg: error };
     }
+}
+
+function formatarData(data) {
+    const dateFromDB = new Date(data);
+
+    // Formatar para PT-BR (12/03/2026)
+    const formattedDate = dateFromDB.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+    return formattedDate;
 }

@@ -34,10 +34,10 @@ class JobDAO {
                 res.rows.forEach(obj => {
                     let job = new Job({
                         id: obj.id,
-                        jobDate: obj.jobDate,
+                        jobDate: obj.jobdate,
                         descr: obj.descr,
                         payed: obj.payed,
-                        totalValue: obj.totalValue,
+                        totalValue: obj.totalvalue,
                     })
                     jobsArray.push(job);
 

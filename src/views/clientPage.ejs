@@ -38,11 +38,18 @@
             Enviar
         </button>
     </form>
-    <h3>serviços</h3>
+    <h3>Serviços</h3>
     <% if(jobs.length>0 ) { %>
         <% jobs.forEach(job=> { %>
             <p>
+                <b>Descrição:</b>
                 <%=job.descr%>
+                    <b>Data Realizada:</b>
+                    <%=job.jobDate%>
+                        <b> Valor Total:</b>
+                        <%=job.totalValue%> </br>
+                            <a href='/services/<%=job.id%>/edit'>Editar Serviço</a>
+                            <a href='/services/<%=job.id%>/delete'>Apagar Serviço</a>
             </p>
             <% })}; %>
 
