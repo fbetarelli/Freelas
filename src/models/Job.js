@@ -23,6 +23,8 @@ class Job {
 
     getDescription() { return this.#descr }
 
+    getJobDate() { return this.#jobDate }
+
     getTotalValue() { return this.#totalValue }
 
     isPayed() { return this.#payed }

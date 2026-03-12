@@ -27,7 +27,7 @@
         <h3>Apagar cliente</h3>
     </a>
     <h3>Criar Serviço</h3>
-    <form method="POST" action="/client/<%=client.id%>/addService">
+    <form method="POST" action="/client/<%=client.id%>/addJob">
         Descrição: </br>
         <input type="text" name="descr" placeholder="Descrição do serviço" required /> </br>
         Data: </br>
@@ -42,7 +42,7 @@
     <% if(jobs.length>0 ) { %>
         <% jobs.forEach(job=> { %>
             <p>
-                <%=job.getDescription()%>
+                <%=job.descr%>
             </p>
             <% })}; %>
 

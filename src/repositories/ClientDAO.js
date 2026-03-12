@@ -22,7 +22,7 @@ class ClientDAO {
 
     }
     async deleteClient(clientId) {
-        const query = `DELETE FROM clients WHERE userId=$1`
+        const query = `DELETE FROM clients WHERE id=$1`
         const params = [clientId]
 
         try {
