@@ -7,7 +7,8 @@ class JobDTO {
     clientId
     userId
 
-    constructor({ id, jobDate, descr, payed, totalValue }) {
+    constructor({ clientId, id, jobDate, descr, payed, totalValue }) {
+        this.clientId = clientId
         this.id = id
         this.jobDate = jobDate
         this.descr = descr

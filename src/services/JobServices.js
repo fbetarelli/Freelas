@@ -4,11 +4,29 @@ const JobDAO = require('../repositories/JobDAO');
 
 exports.addJob = async (job) => {
     let dao = new JobDAO;
-    console.log('rodando add job')
     try {
         await dao.addJob(job);
-        console.log('rodou dao')
         return { success: true }
+
+
+    } catch (error) {
+
+        return { success: false, errMsg: error };
+    }
+}
+exports.getJobById = async (id) => {
+    let dao = new JobDAO;
+    try {
+        const job = await dao.getJobById(id);
+        let dto = new JobDTO({
+            clientId: job.getClientId(),
+            id: job.getId(),
+            jobDate: formatarData(job.getJobDate()),
+            descr: job.getDescription(),
+            payed: job.isPayed(),
+            totalValue: job.getTotalValue()
+        })
+        return { success: true, job: dto }
 
 
     } catch (error) {

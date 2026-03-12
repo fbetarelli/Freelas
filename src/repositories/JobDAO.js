@@ -6,14 +6,41 @@ class JobDAO {
 
 
     async addJob(job) {
-        console.log('rodando dao')
         const query = `INSERT INTO jobs(descr,jobDate,totalValue,clientId,userId) VALUES ($1,$2,$3,$4,$5)`
         const params = [job.getDescription(), job.getJobDate(), job.getTotalValue(), job.getClientId(), job.getUserId()]
 
         try {
 
             const res = await pool.query(query, params);
-            console.log('fim dao')
+
+
+        } catch (error) {
+            console.error('Erro no JobDAO addJobs ' + error)
+            throw error
+        }
+
+    }
+    async getJobById(id) {
+        const query = `SELECT * FROM jobs WHERE id=$1`
+        const params = [id]
+
+        try {
+
+            const res = await pool.query(query, params);
+            if (res.rows.length > 0) {
+                let job = new Job({
+                    clientId: res.rows[0].clientid,
+                    userId: res.rows[0].userid,
+                    id: res.rows[0].id,
+                    jobDate: res.rows[0].jobdate,
+                    descr: res.rows[0].descr,
+                    payed: res.rows[0].payed,
+                    totalValue: res.rows[0].totalvalue,
+                })
+                return job
+            }
+            return null
+
 
         } catch (error) {
             console.error('Erro no JobDAO getJobsByClient ' + error)
