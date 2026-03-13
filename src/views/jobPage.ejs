@@ -8,12 +8,16 @@
 </head>
 
 <body>
-    <b>Descrição:</b>
+    <h3>
+        <b>Descrição:</b>
+    </h3>
     <%=job.descr%>
-        <b>Data Realizada:</b>
+        <h3> <b>Data Realizada:</b> </h3>
         <%=job.jobDate%>
-            <b> Valor Total:</b>
+            <h3> <b> Valor Total:</b> </h3>
             <%=job.totalValue%> </br>
+
+
                 <a href='/job/<%=job.id%>/delete'>Deletar Serviço</a>
                 <h3>Editar Serviço</h3>
                 <form method="POST" action="/job/<%=job.id%>/edit">
@@ -28,13 +32,34 @@
                     </button>
                 </form>
                 <h3>Adicionar Material</h3>
-                <form method="POST" action="/job/<%=job.id%>/addMaterial">
+                <form method="POST" action="/job/<%=job.id%>/material/add">
                     Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>
                     Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
                     Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" /> </br>
                     Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
+                    <button type="submit">
+                        Enviar
+                    </button>
                 </form>
                 <a href='/client/<%=job.clientId%>'>Voltar</a>
+                <% if(materials.length>0 ) { %>
+                    <% materials.forEach(material=> { %>
+                        <p>
+                            <b>Descrição:</b>
+                            <%=material.descr%>
+                                <b>Quantidade:</b>
+                                <%=material.qnt%>
+                                    <b> Valor Unitário:</b>
+                                    <%=material.unitaryVal%> </br>
+                                        <b> Valor Total:</b>
+                                        <%=(material.unitaryVal*material.qnt)%> </br>
+                                            <b> Fornecedor:</b>
+                                            <%=material.supplier%> </br>
+
+                        </p>
+
+                        </br>
+                        <% })}; %>
 </body>
 
 </html>

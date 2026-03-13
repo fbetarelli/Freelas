@@ -1,5 +1,6 @@
 const Job = require('../models/Job')
 const JobServices = require('../services/JobServices');
+const MaterialServices = require('../services/MaterialServices');
 
 exports.addJob = async (req, res) => {
     console.log('rodou')
@@ -77,12 +78,13 @@ exports.getJobPage = async (req, res) => {
 
     try {
         const jobsResult = await JobServices.getJobById(jobId);
+        const materialsResult = await MaterialServices.getMaterialsByJob(jobId);
 
-        if (jobsResult.success) {
-            res.render('jobPage', { job: jobsResult.job })
+        if (jobsResult.success && materialsResult.success) {
+            res.render('jobPage', { job: jobsResult.job, materials: materialsResult.materials })
 
         } else {
-            res.render('erro', { errMsg: jobsResult.errMsg })
+            res.render('erro', { errorMessage: jobsResult.errMsg })
         }
     } catch (error) {
         console.error('Erro no getClientPage controller ' + error)
