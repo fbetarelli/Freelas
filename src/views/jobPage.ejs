@@ -15,6 +15,18 @@
             <b> Valor Total:</b>
             <%=job.totalValue%> </br>
                 <a href='/job/<%=job.id%>/delete'>Deletar Serviço</a>
+                <h3>Editar Serviço</h3>
+                <form method="POST" action="/job/<%=job.id%>/edit">
+                    Descrição: </br>
+                    <input type="text" name="descr" placeholder="Descrição do serviço" /> </br>
+                    Data: </br>
+                    <input type="date" name="date" /> </br>
+                    Valor Total: </br>
+                    <input type="text" name="totalValue" placeholder="Valor total do serviço" /> </br>
+                    <button type="submit">
+                        Enviar
+                    </button>
+                </form>
                 <h3>Adicionar Material</h3>
                 <form method="POST" action="/job/<%=job.id%>/addMaterial">
                     Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>

@@ -52,7 +52,6 @@ class ClientDAO {
 
         });
         values.push(client.id)
-        console.log(`UPDATE clients SET ${fields.join(', ')} WHERE id=$${index}`)
         const query = `UPDATE clients SET ${fields.join(', ')} WHERE id=$${index}`
 
         try {

@@ -7,7 +7,7 @@ async function authorize(req, res, next) {
         console.log(job.getUserId())
         console.log(req.session.user.id)
         if (job && req.session.user && req.session.user.id === job.getUserId()) {
-            console.log(req.originalUrl)
+
             next()
         }
         else {

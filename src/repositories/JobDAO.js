@@ -20,6 +20,34 @@ class JobDAO {
         }
 
     }
+    async editJob(job) {
+
+        try {
+            let fields = []
+            let values = []
+            let index = 1;
+
+            Object.entries(job).forEach(([key, value]) => {
+                if (value) {
+
+                    fields.push(`${key} = $${index++}`)
+                    values.push(value)
+                }
+            });
+            values.push(job.id)
+
+            const query = `UPDATE jobs SET ${fields.join(', ')} WHERE id=$${index}`
+
+
+            const res = await pool.query(query, values);
+
+
+        } catch (error) {
+            console.error('Erro no JobDAO addJobs ' + error)
+            throw error
+        }
+
+    }
     async deleteJob(jobid) {
         const query = `DELETE FROM jobs WHERE id=$1`
         const params = [jobid]
