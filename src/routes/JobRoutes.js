@@ -6,6 +6,7 @@ const authorize = require('../middlewares/jobAuth');
 
 
 router.get('/job/:id', authorize, JobController.getJobPage);
+router.get('/job/:id/delete', authorize, JobController.deleteJob);
 
 
 module.exports = router;

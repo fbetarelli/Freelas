@@ -20,6 +20,21 @@ class JobDAO {
         }
 
     }
+    async deleteJob(jobid) {
+        const query = `DELETE FROM jobs WHERE id=$1`
+        const params = [jobid]
+
+        try {
+
+            const res = await pool.query(query, params);
+
+
+        } catch (error) {
+            console.error('Erro no JobDAO addJobs ' + error)
+            throw error
+        }
+
+    }
     async getJobById(id) {
         const query = `SELECT * FROM jobs WHERE id=$1`
         const params = [id]

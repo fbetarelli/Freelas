@@ -28,6 +28,21 @@ exports.addJob = async (req, res) => {
     }
 
 }
+exports.deleteJob = async (req, res) => {
+    console.log('rodou')
+    try {
+
+        const result = await JobServices.deleteJob(req.params.id);
+        if (result.success) {
+
+            res.redirect(req.session.returnTo)
+        }
+    } catch (error) {
+        console.log('result erro')
+        res.render('erro', { errMsg: error })
+    }
+
+}
 exports.getJobPage = async (req, res) => {
     const jobId = req.params.id;
 

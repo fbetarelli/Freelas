@@ -14,6 +14,14 @@
         <%=job.jobDate%>
             <b> Valor Total:</b>
             <%=job.totalValue%> </br>
+                <a href='/job/<%=job.id%>/delete'>Deletar Serviço</a>
+                <h3>Adicionar Material</h3>
+                <form method="POST" action="/job/<%=job.id%>/addMaterial">
+                    Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>
+                    Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
+                    Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" /> </br>
+                    Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
+                </form>
                 <a href='/client/<%=job.clientId%>'>Voltar</a>
 </body>
 

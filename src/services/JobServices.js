@@ -14,6 +14,18 @@ exports.addJob = async (job) => {
         return { success: false, errMsg: error };
     }
 }
+exports.deleteJob = async (jobid) => {
+    let dao = new JobDAO;
+    try {
+        await dao.deleteJob(jobid);
+        return { success: true }
+
+
+    } catch (error) {
+
+        return { success: false, errMsg: error };
+    }
+}
 exports.getJobById = async (id) => {
     let dao = new JobDAO;
     try {
