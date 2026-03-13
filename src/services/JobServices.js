@@ -48,7 +48,7 @@ exports.getJobsByClient = async (clientId) => {
                     jobDate: formatarData(entity.getJobDate()),
                     descr: entity.getDescription(),
                     payed: entity.isPayed(),
-                    totalValue: entity.getTotalValue()
+                    totalValue: formatarValor(entity.getTotalValue())
                 })
                 DTOArray.push(dto)
             })
@@ -71,4 +71,14 @@ function formatarData(data) {
         year: 'numeric'
     });
     return formattedDate;
+}
+
+function formatarValor(val) {
+    //formata numero para separar casas.
+    const numeroFormatado = new Intl.NumberFormat(navigator.language, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(val);
+
+    return numeroFormatado
 }

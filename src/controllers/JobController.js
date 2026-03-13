@@ -4,10 +4,15 @@ const JobServices = require('../services/JobServices');
 exports.addJob = async (req, res) => {
     console.log('rodou')
     try {
+        //tira os pontos da string ex: 199,99
+        const temp = req.body.totalValue.replace(/\./g, '')
+        const valorTotal = temp.replace(/,/g, '.')
+
+
         const job = new Job({
             descr: req.body.descr,
             jobDate: req.body.date,
-            totalValue: req.body.totalValue,
+            totalValue: parseFloat(valorTotal),
             clientId: req.params.id,
             userId: req.session.user.id
         })
