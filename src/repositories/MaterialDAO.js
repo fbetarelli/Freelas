@@ -45,7 +45,7 @@ class MaterialDAO {
 
 
         } catch (error) {
-            console.error('Erro no MaterialDAO addMaterials ' + error)
+            console.error('Erro no MaterialDAO editMaterials ' + error)
             throw error
         }
 

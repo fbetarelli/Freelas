@@ -42,7 +42,7 @@ exports.editMaterial = async (req, res) => {
 
 
         const material = ({
-            id: req.body.id,
+            id: req.params.materialid,
             supplier: req.body.supplier,
             descr: req.body.descr,
             qnt: req.body.qnt,
@@ -64,10 +64,10 @@ exports.deleteMaterial = async (req, res) => {
     console.log('rodou')
     try {
 
-        const result = await MaterialServices.deleteMaterial(req.params.id);
+        const result = await MaterialServices.deleteMaterial(req.params.materialid);
         if (result.success) {
 
-            res.redirect(req.session.returnTo)
+            res.redirect(`/job/${req.params.id}`)
         }
     } catch (error) {
         console.log('result erro')

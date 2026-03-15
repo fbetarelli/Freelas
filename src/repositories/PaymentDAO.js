@@ -1,0 +1,108 @@
+const pool = require('../models/Database');
+const Payment = require('../models/Payment');
+
+class PaymentDAO {
+
+
+    async addPayment(payment) {
+        try {
+            console.log('rodou add payment dao')
+            const query = `INSERT INTO payments(method,paymentDate,value,installment,jobId) VALUES ($1,$2,$3,$4,$5)`
+            const params = [payment.getMethod(), payment.getPaymentDate(), payment.getValue(), payment.getInstallment(), payment.getJobId()]
+            console.log(query)
+            console.log(params)
+
+
+            const res = await pool.query(query, params);
+            console.log('rodou add payment dao query')
+
+        } catch (error) {
+            console.error('Erro no PaymentDAO addPayments ' + error)
+            throw error
+        }
+
+    }
+    async editPayment(payment) {
+
+        try {
+            let fields = []
+            let values = []
+            let index = 1;
+
+            Object.entries(payment).forEach(([key, value]) => {
+                if (value) {
+
+                    fields.push(`${key} = $${index++}`)
+                    values.push(value)
+                }
+            });
+            values.push(payment.id)
+
+            const query = `UPDATE payments SET ${fields.join(', ')} WHERE id=$${index}`
+           
+
+            const res = await pool.query(query, values);
+
+
+        } catch (error) {
+            console.error('Erro no PaymentDAO editPayments ' + error)
+            throw error
+        }
+
+    }
+    async deletePayment(paymentid) {
+        const query = `DELETE FROM payments WHERE id=$1`
+        const params = [paymentid]
+
+        try {
+
+            const res = await pool.query(query, params);
+
+
+        } catch (error) {
+            console.error('Erro no PaymentDAO addPayments ' + error)
+            throw error
+        }
+
+    }
+
+    async getPaymentsByJob(jobId) {
+
+        const query = `SELECT * FROM payments WHERE jobId=$1 ORDER BY paymentDate`
+        const params = [jobId]
+
+        try {
+            const res = await pool.query(query, params);
+            const paymentsArray = [];
+            if (res.rows.length > 0) {
+
+
+                res.rows.forEach(obj => {
+                    const payment = new Payment({
+                        id: obj.id,
+                        method: obj.method,
+                        paymentDate: obj.paymentdate,
+                        value: obj.value,
+                        installment: obj.installment,
+                        jobId: obj.id
+                    })
+                    paymentsArray.push(payment);
+
+                });
+
+            }
+            return paymentsArray;
+
+        } catch (error) {
+            console.error('Erro no PaymentDAO getPaymentsByJob ' + error)
+            throw error
+        }
+
+    }
+
+
+
+}
+
+
+module.exports = PaymentDAO;

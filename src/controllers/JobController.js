@@ -1,6 +1,7 @@
 const Job = require('../models/Job')
 const JobServices = require('../services/JobServices');
 const MaterialServices = require('../services/MaterialServices');
+const PaymentServices = require('../services/PaymentServices');
 
 exports.addJob = async (req, res) => {
     console.log('rodou')
@@ -79,9 +80,10 @@ exports.getJobPage = async (req, res) => {
     try {
         const jobsResult = await JobServices.getJobById(jobId);
         const materialsResult = await MaterialServices.getMaterialsByJob(jobId);
+        const paymentsResult = await PaymentServices.getPaymentsByJob(jobId);
 
-        if (jobsResult.success && materialsResult.success) {
-            res.render('jobPage', { job: jobsResult.job, materials: materialsResult.materials })
+        if (jobsResult.success && materialsResult.success && paymentsResult.success) {
+            res.render('jobPage', { job: jobsResult.job, materials: materialsResult.materials, payments: paymentsResult.payments })
 
         } else {
             res.render('erro', { errorMessage: jobsResult.errMsg })
