@@ -84,6 +84,32 @@ exports.getJobsByClient = async (clientId) => {
         return { success: false, errMsg: error };
     }
 }
+exports.getLastJobsByUser = async (userId) => {
+    let dao = new JobDAO;
+    try {
+        const result = await dao.getLastJobsByUser(userId)
+        const DTOArray = []
+
+        if (result && result.length > 0) {
+            result.forEach(entity => {
+
+                let dto = new JobDTO({
+                    id: entity.getId(),
+                    jobDate: formatarData(entity.getJobDate()),
+                    descr: entity.getDescription(),
+                    payed: entity.isPayed(),
+                    totalValue: formatarValor(entity.getTotalValue())
+                })
+                DTOArray.push(dto)
+            })
+        }
+        return { success: true, jobs: DTOArray }
+
+    } catch (error) {
+
+        return { success: false, errMsg: error };
+    }
+}
 
 function formatarData(data) {
     const dateFromDB = new Date(data);

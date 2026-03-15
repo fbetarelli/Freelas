@@ -122,6 +122,37 @@ class JobDAO {
         }
 
     }
+    async getLastJobsByUser(userId) {
+        const query = `SELECT * FROM jobs WHERE userId=$1 ORDER BY jobDate DESC LIMIT 5 `
+        const params = [userId]
+
+        try {
+            const res = await pool.query(query, params);
+            const jobsArray = [];
+            if (res.rows.length > 0) {
+
+
+                res.rows.forEach(obj => {
+                    let job = new Job({
+                        id: obj.id,
+                        jobDate: obj.jobdate,
+                        descr: obj.descr,
+                        payed: obj.payed,
+                        totalValue: obj.totalvalue,
+                    })
+                    jobsArray.push(job);
+
+                });
+                return jobsArray;
+            } else {
+                return jobsArray;
+            }
+        } catch (error) {
+            console.error('Erro no JobDAO getJobsByClient ' + error)
+            throw error
+        }
+
+    }
 
 
 

@@ -11,38 +11,55 @@
 <body>
     <h1>dashboards</h1> </br>
     <a href="/logout">Sair</a>
+    <h1>Últimos serviços:</h1>
 
-    <% clients.forEach(client=> {
-
-        %>
-        <div class="">
-            <h3>
-                Nome: <%= client.name %>
-            </h3>
+    <% if(jobs.length>0 ) { %>
+        <% jobs.forEach(job=> { %>
             <p>
-                Contato: <%= client.contact%>
+                <b>Descrição:</b>
+                <%=job.descr%>
+                    <b>Data Realizada:</b>
+                    <%=job.jobDate%>
+                        <b> Valor Total:</b>
+                        <%=job.totalValue%> </br>
+                            <a href='/job/<%=job.id%>'>Ver Serviço</a>
             </p>
-            <p>
-                Endereço: <%= client.address %>
-            </p>
-            <a href="/client/<%= client.id %>">Ver informações e serviços</a> </br>
-        </div>
-        <% })%>
+
+            </br>
+            <% })}; %>
+                <h1>Lista de Clientes:</h1>
+                <% clients.forEach(client=> {
+
+                    %>
+                    <div class="">
+                        <h3>
+                            Nome: <%= client.name %>
+                        </h3>
+                        <p>
+                            Contato: <%= client.contact%>
+                        </p>
+                        <p>
+                            Endereço: <%= client.address %>
+                        </p>
+                        <a href="/client/<%= client.id %>">Ver informações e serviços</a> </br>
+                    </div>
+                    <% })%>
 
 
-            <h3>Adicionar Cliente</h3>
-            <form method="POST" action="/addClient">
-                *Obrigatório </br>
-                * Nome: </br>
-                <input type="text" name="name" placeholder="insira o nome do cliente" required /> </br>
-                Endereço (opcional): </br>
-                <input type="text" name="address" placeholder="insira o endereço do cliente" /> </br>
-                * Contato: </br>
-                <input type="text" name="contact" placeholder="insira o contato do cliente" required /> </br>
-                <button type="submit">
-                    Enviar
-                </button>
-            </form>
+                        <h3>Adicionar Cliente</h3>
+                        <form method="POST" action="/addClient">
+                            *Obrigatório </br>
+                            * Nome: </br>
+                            <input type="text" name="name" placeholder="insira o nome do cliente" required /> </br>
+                            Endereço (opcional): </br>
+                            <input type="text" name="address" placeholder="insira o endereço do cliente" /> </br>
+                            * Contato: </br>
+                            <input type="text" name="contact" placeholder="insira o contato do cliente" required />
+                            </br>
+                            <button type="submit">
+                                Enviar
+                            </button>
+                        </form>
 </body>
 
 </html>

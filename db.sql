@@ -43,13 +43,17 @@ CREATE TABLE materials (
 	jobId INT REFERENCES jobs (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
-
+SELECT * FROM jobs WHERE userId=1 ORDER BY jobDate LIMIT 5
 
 select * from users;
 select * from clients;
 select * from jobs;
 select * from payments;
+
+SELECT * FROM payments WHERE jobId=21 ORDER BY paymentDate
 select * from materials;
+
+
 
 INSERT INTO clients(name,address,contact,userID) VALUES ('nome','endereco','contato','2') RETURNING 1
 
