@@ -39,7 +39,7 @@ class PaymentDAO {
             values.push(payment.id)
 
             const query = `UPDATE payments SET ${fields.join(', ')} WHERE id=$${index}`
-           
+
 
             const res = await pool.query(query, values);
 
@@ -95,6 +95,26 @@ class PaymentDAO {
 
         } catch (error) {
             console.error('Erro no PaymentDAO getPaymentsByJob ' + error)
+            throw error
+        }
+
+    }
+    async getTotalFromLastMonth(userId) {
+
+        const query = `SELECT SUM(payments.value) FROM payments
+                        JOIN jobs ON payments.jobId = jobs.id
+                        WHERE jobs.userId = 1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`
+        const params = [userId]
+
+        try {
+            const res = await pool.query(query, params);
+            if (res.rows.length > 0) {
+                return res.rows[0]
+            }
+            return null;
+
+        } catch (error) {
+            console.error('Erro no PaymentDAO getTotalFromLastMonth ' + error)
             throw error
         }
 
