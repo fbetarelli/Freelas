@@ -42,14 +42,7 @@ exports.getJobById = async (id) => {
     let dao = new JobDAO;
     try {
         const job = await dao.getJobById(id);
-        let dto = new JobDTO({
-            clientId: job.getClientId(),
-            id: job.getId(),
-            jobDate: formatarData(job.getJobDate()),
-            descr: job.getDescription(),
-            payed: job.isPayed(),
-            totalValue: job.getTotalValue()
-        })
+        let dto = toDTO(job)
         return { success: true, job: dto }
 
 
@@ -66,14 +59,8 @@ exports.getJobsByClient = async (clientId) => {
 
         if (result && result.length > 0) {
             result.forEach(entity => {
+                let dto = toDTO(entity)
 
-                let dto = new JobDTO({
-                    id: entity.getId(),
-                    jobDate: formatarData(entity.getJobDate()),
-                    descr: entity.getDescription(),
-                    payed: entity.isPayed(),
-                    totalValue: formatarValor(entity.getTotalValue())
-                })
                 DTOArray.push(dto)
             })
         }
@@ -93,13 +80,7 @@ exports.getLastJobsByUser = async (userId) => {
         if (result && result.length > 0) {
             result.forEach(entity => {
 
-                let dto = new JobDTO({
-                    id: entity.getId(),
-                    jobDate: formatarData(entity.getJobDate()),
-                    descr: entity.getDescription(),
-                    payed: entity.isPayed(),
-                    totalValue: formatarValor(entity.getTotalValue())
-                })
+                let dto = toDTO(entity)
                 DTOArray.push(dto)
             })
         }
@@ -110,6 +91,7 @@ exports.getLastJobsByUser = async (userId) => {
         return { success: false, errMsg: error };
     }
 }
+
 
 function formatarData(data) {
     const dateFromDB = new Date(data);
@@ -125,10 +107,22 @@ function formatarData(data) {
 
 function formatarValor(val) {
     //formata numero para separar casas.
-    const numeroFormatado = new Intl.NumberFormat(navigator.language, {
+    const numeroFormatado = new Intl.NumberFormat('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     }).format(val);
 
     return numeroFormatado
+}
+
+function toDTO(obj) {
+    let dto = new JobDTO({
+        id: obj.getId(),
+        clientId: obj.getClientId(),
+        jobDate: formatarData(obj.getJobDate()),
+        descr: obj.getDescription(),
+        payed: (obj.isPayed() ? 'Serviço pago' : 'Aguardando pagamento'),
+        totalValue: formatarValor(obj.getTotalValue())
+    })
+    return dto
 }

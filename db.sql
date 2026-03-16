@@ -9,7 +9,7 @@ CREATE TABLE clients (
     name VARCHAR(50) NOT NULL,
     address VARCHAR(255), 
     contact VARCHAR(150),
-	lastservice TIMESTAMP,
+	dateModified TIMESTAMP,
 	userId INT REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 

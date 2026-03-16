@@ -43,6 +43,7 @@ exports.editJob = async (req, res) => {
 
         const job = ({
             id: req.params.id,
+            payed: req.body.payed ? true : false,
             descr: req.body.descr,
             jobDate: req.body.date,
             totalValue: valorTotal,
@@ -86,7 +87,7 @@ exports.getJobPage = async (req, res) => {
             res.render('jobPage', { job: jobsResult.job, materials: materialsResult.materials, payments: paymentsResult.payments })
 
         } else {
-            res.render('erro', { errorMessage: jobsResult.errMsg })
+            res.render('erro', { errorMessage: jobsResult.errMsg || materialsResult.errMsg || paymentsResult.errMsg })
         }
     } catch (error) {
         console.error('Erro no getClientPage controller ' + error)

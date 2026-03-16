@@ -4,14 +4,14 @@ class Client {
     #address
     #contact
     #userId
-    #last_service_at
+    #dateModified
 
-    constructor({ id, name, address, contact, last_service_at, userId }) {
+    constructor({ id, name, address, contact, dateModified, userId }) {
         this.#id = id;
         this.#name = name;
         this.#address = address;
         this.#contact = contact;
-        this.#last_service_at = last_service_at;
+        this.#dateModified = dateModified;
         this.#userId = userId;
     }
 
@@ -34,8 +34,8 @@ class Client {
     getUserId() {
         return this.#userId
     }
-    LastServiceAt() {
-        return this.#userId
+    getDateModified() {
+        return this.#dateModified
     }
 
     toJSON() {

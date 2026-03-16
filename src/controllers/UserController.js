@@ -13,6 +13,7 @@ exports.login = async (req, res) => {
     if (result.success === true) {
         req.session.user = {
             id: result.user.getId(),
+            username: result.user.getUsername(),
             login: result.user.getLogin(),
         }
         // res.redirect('dashboard', { user: result.user })
@@ -27,17 +28,19 @@ exports.showRegister = (req, res) => {
 }
 
 exports.register = async (req, res) => {
+    let username = req.body.username
     let login = req.body.email
     let password = req.body.password
 
-    let result = await UserServices.register(login, password)
+    let result = await UserServices.register(username, login, password)
 
     if (result.success === true) {
         req.session.user = {
+            username: result.user.username,
             id: result.user.id,
             login: result.user.login,
         }
-        // res.redirect('dashboard', { user: result.user })
+
         res.redirect('/dashboard')
     } else {
         res.render('erro', { errorMessage: result.errMsg })

@@ -3,15 +3,16 @@ const User = require('../models/User');
 
 class UserDAO {
 
-    async register(login, hash) {
+    async register(username, login, hash) {
         try {
 
-            const query = `INSERT INTO users(login,hashpassword) VALUES($1,$2) RETURNING id, login, hashpassword `;
-            const params = [login, hash];
+            const query = `INSERT INTO users(username,login,hashpassword) VALUES($1,$2,$3) RETURNING id, username, login, hashpassword `;
+            const params = [username, login, hash];
             const res = await pool.query(query, params);
 
             let user = new User({
                 id: res.rows[0].id,
+                username: res.rows[0].username,
                 login: res.rows[0].login,
             });
 
@@ -33,6 +34,7 @@ class UserDAO {
             if (res.rows.length > 0) {
                 let user = new User({
                     id: res.rows[0].id,
+                    username: res.rows[0].username,
                     login: res.rows[0].login,
                     hashPassword: res.rows[0].hashpassword
                 });

@@ -28,7 +28,8 @@ class JobDAO {
             let index = 1;
 
             Object.entries(job).forEach(([key, value]) => {
-                if (value) {
+
+                if (value || key === 'payed') {
 
                     fields.push(`${key} = $${index++}`)
                     values.push(value)
@@ -75,9 +76,9 @@ class JobDAO {
                     clientId: res.rows[0].clientid,
                     userId: res.rows[0].userid,
                     id: res.rows[0].id,
+                    payed: res.rows[0].payed,
                     jobDate: res.rows[0].jobdate,
                     descr: res.rows[0].descr,
-                    payed: res.rows[0].payed,
                     totalValue: res.rows[0].totalvalue,
                 })
                 return job

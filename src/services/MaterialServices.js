@@ -53,15 +53,7 @@ exports.getMaterialsByJob = async (jobId) => {
             let index = 1;
             result.forEach(entity => {
 
-                let dto = new MaterialDTO({
-
-                    id: entity.getId(),
-                    descr: entity.getDescription(),
-                    supplier: entity.getSupplier(),
-                    qnt: entity.getQuantity(),
-                    unitaryVal: entity.getUnitaryValue(),
-                    jobId: jobId,
-                })
+                let dto = toDTO(entity, jobId)
 
                 DTOArray.push(dto)
             })
@@ -83,4 +75,17 @@ function formatarValor(val) {
     }).format(val);
 
     return numeroFormatado
+}
+
+function toDTO(obj, jobId) {
+    let dto = new MaterialDTO({
+
+        id: obj.getId(),
+        descr: obj.getDescription(),
+        supplier: obj.getSupplier(),
+        qnt: obj.getQuantity(),
+        unitaryVal: formatarValor(obj.getUnitaryValue()),
+        jobId: jobId,
+    })
+    return dto
 }

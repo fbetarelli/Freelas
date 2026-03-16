@@ -43,12 +43,7 @@ exports.getClients = async (userId) => {
 
         if (result && result.length > 0) {
             result.forEach(entity => {
-                let dto = new ClientDTO({
-                    id: entity.getId(),
-                    name: entity.getName(),
-                    address: entity.getAddress(),
-                    contact: entity.getContact()
-                })
+                let dto = toDTO(entity)
                 DTOArray.push(dto)
             })
         }
@@ -65,15 +60,21 @@ exports.getClientById = async (id) => {
     let dao = new ClientDAO;
     try {
         const client = await dao.getClientById(id);
-        let dto = new ClientDTO({
-            id: client.getId(),
-            name: client.getName(),
-            address: client.getAddress(),
-            contact: client.getContact()
-        })
+        let dto = toDTO(client)
         return { success: true, client: dto };
 
     } catch (error) {
         return { success: false, errMsg: error };
     }
-} 
+}
+
+function toDTO(obj) {
+    let dto = new ClientDTO({
+        id: obj.getId(),
+        name: obj.getName(),
+        address: obj.getAddress(),
+        contact: obj.getContact()
+
+    })
+    return dto;
+}

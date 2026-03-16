@@ -50,18 +50,8 @@ exports.getPaymentsByJob = async (jobId) => {
 
         if (result && result.length > 0) {
 
-            let index = 1;
             result.forEach(entity => {
-
-                let dto = new PaymentDTO({
-                    id: entity.getId(),
-                    method: entity.getMethod(),
-                    paymentDate: formatarData(entity.getPaymentDate()),
-                    value: entity.getValue(),
-                    installment: entity.getInstallment(),
-                    jobId: entity.getJobId()
-                })
-
+                let dto = toDTO(entity)
                 DTOArray.push(dto)
             })
         }
@@ -73,6 +63,7 @@ exports.getPaymentsByJob = async (jobId) => {
         return { success: false, errMsg: error };
     }
 }
+
 function formatarData(data) {
     const dateFromDB = new Date(data);
 
@@ -87,10 +78,22 @@ function formatarData(data) {
 
 function formatarValor(val) {
     //formata numero para separar casas.
-    const numeroFormatado = new Intl.NumberFormat(navigator.language, {
+    const numeroFormatado = new Intl.NumberFormat('pt-BR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     }).format(val);
 
     return numeroFormatado
+}
+
+function toDTO(obj) {
+    let dto = new PaymentDTO({
+        id: obj.getId(),
+        method: obj.getMethod(),
+        paymentDate: formatarData(obj.getPaymentDate()),
+        value: formatarValor(obj.getValue()),
+        installment: obj.getInstallment(),
+        jobId: obj.getJobId()
+    })
+    return dto
 }

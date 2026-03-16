@@ -20,7 +20,7 @@ exports.login = async (login, password) => {
     }
 
 }
-exports.register = async (login, password) => {
+exports.register = async (username, login, password) => {
     try {
         let dao = new UserDAO;
         let check = await dao.findByLogin(login)
@@ -32,7 +32,7 @@ exports.register = async (login, password) => {
         let saltRounds = 10;
         let hash = await bcrypt.hash(password, saltRounds)
 
-        let user = await dao.register(login, hash)
+        let user = await dao.register(username, login, hash)
         return { success: true, user }
 
     } catch (error) {
