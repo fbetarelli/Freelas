@@ -103,15 +103,15 @@ class PaymentDAO {
 
         const query = `SELECT SUM(payments.value) FROM payments
                         JOIN jobs ON payments.jobId = jobs.id
-                        WHERE jobs.userId = 1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`
+                        WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`
         const params = [userId]
 
         try {
             const res = await pool.query(query, params);
             if (res.rows.length > 0) {
-                return res.rows[0]
+                return res.rows[0].sum
             }
-            return null;
+            return 0;
 
         } catch (error) {
             console.error('Erro no PaymentDAO getTotalFromLastMonth ' + error)

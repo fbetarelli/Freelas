@@ -52,7 +52,14 @@ select * from jobs;
 select * from payments;
 
 SELECT * FROM payments WHERE jobId=21 ORDER BY paymentDate
+
+SELECT SUM(materials.unitaryVal*qnt)
+FROM materials
+JOIN jobs ON materials.jobId = jobs.id
+WHERE jobs.userId = 1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'
+
 select * from materials;
+
 
 
 

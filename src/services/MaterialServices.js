@@ -78,14 +78,17 @@ function formatarValor(val) {
 }
 
 function toDTO(obj, jobId) {
+    let valorUni = formatarValor(obj.getUnitaryValue())
     let dto = new MaterialDTO({
 
         id: obj.getId(),
         descr: obj.getDescription(),
         supplier: obj.getSupplier(),
         qnt: obj.getQuantity(),
-        unitaryVal: formatarValor(obj.getUnitaryValue()),
+        unitaryVal: valorUni,
+        totalVal: (valorUni * obj.getQuantity()),
         jobId: jobId,
+
     })
     return dto
 }

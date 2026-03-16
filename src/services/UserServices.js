@@ -1,5 +1,7 @@
 const User = require('../models/User')
 const UserDAO = require('../repositories/UserDAO')
+const PaymentDAO = require('../repositories/PaymentDAO')
+const MaterialDAO = require('../repositories/MaterialDAO')
 const bcrypt = require('bcrypt');
 
 exports.login = async (login, password) => {
@@ -38,5 +40,22 @@ exports.register = async (username, login, password) => {
     } catch (error) {
         return { success: false, errMsg: error }
     }
+
+}
+exports.getProfitFromLastMonth = async (userid) => {
+    try {
+        let paymentDao = new PaymentDAO
+        let materialDao = new MaterialDAO
+
+        let paymentTotal = await paymentDao.getTotalFromLastMonth(userid)
+        let materialTotal = await materialDao.getTotalFromLastMonth(userid)
+
+        const final = (paymentTotal - materialTotal)
+        return { success: true, profit: final }
+
+    } catch (error) {
+        return { success: false, errMsg: error }
+    }
+
 
 }

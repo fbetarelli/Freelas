@@ -6,12 +6,13 @@ class MaterialDTO {
     unitaryVal
     jobId
 
-    constructor({ id, descr, supplier, qnt, unitaryVal, jobId }) {
+    constructor({ id, descr, supplier, qnt, unitaryVal, totalVal, jobId }) {
         this.id = id
         this.descr = descr
         this.supplier = supplier
         this.qnt = qnt
         this.unitaryVal = unitaryVal
+        this.totalVal = totalVal
         this.jobId = jobId
     }
 
