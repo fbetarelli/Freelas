@@ -6,7 +6,7 @@ exports.showDashboard = async (req, res) => {
     try {
         const clientsResult = await ClientServices.getClients(req.session.user.id);
         const jobsResult = await JobServices.getLastJobsByUser(req.session.user.id)
-        //const paymentsResult = await JobServices.getUserProfitByLast30Days(req.session.user.id)
+        //const paymentsResult = await PaymentServices.getUserProfitByLast30Days(req.session.user.id)
 
         if (clientsResult.success && jobsResult.success /*&& paymentsResult.success*/) {
             res.render('dashboard', { clients: clientsResult.clients, jobs: jobsResult.jobs, /*payments: paymentsResult.payments,*/ username: req.session.user.username })

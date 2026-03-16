@@ -36,9 +36,9 @@ exports.register = async (req, res) => {
 
     if (result.success === true) {
         req.session.user = {
-            username: result.user.username,
-            id: result.user.id,
-            login: result.user.login,
+            id: result.user.getId(),
+            username: result.user.getUsername(),
+            login: result.user.getLogin()
         }
 
         res.redirect('/dashboard')
