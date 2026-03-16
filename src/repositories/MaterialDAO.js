@@ -98,6 +98,27 @@ class MaterialDAO {
         }
 
     }
+    async getTotalFromLastMonth(userId) {
+
+        const query = `SELECT SUM(materials.unitaryVal*qnt)
+FROM materials
+JOIN jobs ON materials.jobId = jobs.id
+WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`
+        const params = [userId]
+
+        try {
+            const res = await pool.query(query, params);
+            if (res.rows.length > 0) {
+                return res.rows[0].sum
+            }
+            return 0;
+
+        } catch (error) {
+            console.error('Erro no MaterialDAO getTotalFromLastMonth ' + error)
+            throw error
+        }
+
+    }
 
 
 
