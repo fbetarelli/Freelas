@@ -1,46 +1,21 @@
 const MaterialDTO = require('../DTO/MaterialDTO');
 const Material = require('../models/Material');
 const MaterialDAO = require('../repositories/MaterialDAO');
-const {  formatarValor } = require('../utils/formattingHelpers');
+const { runDAO } = require('../utils/serviceHelper');
+const { formatarValor } = require('../utils/formattingHelpers');
+
+const dao = new MaterialDAO;
 
 exports.addMaterial = async (material) => {
-    console.log('rodou add material service')
-    let dao = new MaterialDAO;
-    try {
-        await dao.addMaterial(material);
-        console.log('sucesso service')
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "addMaterial", material);
 }
 exports.editMaterial = async (material) => {
-    let dao = new MaterialDAO;
-    try {
-        await dao.editMaterial(material);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "editMaterial", material);
 }
-exports.deleteMaterial = async (materialid) => {
-    let dao = new MaterialDAO;
-    try {
-        await dao.deleteMaterial(materialid);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+exports.deleteMaterial = async (materialId) => {
+    return runDAO(dao, "deleteMaterial", materialId);
 }
+
 
 exports.getMaterialsByJob = async (jobId) => {
     let dao = new MaterialDAO;

@@ -1,46 +1,21 @@
 const PaymentDTO = require('../DTO/PaymentDTO');
 const Payment = require('../models/Payment');
 const PaymentDAO = require('../repositories/PaymentDAO')
+const { runDAO } = require('../utils/serviceHelper');
 const { formatarData, formatarValor } = require('../utils/formattingHelpers');
 
+const dao = new PaymentDAO;
+
 exports.addPayment = async (payment) => {
-    console.log('rodou add payment service')
-    let dao = new PaymentDAO;
-    try {
-        await dao.addPayment(payment);
-        console.log('sucesso service')
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "addPayment", payment);
 }
 exports.editPayment = async (payment) => {
-    let dao = new PaymentDAO;
-    try {
-        await dao.editPayment(payment);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "editPayment", payment);
 }
-exports.deletePayment = async (paymentid) => {
-    let dao = new PaymentDAO;
-    try {
-        await dao.deletePayment(paymentid);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+exports.deletePayment = async (paymentId) => {
+    return runDAO(dao, "deletePayment", paymentId);
 }
+
 
 exports.getPaymentsByJob = async (jobId) => {
     let dao = new PaymentDAO;
