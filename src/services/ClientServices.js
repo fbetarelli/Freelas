@@ -1,42 +1,23 @@
 const Client = require('../models/Client');
 const ClientDAO = require('../repositories/ClientDAO');
 const ClientDTO = require('../DTO/ClientDTO');
+const { runDAO } = require('../utils/serviceHelper');
 
-exports.addClient = async (client) => {
-    let dao = new ClientDAO
-    try {
-        await dao.addClient(client);
-        return { success: true };
 
-    } catch (error) {
-        return { success: false, errMsg: error };
-    }
+const dao = new ClientDAO
+
+exports.addClient = (client) => {
+    return runDAO(dao, "addClient", client);
 }
+
 exports.editClient = async (client) => {
-    let dao = new ClientDAO
-
-    try {
-        await dao.editClient(client);
-        return { success: true };
-
-    } catch (error) {
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "editClient", client);
 }
 exports.deleteClient = async (clientId) => {
-    let dao = new ClientDAO
-
-    try {
-        await dao.deleteClient(clientId);
-        return { success: true };
-
-    } catch (error) {
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "deleteClient", clientId);
 }
 
 exports.getClients = async (userId) => {
-    let dao = new ClientDAO;
     try {
         const result = await dao.getClients(userId)
         const DTOArray = []
@@ -47,9 +28,7 @@ exports.getClients = async (userId) => {
                 DTOArray.push(dto)
             })
         }
-
         return { success: true, clients: DTOArray }
-
     } catch (error) {
 
         return { success: false, errMsg: error };
@@ -78,3 +57,4 @@ function toDTO(obj) {
     })
     return dto;
 }
+
