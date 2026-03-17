@@ -1,56 +1,32 @@
 const JobDTO = require('../DTO/JobDTO');
 const Job = require('../models/Job');
 const JobDAO = require('../repositories/JobDAO');
+const { runDAO } = require('../utils/serviceHelper');
+
+const dao = new JobDAO;
 
 exports.addJob = async (job) => {
-    let dao = new JobDAO;
-    try {
-        await dao.addJob(job);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "addJob", job);
 }
 exports.editJob = async (job) => {
-    let dao = new JobDAO;
-    try {
-        await dao.editJob(job);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "editJob", job);
 }
-exports.deleteJob = async (jobid) => {
-    let dao = new JobDAO;
-    try {
-        await dao.deleteJob(jobid);
-        return { success: true }
-
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+exports.deleteJob = async (jobId) => {
+    return runDAO(dao, "deleteJob", jobId);
 }
+
 exports.getJobById = async (id) => {
     let dao = new JobDAO;
     try {
         const job = await dao.getJobById(id);
         let dto = toDTO(job)
         return { success: true, job: dto }
-
-
     } catch (error) {
 
         return { success: false, errMsg: error };
     }
 }
+
 exports.getJobsByClient = async (clientId) => {
     let dao = new JobDAO;
     try {
@@ -60,7 +36,6 @@ exports.getJobsByClient = async (clientId) => {
         if (result && result.length > 0) {
             result.forEach(entity => {
                 let dto = toDTO(entity)
-
                 DTOArray.push(dto)
             })
         }
@@ -79,7 +54,6 @@ exports.getLastJobsByUser = async (userId) => {
 
         if (result && result.length > 0) {
             result.forEach(entity => {
-
                 let dto = toDTO(entity)
                 DTOArray.push(dto)
             })

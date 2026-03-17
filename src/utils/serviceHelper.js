@@ -1,6 +1,4 @@
 async function runDAO(dao, action, parameter) {
-    
-
     try {
         await dao[action](parameter);
         return { success: true };
