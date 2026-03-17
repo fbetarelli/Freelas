@@ -44,7 +44,7 @@ exports.deletePayment = async (paymentid) => {
 exports.getPaymentsByJob = async (jobId) => {
     let dao = new PaymentDAO;
     try {
-
+        let totalValue = 0
         const result = await dao.getPaymentsByJob(jobId)
         const DTOArray = []
 
@@ -52,11 +52,12 @@ exports.getPaymentsByJob = async (jobId) => {
 
             result.forEach(entity => {
                 let dto = toDTO(entity)
+                totalValue += entity.getValue()
                 DTOArray.push(dto)
             })
         }
 
-        return { success: true, payments: DTOArray }
+        return { success: true, payments: DTOArray, paymentsVal: formatarValor(totalValue) }
 
     } catch (error) {
 

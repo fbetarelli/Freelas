@@ -51,11 +51,20 @@ exports.getProfitFromLastMonth = async (userid) => {
         let materialTotal = await materialDao.getTotalFromLastMonth(userid)
 
         const final = (paymentTotal - materialTotal)
-        return { success: true, profit: final }
+        return { success: true, profit: formatarValor(final) }
 
     } catch (error) {
         return { success: false, errMsg: error }
     }
 
 
+}
+function formatarValor(val) {
+    //formata numero para separar casas.
+    const numeroFormatado = new Intl.NumberFormat('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(val);
+
+    return numeroFormatado
 }

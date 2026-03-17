@@ -19,105 +19,119 @@
                 <h3> Status:
                     <%=job.payed%>
                 </h3>
+                <h3> Valor Total dos Pagamentos:</h3>
+                <%=paymentsVal%> </br>
+                    <h3> Valor Total dos Materiais:</h3>
+                    <%=materialsVal%> </br>
+                        <h3> Balanço total:</h3>
+                        <%=profit%> </br>
 
 
 
-                <a href='/job/<%=job.id%>/delete'>Deletar Serviço</a>
-                <h3>Editar Serviço</h3>
-                <form method="POST" action="/job/<%=job.id%>/edit">
-                    Serviço foi pago? </br>
-                    <input type="checkbox" name="payed" value="payed" /> </br>
-                    Descrição: </br>
-                    <input type="text" name="descr" placeholder="Descrição do serviço" /> </br>
-                    Data: </br>
-                    <input type="date" name="date" /> </br>
-                    Valor Total: </br>
-                    <input type="text" name="totalValue" placeholder="Valor total do serviço" /> </br>
-                    <button type="submit">
-                        Enviar
-                    </button>
-                </form>
-                <h3>Adicionar Material</h3>
-                <form method="POST" action="/job/<%=job.id%>/material/add">
-                    Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>
-                    Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
-                    Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" /> </br>
-                    Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
-                    <button type="submit">
-                        Enviar
-                    </button>
-                </form></br>
-                <h3>Adicionar Pagamento</h3>
-                <form method="POST" action="/job/<%=job.id%>/payment/add">
-                    Método de pagamento: <input type="text" name="method" placeholder="Método ou forma de pagamento" />
-                    </br>
-                    Data do pagamento: </br>
-                    <input type="date" name="paymentDate" /> </br>
-                    Valor:<input type="text" name="value" placeholder="00,00" /> </br>
-                    Parcela:<input type="text" name="installment" placeholder="Número da parcela" /> </br>
-                    <button type="submit">
-                        Enviar
-                    </button>
-                </form></br>
-                <a href='/client/<%=job.clientId%>'>Voltar ao cliente</a> </br></br>
-                <h1>MATERIAIS:</h1>
-                <% if(materials.length>0 ) { %>
-                    <% materials.forEach(material=> { %>
-                        <p>
-                            <b>Descrição:</b>
-                            <%=material.descr%>
-                                <b>Quantidade:</b>
-                                <%=material.qnt%>
-                                    <b> Valor Unitário:</b>
-                                    <%=material.unitaryVal%> </br>
-                                        <b> Valor Total:</b>
-                                        <%=material.totalVal%> </br>
-                                            <b> Fornecedor:</b>
-                                            <%=material.supplier%> </br>
-
-                        </p>
-                        <h3>Editar Material</h3>
-                        <form method="POST" action="/job/<%=job.id%>/material/<%=material.id%>/edit">
-                            Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>
-                            Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
-                            Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" /> </br>
-                            Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
-                            <button type="submit">
-                                Enviar
-                            </button>
-                        </form>
-                        <a href='/job/<%=job.id%>/material/<%=material.id%>/delete'>Deletar Material</a>
-                        <% })}; %>
-                            <h1>PAGAMENTOS</h1>
-                            <% if(payments.length>0 ) { %>
-                                <% payments.forEach(payment=> { %>
+                            <a href='/job/<%=job.id%>/delete'>Deletar Serviço</a>
+                            <h3>Editar Serviço</h3>
+                            <form method="POST" action="/job/<%=job.id%>/edit">
+                                Serviço foi pago? </br>
+                                <input type="checkbox" name="payed" value="payed" /> </br>
+                                Descrição: </br>
+                                <input type="text" name="descr" placeholder="Descrição do serviço" /> </br>
+                                Data: </br>
+                                <input type="date" name="date" /> </br>
+                                Valor Total: </br>
+                                <input type="text" name="totalValue" placeholder="Valor total do serviço" /> </br>
+                                <button type="submit">
+                                    Enviar
+                                </button>
+                            </form>
+                            <h3>Adicionar Material</h3>
+                            <form method="POST" action="/job/<%=job.id%>/material/add">
+                                Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>
+                                Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
+                                Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" /> </br>
+                                Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
+                                <button type="submit">
+                                    Enviar
+                                </button>
+                            </form></br>
+                            <h3>Adicionar Pagamento</h3>
+                            <form method="POST" action="/job/<%=job.id%>/payment/add">
+                                Método de pagamento: <input type="text" name="method"
+                                    placeholder="Método ou forma de pagamento" />
+                                </br>
+                                Data do pagamento: </br>
+                                <input type="date" name="paymentDate" /> </br>
+                                Valor:<input type="text" name="value" placeholder="00,00" /> </br>
+                                Parcela:<input type="text" name="installment" placeholder="Número da parcela" /> </br>
+                                <button type="submit">
+                                    Enviar
+                                </button>
+                            </form></br>
+                            <a href='/client/<%=job.clientId%>'>Voltar ao cliente</a> </br></br>
+                            <h1>MATERIAIS:</h1>
+                            <% if(materials.length>0 ) { %>
+                                <% materials.forEach(material=> { %>
                                     <p>
-                                        <b>Método:</b>
-                                        <%=payment.method%>
-                                            <b>Valor:</b>
-                                            <%=payment.value%>
-                                                <b> Data de pagamento:</b>
-                                                <%=payment.paymentDate%> </br>
-                                                    <b> Número da Parcela:</b>
-                                                    <%=payment.installment%> </br>
+                                        <b>Descrição:</b>
+                                        <%=material.descr%>
+                                            <b>Quantidade:</b>
+                                            <%=material.qnt%>
+                                                <b> Valor Unitário:</b>
+                                                <%=material.unitaryVal%> </br>
+                                                    <b> Valor Total:</b>
+                                                    <%=material.totalVal%> </br>
+                                                        <b> Fornecedor:</b>
+                                                        <%=material.supplier%> </br>
 
                                     </p>
-                                    <h3>Editar Pagamento</h3>
-                                    <form method="POST" action="/job/<%=job.id%>/payment/<%=payment.id%>/edit">
-                                        Método de pagamento: <input type="text" name="method"
-                                            placeholder="Método ou forma de pagamento" />
+                                    <h3>Editar Material</h3>
+                                    <form method="POST" action="/job/<%=job.id%>/material/<%=material.id%>/edit">
+                                        Descrição: <input type="text" name="descr"
+                                            placeholder="Descrição do Material" />
                                         </br>
-                                        Data do pagamento: </br>
-                                        <input type="date" name="paymentDate" /> </br>
-                                        Valor:<input type="text" name="value" placeholder="00,00" /> </br>
-                                        Parcela:<input type="text" name="installment" placeholder="Número da parcela" />
+                                        Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" />
                                         </br>
+                                        Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" />
+                                        </br>
+                                        Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
                                         <button type="submit">
                                             Enviar
                                         </button>
-                                    </form></br>
-                                    <a href='/job/<%=job.id%>/payment/<%=payment.id%>/delete'>Deletar Pagamento</a>
+                                    </form>
+                                    <a href='/job/<%=job.id%>/material/<%=material.id%>/delete'>Deletar Material</a>
                                     <% })}; %>
+                                        <h1>PAGAMENTOS</h1>
+                                        <% if(payments.length>0 ) { %>
+                                            <% payments.forEach(payment=> { %>
+                                                <p>
+                                                    <b>Método:</b>
+                                                    <%=payment.method%>
+                                                        <b>Valor:</b>
+                                                        <%=payment.value%>
+                                                            <b> Data de pagamento:</b>
+                                                            <%=payment.paymentDate%> </br>
+                                                                <b> Número da Parcela:</b>
+                                                                <%=payment.installment%> </br>
+
+                                                </p>
+                                                <h3>Editar Pagamento</h3>
+                                                <form method="POST"
+                                                    action="/job/<%=job.id%>/payment/<%=payment.id%>/edit">
+                                                    Método de pagamento: <input type="text" name="method"
+                                                        placeholder="Método ou forma de pagamento" />
+                                                    </br>
+                                                    Data do pagamento: </br>
+                                                    <input type="date" name="paymentDate" /> </br>
+                                                    Valor:<input type="text" name="value" placeholder="00,00" /> </br>
+                                                    Parcela:<input type="text" name="installment"
+                                                        placeholder="Número da parcela" />
+                                                    </br>
+                                                    <button type="submit">
+                                                        Enviar
+                                                    </button>
+                                                </form></br>
+                                                <a href='/job/<%=job.id%>/payment/<%=payment.id%>/delete'>Deletar
+                                                    Pagamento</a>
+                                                <% })}; %>
 </body>
 
 </html>

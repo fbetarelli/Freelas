@@ -47,19 +47,19 @@ exports.getMaterialsByJob = async (jobId) => {
 
         const result = await dao.getMaterialsByJob(jobId)
         const DTOArray = []
+        let totalMateriais = 0;
 
         if (result && result.length > 0) {
-
             let index = 1;
             result.forEach(entity => {
-
                 let dto = toDTO(entity, jobId)
-
+                totalMateriais += dto.totalVal;
                 DTOArray.push(dto)
             })
         }
 
-        return { success: true, materials: DTOArray }
+
+        return { success: true, materials: DTOArray, materialsVal: formatarValor(totalMateriais) }
 
     } catch (error) {
 
@@ -86,9 +86,10 @@ function toDTO(obj, jobId) {
         supplier: obj.getSupplier(),
         qnt: obj.getQuantity(),
         unitaryVal: valorUni,
-        totalVal: (valorUni * obj.getQuantity()),
+        totalVal: (obj.getUnitaryValue() * obj.getQuantity()),
         jobId: jobId,
 
     })
+
     return dto
 }

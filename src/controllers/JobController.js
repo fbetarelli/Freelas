@@ -84,7 +84,14 @@ exports.getJobPage = async (req, res) => {
         const paymentsResult = await PaymentServices.getPaymentsByJob(jobId);
 
         if (jobsResult.success && materialsResult.success && paymentsResult.success) {
-            res.render('jobPage', { job: jobsResult.job, materials: materialsResult.materials, payments: paymentsResult.payments })
+            let paymentsVal = paymentsResult.paymentsVal
+            let materialsVal = materialsResult.materialsVal
+            let profit = parseFloat(paymentsVal) - parseFloat(materialsVal);
+            res.render('jobPage', {
+                job: jobsResult.job,
+                materials: materialsResult.materials, materialsVal,
+                payments: paymentsResult.payments, paymentsVal, profit
+            })
 
         } else {
             res.render('erro', { errorMessage: jobsResult.errMsg || materialsResult.errMsg || paymentsResult.errMsg })
