@@ -1,6 +1,7 @@
 const MaterialDTO = require('../DTO/MaterialDTO');
 const Material = require('../models/Material');
 const MaterialDAO = require('../repositories/MaterialDAO');
+const {  formatarValor } = require('../utils/formattingHelpers');
 
 exports.addMaterial = async (material) => {
     console.log('rodou add material service')
@@ -67,15 +68,6 @@ exports.getMaterialsByJob = async (jobId) => {
     }
 }
 
-function formatarValor(val) {
-    //formata numero para separar casas.
-    const numeroFormatado = new Intl.NumberFormat(navigator.language, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(val);
-
-    return numeroFormatado
-}
 
 function toDTO(obj, jobId) {
     let valorUni = formatarValor(obj.getUnitaryValue())

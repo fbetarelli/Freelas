@@ -2,6 +2,7 @@ const JobDTO = require('../DTO/JobDTO');
 const Job = require('../models/Job');
 const JobDAO = require('../repositories/JobDAO');
 const { runDAO } = require('../utils/serviceHelper');
+const { formatarData, formatarValor } = require('../utils/formattingHelpers');
 
 const dao = new JobDAO;
 
@@ -64,29 +65,6 @@ exports.getLastJobsByUser = async (userId) => {
 
         return { success: false, errMsg: error };
     }
-}
-
-
-function formatarData(data) {
-    const dateFromDB = new Date(data);
-
-    // Formatar para PT-BR (12/03/2026)
-    const formattedDate = dateFromDB.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-    return formattedDate;
-}
-
-function formatarValor(val) {
-    //formata numero para separar casas.
-    const numeroFormatado = new Intl.NumberFormat('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(val);
-
-    return numeroFormatado
 }
 
 function toDTO(obj) {

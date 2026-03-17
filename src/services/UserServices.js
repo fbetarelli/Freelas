@@ -2,6 +2,7 @@ const User = require('../models/User')
 const UserDAO = require('../repositories/UserDAO')
 const PaymentDAO = require('../repositories/PaymentDAO')
 const MaterialDAO = require('../repositories/MaterialDAO')
+const { formatarValor } = require('../utils/formattingHelpers');
 const bcrypt = require('bcrypt');
 
 exports.login = async (login, password) => {
@@ -58,13 +59,4 @@ exports.getProfitFromLastMonth = async (userid) => {
     }
 
 
-}
-function formatarValor(val) {
-    //formata numero para separar casas.
-    const numeroFormatado = new Intl.NumberFormat('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(val);
-
-    return numeroFormatado
 }
