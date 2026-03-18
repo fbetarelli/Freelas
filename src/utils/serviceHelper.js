@@ -1,11 +1,12 @@
 async function runDAO(dao, action, parameter) {
-    try {
-        await dao[action](parameter);
-        return { success: true };
+    console.log(`\n DAO executando ${action}`)
+    let start = Date.now()
 
-    } catch (error) {
-        return { success: false, errMsg: error };
-    }
+    await dao[action](parameter);
+
+    let end = Date.now()
+    console.log(`DAO executou ${action} em ${end - start}ms\n`)
 }
+
 
 module.exports = { runDAO }
