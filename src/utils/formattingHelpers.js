@@ -16,4 +16,12 @@ function formatarValor(val) {
     }).format(val);
 }
 
-module.exports = { formatarData, formatarValor };
+
+function formatarParaFloat(valor) {
+    //retira os pontos EX: 12,99 para 12.99
+    const temp = valor.replace(/\./g, '')
+    const final = temp.replace(/,/g, '.')
+    return (parseFloat(final))
+}
+
+module.exports = { formatarData, formatarValor, formatarParaFloat };
