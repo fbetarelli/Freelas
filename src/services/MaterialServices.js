@@ -2,7 +2,7 @@ const MaterialDTO = require('../DTO/MaterialDTO');
 const Material = require('../models/Material');
 const MaterialDAO = require('../repositories/MaterialDAO');
 const { runDAO } = require('../utils/serviceHelper');
-const { formatarValor } = require('../utils/formattingHelpers');
+const { formatarValor, formatarParaFloat } = require('../utils/formattingHelpers');
 
 const dao = new MaterialDAO;
 
@@ -29,13 +29,13 @@ exports.getMaterialsByJob = async (jobId) => {
             let index = 1;
             result.forEach(entity => {
                 let dto = toDTO(entity, jobId)
-                totalMateriais += dto.totalVal;
+                totalMateriais += formatarParaFloat(dto.totalVal);
                 DTOArray.push(dto)
             })
         }
 
 
-        return { success: true, materials: DTOArray, materialsVal: formatarValor(totalMateriais) }
+        return { success: true, materials: DTOArray, materialsVal: totalMateriais }
 
     } catch (error) {
 
@@ -53,7 +53,7 @@ function toDTO(obj, jobId) {
         supplier: obj.getSupplier(),
         qnt: obj.getQuantity(),
         unitaryVal: valorUni,
-        totalVal: (obj.getUnitaryValue() * obj.getQuantity()),
+        totalVal: formatarValor((obj.getUnitaryValue() * obj.getQuantity())),
         jobId: jobId,
 
     })

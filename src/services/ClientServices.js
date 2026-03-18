@@ -10,7 +10,6 @@ const dao = new ClientDAO
 exports.addClient = (client) => {
     return runDAO(dao, "addClient", client);
 }
-
 exports.editClient = async (client) => {
     return runDAO(dao, "editClient", client);
 }

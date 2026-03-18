@@ -33,7 +33,7 @@ exports.getPaymentsByJob = async (jobId) => {
             })
         }
 
-        return { success: true, payments: DTOArray, paymentsVal: formatarValor(totalValue) }
+        return { success: true, payments: DTOArray, paymentsVal: totalValue }
 
     } catch (error) {
 

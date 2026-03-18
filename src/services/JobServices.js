@@ -59,7 +59,7 @@ exports.getLastJobsByUser = async (userId) => {
                 DTOArray.push(dto)
             })
         }
-        return { success: true, jobs: DTOArray }
+        return { jobs: DTOArray }
 
     } catch (error) {
 
