@@ -48,6 +48,14 @@ app.use('/', DashboardRoutes)
 app.use('/', ClientRoutes)
 app.use('/', JobRoutes)
 
+app.use((err, req, res, next) => {
+    console.error(err)
+
+    res.status(500).render("erro", {
+        errorMessage: "Erro interno do servidor"
+    })
+})
+
 app.listen(PORT, (err) => {
     if (err) {
         console.error('Erro ao iniciar server ' + err);

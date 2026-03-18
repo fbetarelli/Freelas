@@ -2,102 +2,69 @@ const Job = require('../models/Job')
 const JobServices = require('../services/JobServices');
 const MaterialServices = require('../services/MaterialServices');
 const PaymentServices = require('../services/PaymentServices');
-
-exports.addJob = async (req, res) => {
-    console.log('rodou')
-    try {
-        //tira os pontos da string ex: 199,99
-        const temp = req.body.totalValue.replace(/\./g, '')
-        const valorTotal = temp.replace(/,/g, '.')
+const asyncHandler = require('../utils/asyncHandler');
+const { formatarParaFloat, formatarValor } = require('../utils/formattingHelpers')
 
 
-        const job = new Job({
-            descr: req.body.descr,
-            jobDate: req.body.date,
-            totalValue: parseFloat(valorTotal),
-            clientId: req.params.id,
-            userId: req.session.user.id
-        })
+exports.addJob = asyncHandler(async (req, res) => {
+    const valorTotal = formatarParaFloat(req.body.totalValue);
 
-        const result = await JobServices.addJob(job);
-        if (result.success) {
-            console.log('result success')
-            res.redirect(`/client/${req.params.id}`)
-        }
-    } catch (error) {
-        console.log('result erro')
-        res.render('erro', { errMsg: error })
+
+    const job = new Job({
+        descr: req.body.descr,
+        jobDate: req.body.date,
+        totalValue: valorTotal,
+        clientId: req.params.id,
+        userId: req.session.user.id
+    })
+
+    await JobServices.addJob(job);
+    res.redirect(`/client/${req.params.id}`)
+
+})
+
+exports.editJob = asyncHandler(async (req, res) => {
+    let valorTotal;
+    if (req.body.totalValue) {
+        valorTotal = formatarParaFloat(req.body.totalValue);
     }
+    const job = ({
+        id: req.params.id,
+        payed: req.body.payed ? true : false,
+        descr: req.body.descr,
+        jobDate: req.body.date,
+        totalValue: valorTotal,
+    })
 
-}
-exports.editJob = async (req, res) => {
-    console.log('rodou')
-    try {
-        let valorTotal;
-        //tira os pontos da string ex: 199,99
-        if (req.body.totalValue) {
-            const temp = req.body.totalValue.replace(/\./g, '')
-            valorTotal = parseFloat(temp.replace(/,/g, '.'))
-        }
+    await JobServices.editJob(job);
+    res.redirect(`/job/${req.params.id}`)
 
+})
 
-        const job = ({
-            id: req.params.id,
-            payed: req.body.payed ? true : false,
-            descr: req.body.descr,
-            jobDate: req.body.date,
-            totalValue: valorTotal,
-        })
+exports.deleteJob = asyncHandler(async (req, res) => {
 
-        const result = await JobServices.editJob(job);
-        if (result.success) {
+    await JobServices.deleteJob(req.params.id);
+    res.redirect(req.session.returnTo)
 
-            res.redirect(`/job/${req.params.id}`)
-        }
-    } catch (error) {
-        console.log('result erro')
-        res.render('erro', { errMsg: error })
-    }
+})
 
-}
-exports.deleteJob = async (req, res) => {
-    console.log('rodou')
-    try {
+exports.getJobPage = asyncHandler(async (req, res) => {
 
-        const result = await JobServices.deleteJob(req.params.id);
-        if (result.success) {
-
-            res.redirect(req.session.returnTo)
-        }
-    } catch (error) {
-        console.log('result erro')
-        res.render('erro', { errMsg: error })
-    }
-
-}
-exports.getJobPage = async (req, res) => {
     const jobId = req.params.id;
+    const jobsRes = await JobServices.getJobById(jobId);
+    const materialsRes = await MaterialServices.getMaterialsByJob(jobId);
+    const paymentsRes = await PaymentServices.getPaymentsByJob(jobId);
 
-    try {
-        const jobsResult = await JobServices.getJobById(jobId);
-        const materialsResult = await MaterialServices.getMaterialsByJob(jobId);
-        const paymentsResult = await PaymentServices.getPaymentsByJob(jobId);
 
-        if (jobsResult.success && materialsResult.success && paymentsResult.success) {
-            let paymentsVal = paymentsResult.paymentsVal
-            let materialsVal = materialsResult.materialsVal
-            let profit = parseFloat(paymentsVal) - parseFloat(materialsVal);
-            res.render('jobPage', {
-                job: jobsResult.job,
-                materials: materialsResult.materials, materialsVal,
-                payments: paymentsResult.payments, paymentsVal, profit
-            })
+    let paymentsVal = paymentsRes.paymentsVal
+    let materialsVal = materialsRes.materialsVal
+    let profit = formatarValor(paymentsVal - materialsVal);
 
-        } else {
-            res.render('erro', { errorMessage: jobsResult.errMsg || materialsResult.errMsg || paymentsResult.errMsg })
-        }
-    } catch (error) {
-        console.error('Erro no getClientPage controller ' + error)
-    }
 
-}
+    res.render('jobPage', {
+        job: jobsRes.job,
+        materials: materialsRes.materials, materialsVal: formatarValor(materialsVal),
+        payments: paymentsRes.payments, paymentsVal: formatarValor(paymentsVal), profit
+
+    })
+})

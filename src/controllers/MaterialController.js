@@ -1,78 +1,47 @@
 const Material = require('../models/Material')
 const MaterialServices = require('../services/MaterialServices');
+const asyncHandler = require('../utils/asyncHandler');
+const { formatarParaFloat } = require('../utils/formattingHelpers')
 
-exports.addMaterial = async (req, res) => {
-    console.log('rodou add material')
-    try {
-        //tira os pontos da string ex: 199,99
-        const temp = req.body.unitaryVal.replace(/\./g, '')
-        const valorUnitario = parseFloat(temp.replace(/,/g, '.'))
+exports.addMaterial = asyncHandler(async (req, res) => {
+    const valorUnitario = formatarParaFloat(req.body.unitaryVal)
+    const material = new Material({
+        supplier: req.body.supplier,
+        descr: req.body.descr,
+        qnt: req.body.qnt,
+        unitaryVal: valorUnitario,
+        jobId: req.params.id
 
+    })
 
+    await MaterialServices.addMaterial(material);
 
-        const material = new Material({
-            supplier: req.body.supplier,
-            descr: req.body.descr,
-            qnt: req.body.qnt,
-            unitaryVal: valorUnitario,
-            jobId: req.params.id
+    res.redirect(`/job/${req.params.id}`)
 
-        })
+})
+exports.editMaterial = asyncHandler(async (req, res) => {
 
-        const result = await MaterialServices.addMaterial(material);
-        if (result.success) {
-            console.log('result success')
-            res.redirect(`/job/${req.params.id}`)
-        }
-    } catch (error) {
-        console.log('result erro')
-        res.render('erro', { errMsg: error })
+    let valorUnitario;
+    if (req.body.unitaryVal) {
+        valorUnitario = formatarParaFloat(req.body.unitaryVal)
     }
 
-}
-exports.editMaterial = async (req, res) => {
-    console.log('rodou')
-    try {
-        let valorUnitario;
-        //tira os pontos da string ex: 199,99
-        if (req.body.unitaryVal) {
-            const temp = req.body.unitaryVal.replace(/\./g, '')
-            valorUnitario = temp.replace(/,/g, '.')
-        }
+    const material = ({
+        id: req.params.materialid,
+        supplier: req.body.supplier,
+        descr: req.body.descr,
+        qnt: req.body.qnt,
+        unitaryVal: valorUnitario,
+    })
 
+    await MaterialServices.editMaterial(material);
+    res.redirect(`/job/${req.params.id}`)
 
-        const material = ({
-            id: req.params.materialid,
-            supplier: req.body.supplier,
-            descr: req.body.descr,
-            qnt: req.body.qnt,
-            unitaryVal: valorUnitario,
-        })
+})
 
-        const result = await MaterialServices.editMaterial(material);
-        if (result.success) {
+exports.deleteMaterial = asyncHandler(async (req, res) => {
+    await MaterialServices.deleteMaterial(req.params.materialid);
+    res.redirect(`/job/${req.params.id}`)
 
-            res.redirect(`/job/${req.params.id}`)
-        }
-    } catch (error) {
-        console.log('result erro')
-        res.render('erro', { errMsg: error })
-    }
-
-}
-exports.deleteMaterial = async (req, res) => {
-    console.log('rodou')
-    try {
-
-        const result = await MaterialServices.deleteMaterial(req.params.materialid);
-        if (result.success) {
-
-            res.redirect(`/job/${req.params.id}`)
-        }
-    } catch (error) {
-        console.log('result erro')
-        res.render('erro', { errMsg: error })
-    }
-
-}
+})
 

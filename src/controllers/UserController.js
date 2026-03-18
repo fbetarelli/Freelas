@@ -1,54 +1,45 @@
 const UserServices = require('../services/UserServices')
+const asyncHandler = require('../utils/asyncHandler');
 
 exports.showLogin = (req, res) => {
     res.render('login')
 }
 
-exports.login = async (req, res) => {
+exports.login = asyncHandler(async (req, res) => {
     let login = req.body.email
     let password = req.body.password
 
     let result = await UserServices.login(login, password)
 
-    if (result.success === true) {
-        req.session.user = {
-            id: result.user.getId(),
-            username: result.user.getUsername(),
-            login: result.user.getLogin(),
-        }
-        // res.redirect('dashboard', { user: result.user })
-        res.redirect('/dashboard')
-    } else {
-        res.render('erro', { errorMessage: result.errMsg })
+    req.session.user = {
+        id: result.user.getId(),
+        username: result.user.getUsername(),
+        login: result.user.getLogin(),
     }
-}
+    res.redirect('/dashboard')
+})
 
 exports.showRegister = (req, res) => {
     res.render('register')
 }
 
-exports.register = async (req, res) => {
+exports.register = asyncHandler(async (req, res) => {
     let username = req.body.username
     let login = req.body.email
     let password = req.body.password
 
     let result = await UserServices.register(username, login, password)
 
-    if (result.success === true) {
-        req.session.user = {
-            id: result.user.getId(),
-            username: result.user.getUsername(),
-            login: result.user.getLogin()
-        }
-
-        res.redirect('/dashboard')
-    } else {
-        res.render('erro', { errorMessage: result.errMsg })
+    req.session.user = {
+        id: result.user.getId(),
+        username: result.user.getUsername(),
+        login: result.user.getLogin()
     }
-}
+
+    res.redirect('/dashboard')
+})
 
 exports.logout = (req, res) => {
     req.session.user = null;
     res.redirect('/login');
-
 }
