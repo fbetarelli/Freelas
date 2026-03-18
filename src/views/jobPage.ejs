@@ -45,22 +45,26 @@
                             </form>
                             <h3>Adicionar Material</h3>
                             <form method="POST" action="/job/<%=job.id%>/material/add">
-                                Descrição: <input type="text" name="descr" placeholder="Descrição do Material" /> </br>
+                                Descrição: <input type="text" name="descr" placeholder="Descrição do Material"
+                                    required /> </br>
                                 Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
-                                Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" /> </br>
-                                Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
+                                Quantidade:<input type="number" name="qnt" placeholder="Quantidade do Material"
+                                    required />
+                                </br>
+                                Valor Unitário:<input type="text" name="unitaryVal" placeholder="00,00" required />
+                                </br>
                                 <button type="submit">
                                     Enviar
                                 </button>
                             </form></br>
                             <h3>Adicionar Pagamento</h3>
                             <form method="POST" action="/job/<%=job.id%>/payment/add">
+                                Valor:<input type="text" name="value" placeholder="00,00" required /> </br>
                                 Método de pagamento: <input type="text" name="method"
                                     placeholder="Método ou forma de pagamento" />
                                 </br>
                                 Data do pagamento: </br>
                                 <input type="date" name="paymentDate" /> </br>
-                                Valor:<input type="text" name="value" placeholder="00,00" /> </br>
                                 Parcela:<input type="text" name="installment" placeholder="Número da parcela" /> </br>
                                 <button type="submit">
                                     Enviar
@@ -90,9 +94,10 @@
                                         </br>
                                         Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" />
                                         </br>
-                                        Quantidade:<input type="text" name="qnt" placeholder="Quantidade do Material" />
+                                        Quantidade:<input type="number" name="qnt"
+                                            placeholder="Quantidade do Material" />
                                         </br>
-                                        Valor Unitário:<input type="text" name="unitaryVal" placeholder="0.0" /> </br>
+                                        Valor Unitário:<input type="text" name="unitaryVal" placeholder="00,00" /> </br>
                                         <button type="submit">
                                             Enviar
                                         </button>
@@ -116,12 +121,13 @@
                                                 <h3>Editar Pagamento</h3>
                                                 <form method="POST"
                                                     action="/job/<%=job.id%>/payment/<%=payment.id%>/edit">
+                                                    Valor:<input type="text" name="value" placeholder="00,00" /> </br>
                                                     Método de pagamento: <input type="text" name="method"
                                                         placeholder="Método ou forma de pagamento" />
                                                     </br>
                                                     Data do pagamento: </br>
                                                     <input type="date" name="paymentDate" /> </br>
-                                                    Valor:<input type="text" name="value" placeholder="00,00" /> </br>
+
                                                     Parcela:<input type="text" name="installment"
                                                         placeholder="Número da parcela" />
                                                     </br>
