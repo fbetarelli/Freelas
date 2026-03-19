@@ -69,9 +69,10 @@ class ClientDAO {
 
         try {
             const res = await pool.query(query, params);
+            const clientsArray = [];
 
             if (res.rows.length > 0) {
-                const clientsArray = [];
+
 
                 res.rows.forEach(obj => {
                     let client = new Client({
@@ -86,7 +87,7 @@ class ClientDAO {
                 });
                 return clientsArray;
             } else {
-                return null
+                return clientsArray;
             }
         } catch (error) {
             console.error('Erro no ClienteDAO getClients ' + error)
