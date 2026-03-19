@@ -1,4 +1,5 @@
 class ClientDTO {
+    id
     name
     address
     contact
