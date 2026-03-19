@@ -56,8 +56,8 @@ exports.getJobPage = asyncHandler(async (req, res) => {
     const paymentsRes = await PaymentServices.getPaymentsByJob(jobId);
 
 
-    let paymentsVal = paymentsRes.paymentsVal
-    let materialsVal = materialsRes.materialsVal
+    let paymentsVal = paymentsRes.totalSum
+    let materialsVal = materialsRes.totalSum
     let profit = formatarValor(paymentsVal - materialsVal);
 
 
