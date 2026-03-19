@@ -11,12 +11,18 @@ exports.login = asyncHandler(async (req, res) => {
 
     let result = await UserServices.login(login, password)
 
-    req.session.user = {
-        id: result.user.getId(),
-        username: result.user.getUsername(),
-        login: result.user.getLogin(),
+    if (result.user) {
+        req.session.user = {
+            id: result.user.getId(),
+            username: result.user.getUsername(),
+            login: result.user.getLogin(),
+        }
+        res.redirect('/dashboard')
+    } else {
+        res.redirect('/login')
     }
-    res.redirect('/dashboard')
+
+
 })
 
 exports.showRegister = (req, res) => {
