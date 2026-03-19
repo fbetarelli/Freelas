@@ -1,9 +1,6 @@
-const Client = require('../models/Client');
 const ClientDAO = require('../repositories/ClientDAO');
-const ClientDTO = require('../DTO/ClientDTO');
 const { runDAO } = require('../utils/serviceHelper');
-
-
+const { toDTO } = require('../mappers/ClientMapper')
 
 const dao = new ClientDAO
 
@@ -18,43 +15,11 @@ exports.deleteClient = async (clientId) => {
 }
 
 exports.getClients = async (userId) => {
-    try {
-        const result = await dao.getClients(userId)
-        const DTOArray = []
-
-        if (result && result.length > 0) {
-            result.forEach(entity => {
-                let dto = toDTO(entity)
-                DTOArray.push(dto)
-            })
-        }
-        return { success: true, clients: DTOArray }
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "getClients", userId, toDTO, "clients")
 }
 
 exports.getClientById = async (id) => {
-    let dao = new ClientDAO;
-    try {
-        const client = await dao.getClientById(id);
-        let dto = toDTO(client)
-        return { success: true, client: dto };
-
-    } catch (error) {
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "getClientById", id, toDTO, "client")
 }
 
-function toDTO(obj) {
-    let dto = new ClientDTO({
-        id: obj.getId(),
-        name: obj.getName(),
-        address: obj.getAddress(),
-        contact: obj.getContact()
-
-    })
-    return dto;
-}
 

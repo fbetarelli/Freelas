@@ -1,8 +1,6 @@
-const MaterialDTO = require('../DTO/MaterialDTO');
-const Material = require('../models/Material');
 const MaterialDAO = require('../repositories/MaterialDAO');
 const { runDAO } = require('../utils/serviceHelper');
-const { formatarValor, formatarParaFloat } = require('../utils/formattingHelpers');
+const { toDTO } = require("../mappers/MaterialMapper")
 
 const dao = new MaterialDAO;
 
@@ -18,45 +16,6 @@ exports.deleteMaterial = async (materialId) => {
 
 
 exports.getMaterialsByJob = async (jobId) => {
-    let dao = new MaterialDAO;
-    try {
-
-        const result = await dao.getMaterialsByJob(jobId)
-        const DTOArray = []
-        let totalMateriais = 0;
-
-        if (result && result.length > 0) {
-            let index = 1;
-            result.forEach(entity => {
-                let dto = toDTO(entity, jobId)
-                totalMateriais += formatarParaFloat(dto.totalVal);
-                DTOArray.push(dto)
-            })
-        }
-
-
-        return { success: true, materials: DTOArray, materialsVal: totalMateriais }
-
-    } catch (error) {
-
-        return { success: false, errMsg: error };
-    }
+    return runDAO(dao, "getMaterialsByJob", jobId, toDTO, "materials", true, "totalVal");
 }
 
-
-function toDTO(obj, jobId) {
-    let valorUni = formatarValor(obj.getUnitaryValue())
-    let dto = new MaterialDTO({
-
-        id: obj.getId(),
-        descr: obj.getDescription(),
-        supplier: obj.getSupplier(),
-        qnt: obj.getQuantity(),
-        unitaryVal: valorUni,
-        totalVal: formatarValor((obj.getUnitaryValue() * obj.getQuantity())),
-        jobId: jobId,
-
-    })
-
-    return dto
-}
