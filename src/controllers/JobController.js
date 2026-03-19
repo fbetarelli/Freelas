@@ -30,7 +30,7 @@ exports.editJob = asyncHandler(async (req, res) => {
     }
     const job = ({
         id: req.params.id,
-        payed: req.body.payed ? true : false,
+        payed: req.body.payed,
         descr: req.body.descr,
         jobDate: req.body.date,
         totalValue: valorTotal,

@@ -32,7 +32,12 @@
                             <h3>Editar Serviço</h3>
                             <form method="POST" action="/job/<%=job.id%>/edit">
                                 Serviço foi pago? </br>
-                                <input type="checkbox" name="payed" value="payed" /> </br>
+                                <select name="payed">
+                                    <option value="">Não alterar</option>
+                                    <option value="true">Pago</option>
+                                    <option value="false">Não pago</option>
+                                </select>
+                                </br>
                                 Descrição: </br>
                                 <input type="text" name="descr" placeholder="Descrição do serviço" /> </br>
                                 Data: </br>
