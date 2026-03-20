@@ -16,15 +16,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "tailwind": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.2.2",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "ejs": "^5.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "hashids": "^2.3.0",
     "helmet": "^8.1.0",
     "morgan": "^1.10.1",
     "nodemon": "^3.1.14",
