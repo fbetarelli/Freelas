@@ -1,24 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freelas: Registrar-se</title>
 </head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Momo+Signature&family=Trispace:wght@100..800&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="/styles/output.css" />
 
 <body>
-    <h3>Registrar</h3>
-    <form method="POST" action="/register">
-        Nome de Usuário: <input type="text" name="username" placeholder="insira o seu nome ou de sua empresa "
-            required /> </br>
-        Login: <input type="email" name="email" placeholder="insira seu email aqui" required /> </br>
-        Senha: <input type="password" name="password" placeholder="insira sua senha aqui" required /> </br>
-        <button type="submit">
-            Enviar
-        </button>
-    </form> </br>
-    <a href="/login">Fazer Login</a>
+    <div class="flex min-h-screen flex-col">
+        <div
+            class="inset-0 min-h-screen w-full   bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            <header
+                class="w-full mb-3  bg-linear-to-t from-[#142333] to-[#0d1722] text-shadow-lg/30 text-[#46cca4] rounded-b-4xl text-4xl p-5 font-momo">
+                Freelas</header>
+
+            <p class="p-3 font-trispace text-3xl text-[#46cca4]">Registrar-se</p>
+            <div class="flex-col text-[#f0e8db]/85">
+                <form method="POST" action="/register"
+                    class="mx-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                    <div class="inline-flex items-center justify-between">
+                        <p class="font-trispace text-2xl">É um prazer te conhecer.</p>
+                    </div>
+                    <p class="text-[#bdc8c0]">Já tem uma conta? </br><a
+                            class="text-[#46cca4] hover:opacity-85 underline underline-offset-2" href="/login">faça
+                            login aqui!</a></p>
+                    <p>Nome de Usuário </p>
+                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="username" required
+                        placeholder="Como devemos te chamar?" />
+                    <p>Email </p>
+                    <input type="email" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="email" required
+                        placeholder="email@exemplo.com" />
+                    <p>Senha</p>
+                    <input type="password" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="password"
+                        placeholder="Insira sua senha aqui" />
+                    <p>Confirmar Senha</p>
+                    <input type="password" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="confirmpassword"
+                        placeholder="Escreva sua senha novamente" />
+
+
+                    <button
+                        class="my-2 w-full cursor-pointer rounded-2xl bg-[#46cca4] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                        type="submit">Criar Conta</button>
+                </form>
+            </div>
+
+        </div>
+        <footer class="w-full  gap-6  flex flex-col bg-[#0d1722] text-[#bdc8c0]/80  text-sm p-6 font-lato">
+            <div>
+                <p>Freelas é um serviço independente criado para fins educativos e praticidade de usuários, para saber
+                    mais sobre o projeto acesse nossa <a
+                        class="text-[#46cca4] hover:opacity-85 underline underline-offset-2"
+                        href="https://github.com/fbetarelli/FreelanceManager">página no Github.</a>
+                </p>
+            </div>
+            <div>
+                <p>Freelas™ 2026 Todos os Direitos Resevados.</p>
+            </div>
+        </footer>
+    </div>
+
 </body>
 
 </html>

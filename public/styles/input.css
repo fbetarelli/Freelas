@@ -27,7 +27,6 @@ dialog[open] {
 
 }
 
-
 dialog::backdrop {
     background: rgba(17, 24, 39, 0.9);
     /* igual ao gray-900/90 */
@@ -36,4 +35,5 @@ dialog::backdrop {
 @theme {
     --font-trispace: "Trispace", serif;
     --font-lato: "Lato", serif;
+    --font-momo: "Momo Signature", serif;
 }
