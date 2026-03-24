@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
     })
 })
 
-app.listen(PORT, (err) => {
+app.listen(PORT, '0.0.0.0', (err) => {
     if (err) {
         console.error('Erro ao iniciar server ' + err);
     }
