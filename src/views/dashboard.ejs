@@ -1,71 +1,179 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="/js/dashboard.js" defer></script>
 </head>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Trispace:wght@100..800&display=swap"
+    rel="stylesheet" />
+<link rel="stylesheet" href="/styles/output.css" />
+<script src="/js/dashboard.js" defer></script>
 
 <body>
-    <h1>dashboards</h1> </br>
-    <h3>Olá! <%=username%>
-    </h3>
-    <a href="/logout">Sair</a>
-    <h1>Balanço no último mês: <%=profit%>
-    </h1>
-    <h1>Últimos serviços:</h1>
+    <div class="flex min-h-screen flex-col">
+        <div
+            class="inset-0 min-h-screen w-full bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            <div class="flex flex-col gap-2 px-4 py-6">
+                <div class="mb-2 flex items-center justify-between">
+                    <p class="font-trispace text-3xl">Olá <%=username%>!</p>
+                    <a href="/logout" class="inline-flex text-red-400">
+                        <p>Sair</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                        </svg>
 
-    <% if(jobs.length>0 ) { %>
-        <% jobs.forEach(job=> { %>
-            <p>
-                <b>Descrição:</b>
-                <%=job.descr%>
-                    <b>Data Realizada:</b>
-                    <%=job.jobDate%>
-                        <b> Valor Total:</b>
-                        <%=job.totalValue%> </br>
-                            <b> Status:</b>
-                            <%=job.payed%> </br>
-                                <a href='/job/<%=job.id%>'>Ver Serviço</a>
-            </p>
+                    </a>
+                </div>
 
-            </br>
-            <% })}; %>
-                <h1>Lista de Clientes:</h1>
-                <% clients.forEach(client=> {
+                <dialog id="clientDialog" class="  text-[#f0e8db]/85  flex-col ">
+                    <form method="POST" action="/addClient"
+                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-3 py-4 font-lato text-xl shadow-sm">
+                        <div class="inline-flex items-center justify-between">
+                            <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Cliente</p>
+                            <button id="closeClient">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="ml-4 size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-[#4969db]">Campos obrigatórios*</p>
+                        <p>Nome<i class="text-[#4969db]">*</i></p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="name"
+                            placeholder="Ex: João da Silva" required />
+                        <p>Endereço</p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="address"
+                            placeholder="Ex: Rua 9 de Julho, 412" />
+                        <p>Contato <i class="text-[#4969db]">*</i></p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="contact"
+                            placeholder="Ex: (13) 97386-0157" required />
 
-                    %>
-                    <div class="">
-                        <h3>
-                            Nome: <%= client.name %>
-                        </h3>
-                        <p>
-                            Contato: <%= client.contact%>
+                        <button
+                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#234BDE] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            type="submit">Criar Novo Cliente</button>
+                    </form>
+                </dialog>
+
+                <dialog id="jobDialog" class="  text-[#f0e8db]/85  flex-col ">
+                    <form method="POST" action="/addJob"
+                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-3 py-4 font-lato text-xl shadow-sm">
+                        <div class="inline-flex items-center justify-between">
+                            <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Serviço</p>
+                            <button id="closeJob">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="ml-4 size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-[#DEAD23]">Campos obrigatórios*</p>
+                        <p>Descrição<i class="text-[#DEAD23]">*</i></p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr"
+                            placeholder="Ex: Manutenção Preventiva" required />
+                        <p>Data <i class="text-[#DEAD23]">*</i></p>
+                        <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" required />
+                        <p>Valor Total</p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
+                            placeholder="150,00" />
+
+                        <button
+                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            type="submit">Criar Novo Serviço</button>
+                    </form>
+                </dialog>
+
+                <div
+                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-tl from-[#142333] to-transparent px-3 py-4 text-center font-lato text-xl font-bold shadow-sm">
+                    <p>Balanço:</p>
+                    <p class="text-4xl text-[#46cca4]">R$<%=profit%>
+                    </p>
+                    <p class="text-base text-[#bdc8c0]">(último mês)</p>
+                </div>
+                <div
+                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-3 py-4 text-center font-lato text-xl font-bold shadow-sm">
+                    <p>Serviços:</p>
+                    <p class="text-4xl text-[#46cca4]">5</p>
+                    <p class="text-base text-[#bdc8c0]">(último mês)</p>
+                </div>
+                <div class="flex flex-row gap-2">
+                    <button id="newClientBtn"
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#234BDE] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="mr-2 size-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                        </svg>
+
+                        <p>Novo Cliente</p>
+                    </button>
+                    <button id="newJobBtn"
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#DEAD23] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="mr-2 size-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+                        </svg>
+
+                        Novo Serviço
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex flex-col gap-2">
+                    <% if(jobs.length>0 ) { %>
+
+                        <p class="px-6 font-trispace text-xl text-[#DEAD23]">Últimos Serviços</p>
+                        <% jobs.forEach(job=> { %>
+                            <div class="flex flex-row overflow-hidden px-4 py-2 font-lato font-bold">
+                                <div
+                                    class="mx-2 flex w-full max-w-3xs shrink-1 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 shadow-sm">
+                                    <p class="truncate text-lg">
+                                        <%=job.descr%>
+                                    </p>
+                                    <p class="text-base text-[#bdc8c0]">R$<%=job.totalValue%>
+                                    </p>
+                                    <p class="text-sm text-gray-400">
+                                        <%=job.payed%>
+                                    </p>
+                                    <a href="/job/<%=job.id%>"
+                                        class="my-1 rounded-2xl border-3 border-[#DEAD23] px-4 py-2 text-lg text-[#DEAD23]">Ver
+                                        Serviço</a>
+                                </div>
+                                <% })}; %>
+                            </div>
+                </div>
+            </div>
+
+            <div class="flex w-full flex-col gap-4 px-6 pt-4">
+                <p class="font-trispace text-xl text-[#4969db]">Clientes</p>
+
+                <% clients.forEach(client=> { %>
+                    <div
+                        class="flex w-full flex-col rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-base shadow-sm">
+                        <p class="text truncate font-lato font-bold">
+                            <%= client.name %>
                         </p>
-                        <p>
-                            Endereço: <%= client.address %>
+                        <p class="text-base text-[#bdc8c0]">
+                            <%= client.contact%>
                         </p>
-                        <a href="/client/<%= client.id %>">Ver informações e serviços</a> </br>
+                        <a href="/client/<%=client.id%>"
+                            class="h-sm my-2 rounded-2xl border-3 border-[#234BDE] px-4 py-2 font-lato font-bold text-[#395cdb]">Ver
+                            Detalhes</a>
                     </div>
                     <% })%>
 
-
-                        <h3>Adicionar Cliente</h3>
-                        <form method="POST" action="/addClient">
-                            *Obrigatório </br>
-                            * Nome: </br>
-                            <input type="text" name="name" placeholder="insira o nome do cliente" required /> </br>
-                            Endereço (opcional): </br>
-                            <input type="text" name="address" placeholder="insira o endereço do cliente" /> </br>
-                            * Contato: </br>
-                            <input type="text" name="contact" placeholder="insira o contato do cliente" required />
-                            </br>
-                            <button type="submit">
-                                Enviar
-                            </button>
-                        </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
