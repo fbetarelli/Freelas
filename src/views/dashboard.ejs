@@ -35,12 +35,12 @@
 
                 <dialog id="clientDialog" class="  text-[#f0e8db]/85  flex-col ">
                     <form method="POST" action="/addClient"
-                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-3 py-4 font-lato text-xl shadow-sm">
+                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Cliente</p>
                             <button id="closeClient">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="ml-4 size-6">
+                                    stroke="currentColor" class="ml-4 size-6 hover:opacity-100 opacity-80">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
                             </button>
@@ -63,13 +63,13 @@
                 </dialog>
 
                 <dialog id="jobDialog" class="  text-[#f0e8db]/85  flex-col ">
-                    <form method="POST" action="/addJob"
-                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-3 py-4 font-lato text-xl shadow-sm">
+                    <form method="POST" action="/addJob" id="jobForm"
+                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Serviço</p>
                             <button id="closeJob">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="ml-4 size-6">
+                                    stroke="currentColor" class="ml-4 size-6 hover:opacity-100 opacity-80">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
                             </button>
@@ -83,6 +83,22 @@
                         <p>Valor Total</p>
                         <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
                             placeholder="150,00" />
+                        <p>Cliente</p>
+
+                        <div class="w-full px-1 relative ">
+                            <select class="  w-full appearance-none rounded-2xl bg-[#1b2f44] p-3" name="totalValue">
+                                <option value="seu gerson">seugerson</option>
+                                <option value="seu gerson">seugerson</option>
+                                <option value="seu gerson">seugerson</option>
+                            </select>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                                stroke="currentColor"
+                                class="size-6 absolute right-[15px] top-1/2 pointer-events-none  translate-y-[-50%]">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                            </svg>
+                        </div>
+
 
                         <button
                             class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
@@ -145,7 +161,7 @@
                                         <%=job.payed%>
                                     </p>
                                     <a href="/job/<%=job.id%>"
-                                        class="my-1 rounded-2xl border-3 border-[#DEAD23] px-4 py-2 text-lg text-[#DEAD23]">Ver
+                                        class="my-1 rounded-2xl border-3 border-[#DEAD23] hover:bg-[#DEAD23] hover:text-gray-900 transition-all px-4 py-2 text-lg text-[#DEAD23]">Ver
                                         Serviço</a>
                                 </div>
                                 <% })}; %>
@@ -158,7 +174,7 @@
 
                 <% clients.forEach(client=> { %>
                     <div
-                        class="flex w-full flex-col rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-base shadow-sm">
+                        class="flex w-full flex-col rounded-2xl bg-linear-to-b from-[#142333]  to-[#142333]/50 p-4 text-base shadow-sm">
                         <p class="text truncate font-lato font-bold">
                             <%= client.name %>
                         </p>
@@ -166,7 +182,7 @@
                             <%= client.contact%>
                         </p>
                         <a href="/client/<%=client.id%>"
-                            class="h-sm my-2 rounded-2xl border-3 border-[#234BDE] px-4 py-2 font-lato font-bold text-[#395cdb]">Ver
+                            class="h-sm my-2 rounded-2xl border-3 border-[#234BDE] hover:bg-[#234BDE] transition-all hover:text-gray-900 px-4 py-2 font-lato font-bold text-[#395cdb]">Ver
                             Detalhes</a>
                     </div>
                     <% })%>

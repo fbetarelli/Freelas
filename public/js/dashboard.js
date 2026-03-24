@@ -8,11 +8,10 @@ const closeClient = document.getElementById('closeClient')
 const closeJob = document.getElementById('closeJob')
 
 newClientBtn.addEventListener('click', () => {
-
-    setTimeout(clientDialog.showModal(), 1000)
+    clientDialog.showModal()
 })
 newJobBtn.addEventListener('click', () => {
-    setTimeout(jobDialog.showModal(), 1000)
+    jobDialog.showModal()
 })
 
 closeClient.addEventListener('click', () => {
