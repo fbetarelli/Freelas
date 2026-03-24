@@ -1,23 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/styles/output.css" />
 </head>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Trispace:wght@100..800&display=swap"
+    rel="stylesheet" />
+<link rel="stylesheet" href="/styles/output.css" />
 
 <body>
-    <h3>Login</h3>
-    <form method="POST" action="/login">
-        Login: <input type="email" name="email" placeholder="insira seu email aqui" required /> </br>
-        Senha: <input type="password" name="password" placeholder="insira sua senha aqui" required /> </br>
-        <button type="submit">
-            Enviar
-        </button>
-    </form></br>
-    <a href="/register">Registrar</a>
+    <div class="flex min-h-screen flex-col">
+        <div
+            class="inset-0 min-h-screen w-full bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            <p class="p-6 font-trispace text-3xl text-[#46cca4]">Login</p>
+            <div id="jobDialog" class="flex-col text-[#f0e8db]/85">
+                <form method="POST" action="/login" id="jobForm"
+                    class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                    <div class="inline-flex items-center justify-between">
+                        <p class="font-trispace text-2xl">Bem vindo de volta!</p>
+                    </div>
+                    <p class="text-[#bdc8c0]">Não tem uma conta ainda? </br><a
+                            class="text-[#46cca4] hover:opacity-85 underline underline-offset-2"
+                            href="/register">Registre-se aqui!</a></p>
+                    <p>Email </p>
+                    <input type="email" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="email" required
+                        placeholder="email@exemplo.com" />
+                    <p>Senha</p>
+                    <input type="password" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="password"
+                        placeholder="Insira sua senha aqui" />
+
+
+                    <button
+                        class="my-2 w-full cursor-pointer rounded-2xl bg-[#46cca4] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                        type="submit">Fazer Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
