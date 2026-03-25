@@ -51,10 +51,17 @@ app.use('/', JobRoutes)
 app.use((err, req, res, next) => {
     console.error(err)
 
-    res.status(500).render("erro", {
-        errorMessage: "Erro interno do servidor"
-    })
+    res.status(500).render("erro")
 })
+
+//middleware generico pega tudo que nao foi tratado antes
+
+app.use((req, res) => {
+    res.status(404).render('erro', {
+        title: '404',
+        message: 'Página não encontrada'
+    });
+});
 
 app.listen(PORT, '0.0.0.0', (err) => {
     if (err) {

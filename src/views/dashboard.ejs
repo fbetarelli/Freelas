@@ -25,8 +25,8 @@
             <div class="flex flex-col gap-2 px-4 pt-4 pb-6">
                 <div class="mb-2 flex items-center justify-between">
                     <p class="font-trispace text-3xl">Olá <%=username%>!</p>
-                    <a href="/logout" class="inline-flex text-red-400">
-                        <p>Sair</p>
+                    <a href="/logout" class="inline-flex text-red-400 hover:opacity-75">
+                        <p class="font-medium ">Sair</p>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -48,19 +48,19 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="text-[#4969db]">Campos obrigatórios*</p>
-                        <p>Nome<i class="text-[#4969db]">*</i></p>
+                        <p class="text-[#1c8da6]">Campos obrigatórios*</p>
+                        <p>Nome<i class="text-[#1c8da6]">*</i></p>
                         <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="name"
                             placeholder="Ex: João da Silva" required />
                         <p>Endereço</p>
                         <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="address"
                             placeholder="Ex: Rua 9 de Julho, 412" />
-                        <p>Contato <i class="text-[#4969db]">*</i></p>
+                        <p>Contato <i class="text-[#1c8da6]">*</i></p>
                         <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="contact"
                             placeholder="Ex: (13) 97386-0157" required />
 
                         <button
-                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#234BDE] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#1C8DA6] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                             type="submit">Criar Novo Cliente</button>
                     </form>
                 </dialog>
@@ -124,7 +124,7 @@
                 </div>
                 <div class="flex flex-row gap-2">
                     <button id="newClientBtn"
-                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#234BDE] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#1C8DA6] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="mr-2 size-8">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -174,7 +174,7 @@
             </div>
 
             <div class="flex w-full flex-col gap-4 px-6 py-4 pb-8">
-                <p class="font-trispace text-xl text-[#4969db]">Clientes</p>
+                <p class="font-trispace text-xl text-[#1c8da6]">Clientes</p>
 
                 <% clients.forEach(client=> { %>
                     <div
@@ -182,11 +182,11 @@
                         <p class="text truncate font-lato font-bold">
                             <%= client.name %>
                         </p>
-                        <p class="text-base text-[#bdc8c0]">
+                        <p class="text-base text-[#1C8DA6]">
                             <%= client.contact%>
                         </p>
                         <a href="/client/<%=client.id%>"
-                            class="h-sm my-2 rounded-2xl border-3 border-[#234BDE] hover:bg-[#234BDE] transition-all hover:text-gray-900 px-4 py-2 font-lato font-bold text-[#395cdb]">Ver
+                            class="h-sm my-2 rounded-2xl border-3 border-[#1C8DA6] hover:bg-[#1C8DA6] transition-all hover:text-gray-900 px-4 py-2 font-lato font-bold text-[#1C8DA6]">Ver
                             Detalhes</a>
                     </div>
                     <% })%>
