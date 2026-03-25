@@ -1,63 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freelas: <%=client.name%>
+    </title>
 </head>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Momo+Signature&family=Trispace:wght@100..800&display=swap"
+    rel="stylesheet" />
+<link rel="stylesheet" href="/styles/output.css" />
+<script src="/js/dashboard.js" defer></script>
 
 <body>
-    <h1>
-        <%= client.name%>
-            <%= client.id%>
-    </h1>
-    <form method="POST" action="/client/<%=client.id%>/edit">
-        Nome: </br>
-        <input type="text" name="name" placeholder="editar o nome do cliente" /> </br>
-        Endereço: </br>
-        <input type="text" name="address" placeholder="editar o endereço do cliente" /> </br>
-        Contato: </br>
-        <input type="text" name="contact" placeholder="editar o contato do cliente" /> </br>
-        <button type="submit">
-            Enviar
-        </button>
-    </form>
-    <a href="/client/<%=client.id%>/delete">
-        <h3>Apagar cliente</h3>
-    </a>
-    <h3>Criar Serviço</h3>
-    <form method="POST" action="/client/<%=client.id%>/addJob">
-        Descrição: </br>
-        <input type="text" name="descr" placeholder="Descrição do serviço" required /> </br>
-        Data: </br>
-        <input type="date" name="date" required /> </br>
-        Valor Total: </br>
-        <input type="text" name="totalValue" placeholder="Valor total do serviço" /> </br>
-        <button type="submit">
-            Enviar
-        </button>
-    </form>
-    <h3>Serviços</h3>
-    <% if(jobs.length>0 ) { %>
-        <% jobs.forEach(job=> { %>
-            <p>
-                <b>Descrição:</b>
-                <%=job.descr%>
-                    <b>Data Realizada:</b>
-                    <%=job.jobDate%>
-                        <b> Valor Total:</b>
-                        <%=job.totalValue%> </br>
-                            <b> Status:</b>
-                            <%=job.payed%> </br>
-                                <a href='/job/<%=job.id%>'>Ver Serviço</a>
-            </p>
+    <div class="flex min-h-screen flex-col">
+        <div
+            class="inset-0 min-h-screen w-full bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            <header
+                class="mb-3 w-full rounded-b-4xl bg-linear-to-t from-[#142333] to-[#0d1722] p-5 font-momo text-4xl text-[#46cca4] text-shadow-lg/30">
+                Freelas</header>
+            <div class="flex flex-col gap-2 px-4 pt-4 pb-6">
+                <div class="pb-3">
+                    <p class="font-trispace text-3xl font-medium text-[#1C8DA6]">Página do Cliente</p>
+                    <ul class="flex gap-1 truncate p-1 text-sm text-gray-500">
+                        <li><a href="/dashboard" class="hover:underline">Dashboard</a> -></li>
 
-            </br>
-            <% })}; %>
+                        <li><a href="/clients" class="hover:underline">Clientes</a> -></li>
 
-                <a href="/dashboard">Voltar</a>
+                        <li>
+                            <%=client.name%>
+                        </li>
+                    </ul>
+                </div>
 
+                <dialog id="clientDialog" class="flex-col text-[#f0e8db]/85">
+                    <form method="POST" action="/client/<%=client.id%>/edit"
+                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                        <div class="inline-flex items-center justify-between">
+                            <p class="font-trispace text-2xl text-[#46cca4]">Editar Cliente</p>
+                            <button id="closeClient">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p>Nome</p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="name"
+                            value="<%=client.name%>" maxlength="50" />
+                        <p>Endereço</p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="address"
+                            value="<%=client.address%>" placeholder="Ex: Rua 9 de Julho, 412" maxlength="60" />
+                        <p>Contato</p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="contact"
+                            value="<%=client.contact%>" placeholder="Ex: (13) 97386-0157" maxlength="30" />
+
+                        <button
+                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#1C8DA6] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            type="submit">Salvar Alterações</button>
+                    </form>
+                </dialog>
+
+                <dialog id="jobDialog" class="flex-col text-[#f0e8db]/85">
+                    <form method="POST" action="/client/<%=client.id%>/addJob"
+                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                        <div class="inline-flex items-center justify-between">
+                            <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Serviço</p>
+                            <button id="closeJob">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-[#DEAD23]">Campos obrigatórios*</p>
+                        <p>Descrição<i class="text-[#DEAD23]">*</i></p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr"
+                            placeholder="Ex: Manutenção Preventiva" required />
+                        <p>Data <i class="text-[#DEAD23]">*</i></p>
+                        <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" required />
+                        <p>Valor Total</p>
+                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
+                            placeholder="150,00" />
+
+                        <button
+                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            type="submit">Criar Novo Serviço</button>
+                    </form>
+                </dialog>
+
+
+                <div
+                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-4 py-4 font-lato text-lg font-bold shadow-sm">
+                    <p class="font-trispace text-center   text-2xl">
+                        <%=client.name%>
+                    </p>
+                    <div class="w-full p-[1px] my-3  bg-linear-to-r from-transparent via-[#243e5c] to-transparent">
+                    </div>
+                    <p class="wrap-anywhere">
+                        <i class="text-[#1C8DA6] ">Endereço: </i>
+                        <%=client.address%>
+                    </p>
+                    <p><i class="text-[#1C8DA6]">Contato: </i>
+                        <%=client.contact%>
+                    </p>
+                </div>
+                <div class="flex flex-row gap-2">
+                    <button id="ClientBtn"
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#1C8DA6] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="mr-2 size-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+
+
+                        <p>Editar Cliente</p>
+                    </button>
+                    <button id="newJobBtn"
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#DEAD23] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="mr-2 size-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+                        </svg>
+
+                        Novo Serviço
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex w-full flex-col gap-4 px-6 py-4 pb-8">
+                <p class="font-trispace text-xl text-[#DEAD23]">Serviços</p>
+                <% if(jobs.length>0 ) { %>
+                    <% jobs.forEach(job=> { %>
+                        <div
+                            class="flex w-full flex-col rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-base shadow-sm">
+                            <p class="truncate font-lato text-lg font-bold">
+                                <%=job.descr%>
+                            </p>
+                            <p class="truncate font-lato font-bold">
+                                <%=job.totalValue%>
+                            </p>
+                            <p class="text-gray-400">
+                                <%=job.payed%>
+                            </p>
+                            <a href="/job/<%=job.id%>"
+                                class="h-sm my-2 rounded-2xl border-3 border-[#DEAD23] px-4 py-2 font-lato font-bold text-[#DEAD23] transition-all hover:bg-[#DEAD23] hover:text-gray-900">Ver
+                                Detalhes</a>
+                        </div>
+                        <% })} %>
+            </div>
+        </div>
+        <footer class="flex w-full flex-col gap-6 bg-[#0d1722] p-6 font-lato text-sm text-[#bdc8c0]/80">
+            <p>Freelas é um serviço independente criado para fins educativos e praticidade de usuários, para saber mais
+                sobre o projeto acesse nossa <a class="text-[#46cca4] underline underline-offset-2 hover:opacity-85"
+                    href="https://github.com/fbetarelli/FreelanceManager">página no Github.</a></p>
+            <p>Freelas™ 2026 Todos os Direitos Resevados.</p>
+        </footer>
+    </div>
 </body>
 
 </html>

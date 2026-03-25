@@ -1,13 +1,13 @@
 const clientDialog = document.getElementById('clientDialog')
 const jobDialog = document.getElementById('jobDialog')
 
-const newClientBtn = document.getElementById('newClientBtn')
+const ClientBtn = document.getElementById('ClientBtn')
 const newJobBtn = document.getElementById('newJobBtn')
 
 const closeClient = document.getElementById('closeClient')
 const closeJob = document.getElementById('closeJob')
 
-newClientBtn.addEventListener('click', () => {
+ClientBtn.addEventListener('click', () => {
     clientDialog.showModal()
 })
 newJobBtn.addEventListener('click', () => {
