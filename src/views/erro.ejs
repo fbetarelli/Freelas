@@ -22,18 +22,17 @@
                 class="mb-3 w-full rounded-b-4xl bg-linear-to-t from-[#142333] to-[#0d1722] p-5 font-momo text-4xl text-[#46cca4] text-shadow-lg/30">
                 Freelas</header>
 
-            <p class="p-3 font-trispace text-3xl text-[#cc4646]">Erro <%if (title) {%>
-                    <%=title%>:
-                        <%=message%>
-                            <% }else {%> Inesperado <% }%>
+            <p class="p-3 font-trispace text-3xl text-[#cc4646]">Erro
+                <%=title%>:
+                    <%=message%>
+
             </p>
 
-            <div method="POST" action="/login"
-                class="mx-4 flex flex-col gap-5 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            <div class="mx-4 flex flex-col gap-5 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                 <div class="inline-flex items-center justify-between">
                     <p class="font-trispace text-2xl">Ops! parece que ocorreu um erro em nosso sistema. :/</p>
                 </div>
-                <p class="text-[#bdc8c0]">Caso o erro persista por favor nos mande contate ou mande um issue report em
+                <p class="text-[#bdc8c0]">Caso o erro persista por favor nos contate ou mande um issue report em
                     <a class="text-[#cc4646] underline underline-offset-2 hover:opacity-85"
                         href="https://github.com/fbetarelli/FreelanceManager">nosso Github.</a>
                 </p>
