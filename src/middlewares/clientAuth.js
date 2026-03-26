@@ -5,10 +5,15 @@ async function authorize(req, res, next) {
     let client = await dao.getClientById(req.params.id)
     if (client && req.session.user && req.session.user.id === client.getUserId()) {
 
-        next()
+        return next()
     }
     else {
-        res.redirect('/')
+
+        const err = new Error()
+        err.message = 'Acesso Proibido';
+        err.code = 401;
+
+        return next(err)
     }
 
 }
