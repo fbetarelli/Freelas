@@ -7,6 +7,7 @@ const DashboardRoutes = require('./src/routes/DashboardRoutes');
 const ClientRoutes = require('./src/routes/ClientRoutes');
 const JobRoutes = require('./src/routes/JobRoutes');
 const path = require('path');
+const flash = require('connect-flash')
 
 const logger = require('morgan');
 //const helmet = require('helmet');
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //App.use imports
 app.use(logger('dev'))
+app.use(flash())
 //app.use(helmet())
 
 //Body parser
