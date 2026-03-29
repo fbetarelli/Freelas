@@ -21,3 +21,28 @@ closeClient.addEventListener('click', () => {
 closeJob.addEventListener('click', () => {
     jobDialog.close()
 })
+
+document.addEventListener('DOMContentLoaded', (e) => {
+    let buttons = document.querySelectorAll('.submitForm')
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            let input = btn.closest('.actionForm').querySelector('.valueInput')
+            let errMsg = btn.closest('.actionForm').querySelector('.actionError')
+            let valor = formatarParaFloat(input.value)
+
+            if (isNaN(valor) || valor <= 0) {
+                e.preventDefault();
+                errMsg.innerHTML = 'Insira um valor válido!'
+            } else {
+                errMsg.innerHTML = ''
+            }
+        })
+    });
+})
+
+function formatarParaFloat(valor) {
+    //retira os pontos EX: 12,99 para 12.99
+    const temp = valor.replace(/\./g, '')
+    const final = temp.replace(/,/g, '.')
+    return (final)
+}

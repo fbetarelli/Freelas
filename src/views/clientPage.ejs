@@ -67,7 +67,7 @@
 
                 <dialog id="jobDialog" class="flex-col text-[#f0e8db]/85">
                     <form method="POST" action="/client/<%=client.id%>/addJob"
-                        class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                        class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Serviço</p>
                             <button id="closeJob" type="button">
@@ -84,12 +84,13 @@
                         <p>Data <i class="text-[#DEAD23]">*</i></p>
                         <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" required />
                         <p>Valor Total<i class="text-[#DEAD23]">*</i></p>
-                        <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
+                        <input type="text" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
                             placeholder="150,00" required />
 
                         <button
-                            class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                             type="submit">Criar Novo Serviço</button>
+                        <p class="actionError text-red-400"></p>
                     </form>
                 </dialog>
 
