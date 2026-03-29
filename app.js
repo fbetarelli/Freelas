@@ -55,7 +55,7 @@ app.use((err, req, res, next) => {
 
     res.status(err.code || 500).render("erro", {
         title: err.code || '500',
-        message: err.message || 'Indeterminado'
+        message: err.customMessage || 'Indeterminado'
     })
 })
 

@@ -10,7 +10,7 @@ async function authorize(req, res, next) {
     else {
 
         const err = new Error()
-        err.message = 'Acesso Proibido';
+        err.customMessage = 'Acesso Proibido';
         err.code = 401;
 
         return next(err)
