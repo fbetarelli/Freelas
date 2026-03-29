@@ -7,7 +7,9 @@ const deleteJobDialog = document.getElementById('deleteJobDialog')
 
 const newMaterialBtn = document.getElementById('newMaterialBtn')
 const submitAddMaterial = document.getElementById('submitAddMaterial')
+const submitAddPayment = document.getElementById('submitAddPayment')
 const newPaymentBtn = document.getElementById('newPaymentBtn')
+
 const editJobBtn = document.getElementById('editJobBtn')
 const deleteJobBtn = document.getElementById('deleteJobBtn')
 
@@ -43,30 +45,8 @@ closeDeleteJob.addEventListener('click', () => {
     deleteJobDialog.close()
 })
 
-unitaryVal = document.getElementById('addUnitaryVal');
-const addMaterialError = document.getElementById('addMaterialError');
-submitAddMaterial.addEventListener('click', (e) => {
-    if (isNaN(formatarParaFloat(unitaryVal.value))) {
-        e.preventDefault();
-        addMaterialError.innerHTML = "Insira um valor unitário válido!"
 
-    } else {
-        addMaterialError.innerHTML = ""
-    }
-})
-/*
-paymentValue = document.getElementById('paymentValue');
-const addPaymentError = document.getElementById('addPaymentError');
-submitAddPayment.addEventListener('click', (e) => {
-    if (isNaN(formatarParaFloat(paymentValue.value))) {
-        e.preventDefault();
-        addPaymentError.innerHTML = "Insira um valor válido!"
 
-    } else {
-        addPaymentError.innerHTML = ""
-    }
-})
-*/
 function formatarParaFloat(valor) {
     //retira os pontos EX: 12,99 para 12.99
     const temp = valor.replace(/\./g, '')
@@ -75,40 +55,61 @@ function formatarParaFloat(valor) {
 }
 
 const materialsList = document.getElementById('materialsList')
-materialsList.addEventListener('click', (e) => {
-    let btn = e.target.closest('.editMaterialButton')
-    if (!btn) return;
+if (materialsList) {
+    materialsList.addEventListener('click', (e) => {
+        let btn = e.target.closest('.editMaterialButton')
+        if (!btn) return;
 
-    let id = btn.dataset.id
-    dialog = document.querySelector(`.editMaterialDialog[data-id="${id}"]`)
-    dialog.showModal()
+        toggleModals(btn, 'editMaterialDialog', 'showModal')
 
-})
-materialsList.addEventListener('click', (e) => {
-    let btn = e.target.closest('.closeEditMaterial')
-    if (!btn) return;
+    })
+    materialsList.addEventListener('click', (e) => {
+        let btn = e.target.closest('.closeEditMaterial')
+        if (!btn) return;
 
-    let id = btn.dataset.id
-    dialog = document.querySelector(`.editMaterialDialog[data-id="${id}"]`)
-    dialog.close()
+        toggleModals(btn, 'editMaterialDialog', 'close')
 
-})
+    })
+}
 const paymentsList = document.getElementById('paymentsList')
-paymentsList.addEventListener('click', (e) => {
-    let btn = e.target.closest('.closeEditPayment')
-    if (!btn) return;
+if (paymentsList) {
+    paymentsList.addEventListener('click', (e) => {
+        let btn = e.target.closest('.closeEditPayment')
+        if (!btn) return;
 
+        toggleModals(btn, 'editPaymentDialog', 'close')
+
+    })
+    paymentsList.addEventListener('click', (e) => {
+        let btn = e.target.closest('.editPaymentButton')
+        if (!btn) return;
+
+        toggleModals(btn, 'editPaymentDialog', 'showModal')
+
+    })
+
+}
+
+function toggleModals(btn, cssselector, action) {
     let id = btn.dataset.id
-    dialog = document.querySelector(`.editPaymentDialog[data-id="${id}"]`)
-    dialog.close()
+    let dialog = document.querySelector(`.${cssselector}[data-id="${id}"]`)
+    dialog[action]()
+}
 
-})
-paymentsList.addEventListener('click', (e) => {
-    let btn = e.target.closest('.editPaymentButton')
-    if (!btn) return;
+document.addEventListener('DOMContentLoaded', (e) => {
+    let buttons = document.querySelectorAll('.submitForm')
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            let input = btn.closest('.actionForm').querySelector('.valueInput')
+            let errMsg = btn.closest('.actionForm').querySelector('.actionError')
+            let valor = formatarParaFloat(input.value)
 
-    let id = btn.dataset.id
-    dialog = document.querySelector(`.editPaymentDialog[data-id="${id}"]`)
-    dialog.showModal()
-
+            if (isNaN(valor) || valor <= 0) {
+                e.preventDefault();
+                errMsg.innerHTML = 'Insira um valor válido!'
+            } else {
+                errMsg.innerHTML = ''
+            }
+        })
+    });
 })

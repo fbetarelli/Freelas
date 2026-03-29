@@ -64,18 +64,22 @@
                 </div>
                 <div
                     class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-4 py-4 font-lato text-lg shadow-sm">
-                    <p>
-                        Total Dos Pagamentos:
-                        <span class="text-[#ca2e55]">+R$<%=paymentsVal%></span>
-                    </p>
-                    <p>
-                        Total Dos Materiais:
-                        <span class="text-[#F06543]">-R$<%=materialsVal%></span>
-                    </p>
-                    <p>
-                        Lucro Total:
-                        <span class="text-[#46cca4]"> R$<%=profit%></span>
-                    </p>
+                    <% if (payments.length>0) { %>
+                        <p>
+                            Total Dos Pagamentos:
+                            <span class="text-[#ca2e55]">+R$<%=paymentsVal%></span>
+                        </p>
+                        <% }%>
+                            <% if (materials.length>0) { %>
+                                <p>
+                                    Total Dos Materiais:
+                                    <span class="text-[#F06543]">-R$<%=materialsVal%></span>
+                                </p>
+                                <% }%>
+                                    <p>
+                                        Lucro Total:
+                                        <span class="text-[#46cca4]"> R$<%=profit%></span>
+                                    </p>
                 </div>
 
                 <button id="editJobBtn"
@@ -135,9 +139,9 @@
                             </div>
                             <dialog data-id="<%=material.id%>" class="editMaterialDialog flex-col text-[#f0e8db]/85">
                                 <form method="POST" action="/job/<%=job.id%>/material/<%=material.id%>/edit"
-                                    class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                                    class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                                     <div class="inline-flex items-center justify-between">
-                                        <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Material</p>
+                                        <p class="font-trispace text-2xl text-[#46cca4]">Editar Material</p>
                                         <button data-id="<%=material.id%>" class="closeEditMaterial" type="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor"
@@ -157,14 +161,14 @@
                                     <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="qnt"
                                         placeholder="Ex: 1" value="<%=material.qnt%>" />
                                     <p>Valor Unitário</p>
-                                    <input id="addUnitaryVal" type="text" inputmode="decimal"
-                                        class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="unitaryVal"
+                                    <input type="text" inputmode="decimal"
+                                        class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="unitaryVal"
                                         placeholder="Ex: 11,99" value="<%=material.unitaryVal%>" />
 
-                                    <button id="submitAddMaterial"
-                                        class="my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                    <button
+                                        class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                                         type="submit">Editar Material</button>
-                                    <p id="addMaterialError" class="text-red-400"></p>
+                                    <p class="actionError text-red-400"></p>
                                     <a href="/job/<%=job.id%>/material/<%=material.id%>/delete"
                                         class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">
                                         Apagar Material</a>
@@ -199,7 +203,7 @@
                                     <dialog data-id="<%=payment.id%>"
                                         class="editPaymentDialog flex-col text-[#f0e8db]/85">
                                         <form method="POST" action="/job/<%=job.id%>/payment/<%=payment.id%>/edit"
-                                            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                                            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                                             <div class="inline-flex items-center justify-between">
                                                 <p class="font-trispace text-2xl text-[#46cca4]">Editar Pagamento</p>
                                                 <button data-id="<%=payment.id%>" class="closeEditPayment"
@@ -214,9 +218,9 @@
                                             </div>
 
                                             <p>Valor</p>
-                                            <input type="text" id="paymentValue"
-                                                class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="value"
-                                                placeholder="Valor do Pagamento" value="<%=payment.value%>" />
+                                            <input type="text" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                                                name="value" placeholder="Valor do Pagamento"
+                                                value="<%=payment.value%>" />
                                             <p>Método de Pagamento</p>
                                             <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="method"
                                                 placeholder="Ex: Pix" value="<%=payment.method%>" />
@@ -228,10 +232,10 @@
                                             <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
                                                 name="paymentDate" />
 
-                                            <button id="submitAddPayment"
-                                                class="my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                            <button
+                                                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                                                 type="submit">Editar Pagamento</button>
-                                            <p id="addPaymentError" class="text-red-400"></p>
+                                            <p class="actionError text-red-400"></p>
                                             <a href="/job/<%=job.id%>/payment/<%=payment.id%>/delete"
                                                 class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">
                                                 Apagar Pagamento</a>
@@ -253,7 +257,7 @@
 
     <dialog id="jobDialog" class="flex-col text-[#f0e8db]/85">
         <form method="POST" action="/job/<%=job.id%>/edit"
-            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
                 <p class="font-trispace text-2xl text-[#46cca4]">Editar Serviço</p>
                 <button id="closeJob" type="button">
@@ -269,8 +273,8 @@
             <p>Data</p>
             <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" />
             <p>Valor Total</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue" value="<%=job.totalValue%>"
-                placeholder="150,00" />
+            <input type="text" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
+                value="<%=job.totalValue%>" placeholder="150,00" />
             <p>Serviço foi pago?</p>
             <div class="relative w-full px-1">
                 <select name="payed" class="w-full appearance-none rounded-2xl bg-[#1b2f44] p-3">
@@ -286,8 +290,9 @@
             </div>
 
             <button
-                class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                 type="submit">Salvar Alterações</button>
+            <p class="actionError text-red-400"></p>
             <button type="button" id="deleteJobBtn"
                 class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">Apagar
                 Serviço</button>
@@ -316,7 +321,7 @@
     </dialog>
     <dialog id="addMaterialDialog" class="flex-col text-[#f0e8db]/85">
         <form method="POST" action="/job/<%=job.id%>/material/add"
-            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
                 <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Material</p>
                 <button id="closeAddMaterial" type="button">
@@ -335,18 +340,19 @@
             <p>Quantidade</p>
             <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="qnt" placeholder="Ex: 1" required />
             <p>Valor Unitário</p>
-            <input id="addUnitaryVal" type="text" inputmode="decimal" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
-                name="unitaryVal" placeholder="Ex: 11,99" required />
+            <input id="addUnitaryVal" type="text" inputmode="decimal"
+                class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="unitaryVal" placeholder="Ex: 11,99"
+                required />
 
             <button id="submitAddMaterial"
-                class="my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                 type="submit">Adicionar Material</button>
-            <p id="addMaterialError" class="text-red-400"></p>
+            <p class="actionError text-red-400"></p>
         </form>
     </dialog>
     <dialog id="addPaymentDialog" class="flex-col text-[#f0e8db]/85">
         <form method="POST" action="/job/<%=job.id%>/payment/add"
-            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
                 <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Pagamento</p>
                 <button id="closeAddPayment" type="button">
@@ -358,7 +364,7 @@
             </div>
 
             <p>Valor</p>
-            <input type="text" id="paymentValue" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="value"
+            <input type="text" id="paymentValue" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="value"
                 placeholder="Valor do Pagamento" required />
             <p>Método de Pagamento</p>
             <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="method" placeholder="Ex: Pix" />
@@ -369,9 +375,9 @@
             <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="paymentDate" required />
 
             <button id="submitAddPayment"
-                class="my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                 type="submit">Adicionar Pagamento</button>
-            <p id="addPaymentError" class="text-red-400"></p>
+            <p class="actionError text-red-400"></p>
         </form>
     </dialog>
 </body>
