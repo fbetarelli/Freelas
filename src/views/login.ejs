@@ -43,6 +43,11 @@
                     <button
                         class="my-2 w-full cursor-pointer rounded-2xl bg-[#46cca4] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                         type="submit">Fazer Login</button>
+                    <% if (message.length>0) { %>
+                        <p class=" text-red-400">
+                            <%=message[0]%>
+                        </p>
+                        <% }%>
                 </form>
             </div>
 

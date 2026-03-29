@@ -2,7 +2,7 @@ const UserServices = require('../services/UserServices')
 const asyncHandler = require('../utils/asyncHandler');
 
 exports.showLogin = (req, res) => {
-    res.render('login')
+    res.render('login', { message: req.flash('info') })
 }
 
 exports.login = asyncHandler(async (req, res) => {
@@ -19,6 +19,7 @@ exports.login = asyncHandler(async (req, res) => {
         }
         res.redirect('/dashboard')
     } else {
+        req.flash('info', 'Login ou Senha inválidos.')
         res.redirect('/login')
     }
 
