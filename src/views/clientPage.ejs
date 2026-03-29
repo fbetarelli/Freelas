@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Momo+Signature&family=Trispace:wght@100..800&display=swap"
     rel="stylesheet" />
 <link rel="stylesheet" href="/styles/output.css" />
-<script src="/js/dashboard.js" defer></script>
+<script src="/js/clientPage.js" defer></script>
 
 <body>
     <div class="flex min-h-screen flex-col">
@@ -42,7 +42,7 @@
                         class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-[#46cca4]">Editar Cliente</p>
-                            <button id="closeClient">
+                            <button id="closeClient" type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                     stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -70,7 +70,7 @@
                         class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Serviço</p>
-                            <button id="closeJob">
+                            <button id="closeJob" type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                     stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -83,9 +83,9 @@
                             placeholder="Ex: Manutenção Preventiva" required />
                         <p>Data <i class="text-[#DEAD23]">*</i></p>
                         <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" required />
-                        <p>Valor Total</p>
+                        <p>Valor Total<i class="text-[#DEAD23]">*</i></p>
                         <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
-                            placeholder="150,00" />
+                            placeholder="150,00" required />
 
                         <button
                             class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
@@ -144,7 +144,7 @@
                                 <%=job.descr%>
                             </p>
                             <p class="truncate font-lato font-bold">
-                                <%=job.totalValue%>
+                                R$<%=job.totalValue%>
                             </p>
                             <p class="text-gray-400">
                                 <%=job.payed%>

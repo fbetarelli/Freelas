@@ -1,148 +1,379 @@
-<!DOCTYPE html>
+</html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freelas: <%=job.descr%>
+    </title>
 </head>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Momo+Signature&family=Trispace:wght@100..800&display=swap"
+    rel="stylesheet" />
+<link rel="stylesheet" href="/styles/output.css" />
+<script src="/js/jobPage.js" defer></script>
 
 <body>
-    <h3>
-        Descrição:
-    </h3>
-    <%=job.descr%>
-        <h3> Data Realizada:</h3>
-        <%=job.jobDate%>
-            <h3> Valor Total:</h3>
-            <%=job.totalValue%> </br>
-                <h3> Status:
-                    <%=job.payed%>
-                </h3>
-                <h3> Valor Total dos Pagamentos:</h3>
-                <%=paymentsVal%> </br>
-                    <h3> Valor Total dos Materiais:</h3>
-                    <%=materialsVal%> </br>
-                        <h3> Balanço total:</h3>
-                        <%=profit%> </br>
+    <div class="flex min-h-screen flex-col">
+        <div
+            class="inset-0 min-h-screen w-full bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            <header
+                class="mb-3 w-full rounded-b-4xl bg-linear-to-t from-[#142333] to-[#0d1722] p-5 font-momo text-4xl text-[#46cca4] text-shadow-lg/30">
+                Freelas</header>
+            <div class="flex flex-col gap-2 px-4 pt-4 pb-6">
+                <div class="pb-3">
+                    <p class="font-trispace text-3xl font-medium text-[#DEAD23]">Página do Serviço</p>
+                    <ul class="flex gap-1 truncate p-1 text-sm text-gray-500">
+                        <li><a href="/dashboard" class="hover:underline">Dashboard</a> -></li>
 
+                        <li><a href="/clients" class="hover:underline">Clientes</a> -></li>
 
+                        <li><a href="/client/<%=job.clientId%>" class="hover:underline">Cliente</a> -></li>
+                        <li>
+                            <%=job.descr%>
+                        </li>
+                    </ul>
+                </div>
 
-                            <a href='/job/<%=job.id%>/delete'>Deletar Serviço</a>
-                            <h3>Editar Serviço</h3>
-                            <form method="POST" action="/job/<%=job.id%>/edit">
-                                Serviço foi pago? </br>
-                                <select name="payed">
-                                    <option value="">Não alterar</option>
-                                    <option value="true">Pago</option>
-                                    <option value="false">Não pago</option>
-                                </select>
-                                </br>
-                                Descrição: </br>
-                                <input type="text" name="descr" placeholder="Descrição do serviço" /> </br>
-                                Data: </br>
-                                <input type="date" name="date" /> </br>
-                                Valor Total: </br>
-                                <input type="text" name="totalValue" placeholder="Valor total do serviço" /> </br>
-                                <button type="submit">
-                                    Enviar
-                                </button>
-                            </form>
-                            <h3>Adicionar Material</h3>
-                            <form method="POST" action="/job/<%=job.id%>/material/add">
-                                Descrição: <input type="text" name="descr" placeholder="Descrição do Material"
-                                    required /> </br>
-                                Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" /> </br>
-                                Quantidade:<input type="number" name="qnt" placeholder="Quantidade do Material"
-                                    required />
-                                </br>
-                                Valor Unitário:<input type="text" name="unitaryVal" placeholder="00,00" required />
-                                </br>
-                                <button type="submit">
-                                    Enviar
-                                </button>
-                            </form></br>
-                            <h3>Adicionar Pagamento</h3>
-                            <form method="POST" action="/job/<%=job.id%>/payment/add">
-                                Valor:<input type="text" name="value" placeholder="00,00" required /> </br>
-                                Método de pagamento: <input type="text" name="method"
-                                    placeholder="Método ou forma de pagamento" />
-                                </br>
-                                Data do pagamento: </br>
-                                <input type="date" name="paymentDate" /> </br>
-                                Parcela:<input type="text" name="installment" placeholder="Número da parcela" /> </br>
-                                <button type="submit">
-                                    Enviar
-                                </button>
-                            </form></br>
-                            <a href='/client/<%=job.clientId%>'>Voltar ao cliente</a> </br></br>
-                            <h1>MATERIAIS:</h1>
-                            <% if(materials.length>0 ) { %>
-                                <% materials.forEach(material=> { %>
-                                    <p>
-                                        <b>Descrição:</b>
-                                        <%=material.descr%>
-                                            <b>Quantidade:</b>
-                                            <%=material.qnt%>
-                                                <b> Valor Unitário:</b>
-                                                <%=material.unitaryVal%> </br>
-                                                    <b> Valor Total:</b>
-                                                    <%=material.totalVal%> </br>
-                                                        <b> Fornecedor:</b>
-                                                        <%=material.supplier%> </br>
+                <div
+                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-4 py-4 font-lato text-lg shadow-sm">
+                    <p class="text-center font-trispace text-2xl font-bold">
+                        <%=job.descr%>
+                    </p>
+                    <div class="my-3 w-full bg-linear-to-r from-transparent via-[#243e5c] to-transparent p-[1px]"></div>
+                    <p class="wrap-anywhere">
+                        Serviço Realizado em
+                        <span class="text-[#DEAD23]">
+                            <%=job.jobDate%>
+                        </span>
+                    </p>
+                    <p>
+                        Valor Total:
+                        <span class="text-[#DEAD23]">R$<%=job.totalValue%></span>
+                    </p>
+                    <p>
+                        Status:
+                        <span class="text-[#DEAD23]">
+                            <%=job.payed%>
+                        </span>
+                    </p>
+                </div>
+                <div
+                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-4 py-4 font-lato text-lg shadow-sm">
+                    <p>
+                        Total Dos Pagamentos:
+                        <span class="text-[#ca2e55]">+R$<%=paymentsVal%></span>
+                    </p>
+                    <p>
+                        Total Dos Materiais:
+                        <span class="text-[#F06543]">-R$<%=materialsVal%></span>
+                    </p>
+                    <p>
+                        Lucro Total:
+                        <span class="text-[#46cca4]"> R$<%=profit%></span>
+                    </p>
+                </div>
 
-                                    </p>
-                                    <h3>Editar Material</h3>
-                                    <form method="POST" action="/job/<%=job.id%>/material/<%=material.id%>/edit">
-                                        Descrição: <input type="text" name="descr"
-                                            placeholder="Descrição do Material" />
-                                        </br>
-                                        Fornecedor:<input type="text" name="supplier" placeholder="Fornecedor/Loja" />
-                                        </br>
-                                        Quantidade:<input type="number" name="qnt"
-                                            placeholder="Quantidade do Material" />
-                                        </br>
-                                        Valor Unitário:<input type="text" name="unitaryVal" placeholder="00,00" /> </br>
-                                        <button type="submit">
-                                            Enviar
+                <button id="editJobBtn"
+                    class="inline-flex w-full cursor-pointer items-center rounded-2xl bg-[#DEAD23] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="mr-2 size-8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+
+                    <p>Editar Serviço</p>
+                </button>
+
+                <div class="flex flex-row gap-2">
+                    <button id="newMaterialBtn"
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#F06543] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="mr-2 size-8">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
+                        </svg>
+
+                        <p>Novo Material</p>
+                    </button>
+                    <button id="newPaymentBtn"
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#ca2e55] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="mr-2 size-10">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                        </svg>
+
+                        Novo Pagamento
+                    </button>
+                </div>
+            </div>
+            <% if(materials.length>0 ) { %>
+                <div id="materialsList" class="flex flex-col gap-2">
+                    <p class="px-6 pb-2 font-trispace text-xl text-[#F06543]">Materiais</p>
+
+                    <div class="flex flex-row overflow-x-auto px-4 pb-4 font-lato font-bold">
+                        <% materials.forEach(material=> { %>
+                            <div
+                                class="mx-2 flex w-full max-w-3xs shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-lg shadow-sm">
+                                <p class="truncate">
+                                    <%=material.descr%> <span class="text-[#F06543]">x<%=material.qnt%></span>
+                                </p>
+                                <p class="truncate text-base text-gray-400">Valor Uni. <%=material.unitaryVal%>
+                                </p>
+                                <p class="truncate text-base text-gray-400">Fornecedor: <%=material.supplier%>
+                                </p>
+                                <p>Preço Total: <span class="text-[#F06543]">R$<%=material.totalVal%></span></p>
+
+                                <button data-id="<%=material.id%>"
+                                    class="editMaterialButton my-1 rounded-2xl border-3 border-[#F06543] px-4 py-2 text-lg text-[#F06543] transition-all hover:bg-[#F06543] hover:text-gray-900">Editar
+                                    Material</button>
+                            </div>
+                            <dialog data-id="<%=material.id%>" class="editMaterialDialog flex-col text-[#f0e8db]/85">
+                                <form method="POST" action="/job/<%=job.id%>/material/<%=material.id%>/edit"
+                                    class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                                    <div class="inline-flex items-center justify-between">
+                                        <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Material</p>
+                                        <button data-id="<%=material.id%>" class="closeEditMaterial" type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor"
+                                                class="ml-4 size-6 opacity-80 hover:opacity-100">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M6 18 18 6M6 6l12 12" />
+                                            </svg>
                                         </button>
-                                    </form>
-                                    <a href='/job/<%=job.id%>/material/<%=material.id%>/delete'>Deletar Material</a>
-                                    <% })}; %>
-                                        <h1>PAGAMENTOS</h1>
-                                        <% if(payments.length>0 ) { %>
-                                            <% payments.forEach(payment=> { %>
-                                                <p>
-                                                    <b>Método:</b>
-                                                    <%=payment.method%>
-                                                        <b>Valor:</b>
-                                                        <%=payment.value%>
-                                                            <b> Data de pagamento:</b>
-                                                            <%=payment.paymentDate%> </br>
-                                                                <b> Número da Parcela:</b>
-                                                                <%=payment.installment%> </br>
+                                    </div>
+                                    <p>Descrição</p>
+                                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr"
+                                        placeholder="Ex: Lâmpada LED 9W" value="<%=material.descr%>" />
+                                    <p>Fornecedor</p>
+                                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="supplier"
+                                        placeholder="Loja/Fornecedor do Material" value="<%=material.supplier%>" />
+                                    <p>Quantidade</p>
+                                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="qnt"
+                                        placeholder="Ex: 1" value="<%=material.qnt%>" />
+                                    <p>Valor Unitário</p>
+                                    <input id="addUnitaryVal" type="text" inputmode="decimal"
+                                        class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="unitaryVal"
+                                        placeholder="Ex: 11,99" value="<%=material.unitaryVal%>" />
 
-                                                </p>
-                                                <h3>Editar Pagamento</h3>
-                                                <form method="POST"
-                                                    action="/job/<%=job.id%>/payment/<%=payment.id%>/edit">
-                                                    Valor:<input type="text" name="value" placeholder="00,00" /> </br>
-                                                    Método de pagamento: <input type="text" name="method"
-                                                        placeholder="Método ou forma de pagamento" />
-                                                    </br>
-                                                    Data do pagamento: </br>
-                                                    <input type="date" name="paymentDate" /> </br>
+                                    <button id="submitAddMaterial"
+                                        class="my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                        type="submit">Editar Material</button>
+                                    <p id="addMaterialError" class="text-red-400"></p>
+                                    <a href="/job/<%=job.id%>/material/<%=material.id%>/delete"
+                                        class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">
+                                        Apagar Material</a>
+                                </form>
+                            </dialog>
+                            <% })%>
+                    </div>
 
-                                                    Parcela:<input type="text" name="installment"
-                                                        placeholder="Número da parcela" />
-                                                    </br>
-                                                    <button type="submit">
-                                                        Enviar
-                                                    </button>
-                                                </form></br>
-                                                <a href='/job/<%=job.id%>/payment/<%=payment.id%>/delete'>Deletar
-                                                    Pagamento</a>
-                                                <% })}; %>
+                </div>
+                <%}%>
+
+                    <% if(payments.length>0 ) { %>
+                        <div id="paymentsList" class="flex flex-col gap-2">
+                            <p class="px-6 py-2 font-trispace text-xl text-[#ca2e55]">Pagamentos</p>
+
+                            <div class="flex flex-row overflow-x-auto px-4 pb-4 font-lato font-bold">
+                                <% payments.forEach(payment=> { %>
+                                    <div
+                                        class="mx-2 flex w-full max-w-3xs shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-lg shadow-sm">
+                                        <p>Valor do Pagamento: <span class="text-[#ca2e55]">R$<%=payment.value%></span>
+                                        </p>
+                                        <p class="truncate text-base text-gray-400">Método: <%=payment.method%>
+                                        </p>
+                                        <p>Parcela: <span class="text-[#ca2e55]">
+                                                <%=payment.installment%>x
+                                            </span></p>
+
+                                        <button data-id="<%=payment.id%>"
+                                            class="editPaymentButton my-1 rounded-2xl border-3 border-[#ca2e55] px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">Editar
+                                            Pagamento</button>
+                                    </div>
+                                    <dialog data-id="<%=payment.id%>"
+                                        class="editPaymentDialog flex-col text-[#f0e8db]/85">
+                                        <form method="POST" action="/job/<%=job.id%>/payment/<%=payment.id%>/edit"
+                                            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                                            <div class="inline-flex items-center justify-between">
+                                                <p class="font-trispace text-2xl text-[#46cca4]">Editar Pagamento</p>
+                                                <button data-id="<%=payment.id%>" class="closeEditPayment"
+                                                    type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        class="ml-4 size-6 opacity-80 hover:opacity-100">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M6 18 18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <p>Valor</p>
+                                            <input type="text" id="paymentValue"
+                                                class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="value"
+                                                placeholder="Valor do Pagamento" value="<%=payment.value%>" />
+                                            <p>Método de Pagamento</p>
+                                            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="method"
+                                                placeholder="Ex: Pix" value="<%=payment.method%>" />
+                                            <p>Número da Parcela</p>
+                                            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                                                name="installment" placeholder="Ex: 1"
+                                                value="<%=payment.installment%>" />
+                                            <p>Data do Pagamento</p>
+                                            <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                                                name="paymentDate" />
+
+                                            <button id="submitAddPayment"
+                                                class="my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                                type="submit">Editar Pagamento</button>
+                                            <p id="addPaymentError" class="text-red-400"></p>
+                                            <a href="/job/<%=job.id%>/payment/<%=payment.id%>/delete"
+                                                class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">
+                                                Apagar Pagamento</a>
+                                        </form>
+                                    </dialog>
+                                    <%})%>
+                            </div>
+                        </div>
+                        <%}%>
+        </div>
+        <footer class="flex w-full flex-col gap-6 bg-[#0d1722] p-6 font-lato text-sm text-[#bdc8c0]/80">
+            <p>Freelas é um serviço independente criado para fins educativos e praticidade de usuários, para saber mais
+                sobre
+                o projeto acesse nossa <a class="text-[#46cca4] underline underline-offset-2 hover:opacity-85"
+                    href="https://github.com/fbetarelli/FreelanceManager">página no Github.</a></p>
+            <p>Freelas™ 2026 Todos os Direitos Resevados.</p>
+        </footer>
+    </div>
+
+    <dialog id="jobDialog" class="flex-col text-[#f0e8db]/85">
+        <form method="POST" action="/job/<%=job.id%>/edit"
+            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            <div class="inline-flex items-center justify-between">
+                <p class="font-trispace text-2xl text-[#46cca4]">Editar Serviço</p>
+                <button id="closeJob" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <p>Descrição</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr"
+                placeholder="Ex: Manutenção Preventiva" value="<%=job.descr%>" />
+            <p>Data</p>
+            <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" />
+            <p>Valor Total</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue" value="<%=job.totalValue%>"
+                placeholder="150,00" />
+            <p>Serviço foi pago?</p>
+            <div class="relative w-full px-1">
+                <select name="payed" class="w-full appearance-none rounded-2xl bg-[#1b2f44] p-3">
+                    <option value="">Não alterar</option>
+                    <option value="true">Pago</option>
+                    <option value="false">Não pago</option>
+                </select>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                    stroke="currentColor"
+                    class="pointer-events-none absolute top-1/2 right-[15px] size-6 translate-y-[-50%]">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                </svg>
+            </div>
+
+            <button
+                class="my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                type="submit">Salvar Alterações</button>
+            <button type="button" id="deleteJobBtn"
+                class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">Apagar
+                Serviço</button>
+        </form>
+    </dialog>
+    <dialog id="deleteJobDialog" class="flex-col text-[#f0e8db]/85">
+        <div class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            <div class="inline-flex items-center justify-between">
+                <p class="font-trispace text-2xl text-red-400">Apagar Serviço?</p>
+                <button id="closeDeleteJob" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mx-auto pt-6 pb-8 text-center">
+                <p>Você tem certeza disso?</p>
+                <p>Esta ação é <b class="text-red-400">Irreversível!</b></p>
+            </div>
+            <a href="/job/<%=job.id%>/delete"
+                class="-mt-1 rounded-2xl bg-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-gray-900 transition-all hover:bg-[#ca2e55] hover:text-gray-900">
+                Estou ciente disso.</a>
+        </div>
+
+    </dialog>
+    <dialog id="addMaterialDialog" class="flex-col text-[#f0e8db]/85">
+        <form method="POST" action="/job/<%=job.id%>/material/add"
+            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            <div class="inline-flex items-center justify-between">
+                <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Material</p>
+                <button id="closeAddMaterial" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <p>Descrição</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr" placeholder="Ex: Lâmpada LED 9W"
+                required />
+            <p>Fornecedor</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="supplier"
+                placeholder="Loja/Fornecedor do Material" />
+            <p>Quantidade</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="qnt" placeholder="Ex: 1" required />
+            <p>Valor Unitário</p>
+            <input id="addUnitaryVal" type="text" inputmode="decimal" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                name="unitaryVal" placeholder="Ex: 11,99" required />
+
+            <button id="submitAddMaterial"
+                class="my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                type="submit">Adicionar Material</button>
+            <p id="addMaterialError" class="text-red-400"></p>
+        </form>
+    </dialog>
+    <dialog id="addPaymentDialog" class="flex-col text-[#f0e8db]/85">
+        <form method="POST" action="/job/<%=job.id%>/payment/add"
+            class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            <div class="inline-flex items-center justify-between">
+                <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Pagamento</p>
+                <button id="closeAddPayment" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <p>Valor</p>
+            <input type="text" id="paymentValue" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="value"
+                placeholder="Valor do Pagamento" required />
+            <p>Método de Pagamento</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="method" placeholder="Ex: Pix" />
+            <p>Número da Parcela</p>
+            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="installment" placeholder="Ex: 1"
+                required />
+            <p>Data do Pagamento</p>
+            <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="paymentDate" required />
+
+            <button id="submitAddPayment"
+                class="my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                type="submit">Adicionar Pagamento</button>
+            <p id="addPaymentError" class="text-red-400"></p>
+        </form>
+    </dialog>
 </body>
 
 </html>
