@@ -63,15 +63,21 @@ class ClientDAO {
         }
 
     }
-    async getClients(userId) {
-        const query = `SELECT * FROM clients WHERE userId=$1`
+    async getLatestClients(userId) {
+        const query = `
+                        SELECT * FROM clients LEFT JOIN (SELECT clientId, MAX(jobDate) AS lastJobDate
+                        FROM jobs
+                        GROUP BY clientId) AS latest_jobs ON clients.id = latest_jobs.clientid WHERE clients.userId = $1 ORDER BY  latest_jobs.lastJobDate DESC NULLS LAST
+                        `
         const params = [userId]
+        console.log(userId)
 
         try {
             const res = await pool.query(query, params);
             const clientsArray = [];
 
             if (res.rows.length > 0) {
+
 
 
                 res.rows.forEach(obj => {
@@ -90,7 +96,7 @@ class ClientDAO {
                 return clientsArray;
             }
         } catch (error) {
-            console.error('Erro no ClienteDAO getClients ' + error)
+            console.error('Erro no ClienteDAO getLatestClients ' + error)
             throw error
         }
 

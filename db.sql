@@ -62,8 +62,14 @@ WHERE jobs.userId = 1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'
 
 select * from materials;
 
+SELECT * FROM clients JOIN jobs ON clients.id = jobs.clientId  ORDER BY jobDate DESC LIMIT 5
 
-
+SELECT * FROM clients JOIN (SELECT clientId, MAX(jobDate)
+FROM jobs
+GROUP BY clientId)
+SELECT clientId, MAX(jobDate)
+FROM jobs
+GROUP BY clientId
 
 INSERT INTO clients(name,address,contact,userID) VALUES ('nome','endereco','contato','2') RETURNING 1
 

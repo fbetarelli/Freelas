@@ -91,7 +91,7 @@ class JobDAO {
 
     }
     async getJobsByClient(clientId) {
-        const query = `SELECT * FROM jobs WHERE clientId=$1`
+        const query = `SELECT * FROM jobs WHERE clientId=$1 ORDER BY jobDate DESC`
         const params = [clientId]
 
         try {

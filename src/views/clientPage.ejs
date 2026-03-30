@@ -142,11 +142,14 @@
                         <div
                             class="flex w-full flex-col rounded-2xl bg-linear-to-b from-card-background to-card-background/50 p-4 text-base shadow-sm">
                             <p class="truncate font-lato text-lg font-bold">
-                                <%=job.descr%>
+                                <%=job.descr%> <span class="text-gray-400 text-base">
+                                        (<%=job.jobDate%>)
+                                    </span>
                             </p>
-                            <p class="truncate font-lato font-bold">
+                            <p class="text-service-accent truncate font-lato font-bold">
                                 R$<%=job.totalValue%>
                             </p>
+
                             <p class="text-gray-400">
                                 <%=job.payed%>
                             </p>

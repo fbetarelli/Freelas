@@ -4,8 +4,8 @@ const UserServices = require('../services/UserServices')
 const asyncHandler = require('../utils/asyncHandler');
 
 exports.showDashboard = asyncHandler(async (req, res) => {
-    
-    const clientsResult = await ClientServices.getClients(req.session.user.id);
+
+    const clientsResult = await ClientServices.getLatestClients(req.session.user.id);
     const jobsResult = await JobServices.getLastJobsByUser(req.session.user.id)
     const userResult = await UserServices.getProfitFromLastMonth(req.session.user.id)
 

@@ -14,8 +14,8 @@ exports.deleteClient = async (clientId) => {
     return runDAO(dao, "deleteClient", clientId);
 }
 
-exports.getClients = async (userId) => {
-    return runDAO(dao, "getClients", userId, toDTO, "clients")
+exports.getLatestClients = async (userId) => {
+    return runDAO(dao, "getLatestClients", userId, toDTO, "clients")
 }
 
 exports.getClientById = async (id) => {
