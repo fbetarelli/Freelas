@@ -20,13 +20,13 @@
 <body>
     <div class="flex min-h-screen flex-col">
         <div
-            class="inset-0 min-h-screen w-full bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            class="inset-0 min-h-screen w-full bg-main-background bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-main-text/85">
             <header
-                class="mb-3 w-full rounded-b-4xl bg-linear-to-t from-[#142333] to-[#0d1722] p-5 font-momo text-4xl text-[#46cca4] text-shadow-lg/30">
+                class="mb-3 w-full rounded-b-4xl bg-linear-to-t from-card-background to-footer p-5 font-momo text-4xl text-main-accent text-shadow-lg/30">
                 Freelas</header>
             <div class="flex flex-col gap-2 px-4 pt-4 pb-6">
                 <div class="pb-3">
-                    <p class="font-trispace text-3xl font-medium text-[#DEAD23]">Página do Serviço</p>
+                    <p class="font-trispace text-3xl font-medium text-service-accent">Página do Serviço</p>
                     <ul class="flex gap-1 truncate p-1 text-sm text-gray-500">
                         <li><a href="/dashboard" class="hover:underline">Dashboard</a> -></li>
 
@@ -40,50 +40,50 @@
                 </div>
 
                 <div
-                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-4 py-4 font-lato text-lg shadow-sm">
+                    class="w-full rounded-2xl border-5 border-card-background bg-linear-to-br from-card-background to-transparent px-4 py-4 font-lato text-lg shadow-sm">
                     <p class="text-center font-trispace text-2xl font-bold">
                         <%=job.descr%>
                     </p>
                     <div class="my-3 w-full bg-linear-to-r from-transparent via-[#243e5c] to-transparent p-[1px]"></div>
                     <p class="wrap-anywhere">
                         Serviço Realizado em
-                        <span class="text-[#DEAD23]">
+                        <span class="text-service-accent">
                             <%=job.jobDate%>
                         </span>
                     </p>
                     <p>
                         Valor Total:
-                        <span class="text-[#DEAD23]">R$<%=job.totalValue%></span>
+                        <span class="text-service-accent">R$<%=job.totalValue%></span>
                     </p>
                     <p>
                         Status:
-                        <span class="text-[#DEAD23]">
+                        <span class="text-service-accent">
                             <%=job.payed%>
                         </span>
                     </p>
                 </div>
                 <div
-                    class="w-full rounded-2xl border-5 border-[#142333] bg-linear-to-br from-[#142333] to-transparent px-4 py-4 font-lato text-lg shadow-sm">
+                    class="w-full rounded-2xl border-5 border-card-background bg-linear-to-br from-card-background to-transparent px-4 py-4 font-lato text-lg shadow-sm">
                     <% if (payments.length>0) { %>
                         <p>
                             Total Dos Pagamentos:
-                            <span class="text-[#ca2e55]">+R$<%=paymentsVal%></span>
+                            <span class="text-payment-accent">+R$<%=paymentsVal%></span>
                         </p>
                         <% }%>
                             <% if (materials.length>0) { %>
                                 <p>
                                     Total Dos Materiais:
-                                    <span class="text-[#F06543]">-R$<%=materialsVal%></span>
+                                    <span class="text-material-accent">-R$<%=materialsVal%></span>
                                 </p>
                                 <% }%>
                                     <p>
                                         Lucro Total:
-                                        <span class="text-[#46cca4]"> R$<%=profit%></span>
+                                        <span class="text-main-accent"> R$<%=profit%></span>
                                     </p>
                 </div>
 
                 <button id="editJobBtn"
-                    class="inline-flex w-full cursor-pointer items-center rounded-2xl bg-[#DEAD23] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                    class="inline-flex w-full cursor-pointer items-center rounded-2xl bg-service-accent p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="mr-2 size-8">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -95,7 +95,7 @@
 
                 <div class="flex flex-row gap-2">
                     <button id="newMaterialBtn"
-                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#F06543] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-material-accent p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="mr-2 size-8">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -105,7 +105,7 @@
                         <p>Novo Material</p>
                     </button>
                     <button id="newPaymentBtn"
-                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-[#ca2e55] p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-payment-accent p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="mr-2 size-10">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -118,30 +118,30 @@
             </div>
             <% if(materials.length>0 ) { %>
                 <div id="materialsList" class="flex flex-col gap-2">
-                    <p class="px-6 pb-2 font-trispace text-xl text-[#F06543]">Materiais</p>
+                    <p class="px-6 pb-2 font-trispace text-xl text-material-accent">Materiais</p>
 
                     <div class="flex flex-row overflow-x-auto px-4 pb-4 font-lato font-bold">
                         <% materials.forEach(material=> { %>
                             <div
-                                class="mx-2 flex w-full max-w-3xs shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-lg shadow-sm">
+                                class="mx-2 flex w-full max-w-3xs shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-card-background to-card-background/50 p-4 text-lg shadow-sm">
                                 <p class="truncate">
-                                    <%=material.descr%> <span class="text-[#F06543]">x<%=material.qnt%></span>
+                                    <%=material.descr%> <span class="text-material-accent">x<%=material.qnt%></span>
                                 </p>
                                 <p class="truncate text-base text-gray-400">Valor Uni. <%=material.unitaryVal%>
                                 </p>
                                 <p class="truncate text-base text-gray-400">Fornecedor: <%=material.supplier%>
                                 </p>
-                                <p>Preço Total: <span class="text-[#F06543]">R$<%=material.totalVal%></span></p>
+                                <p>Preço Total: <span class="text-material-accent">R$<%=material.totalVal%></span></p>
 
                                 <button data-id="<%=material.id%>"
-                                    class="editMaterialButton my-1 rounded-2xl border-3 border-[#F06543] px-4 py-2 text-lg text-[#F06543] transition-all hover:bg-[#F06543] hover:text-gray-900">Editar
+                                    class="editMaterialButton my-1 rounded-2xl border-3 border-material-accent px-4 py-2 text-lg text-material-accent transition-all hover:bg-material-accent hover:text-gray-900">Editar
                                     Material</button>
                             </div>
-                            <dialog data-id="<%=material.id%>" class="editMaterialDialog flex-col text-[#f0e8db]/85">
+                            <dialog data-id="<%=material.id%>" class="editMaterialDialog flex-col text-main-text/85">
                                 <form method="POST" action="/job/<%=job.id%>/material/<%=material.id%>/edit"
-                                    class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                                    class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
                                     <div class="inline-flex items-center justify-between">
-                                        <p class="font-trispace text-2xl text-[#46cca4]">Editar Material</p>
+                                        <p class="font-trispace text-2xl text-main-accent">Editar Material</p>
                                         <button data-id="<%=material.id%>" class="closeEditMaterial" type="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor"
@@ -152,25 +152,25 @@
                                         </button>
                                     </div>
                                     <p>Descrição</p>
-                                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr"
+                                    <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
                                         placeholder="Ex: Lâmpada LED 9W" value="<%=material.descr%>" />
                                     <p>Fornecedor</p>
-                                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="supplier"
+                                    <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="supplier"
                                         placeholder="Loja/Fornecedor do Material" value="<%=material.supplier%>" />
                                     <p>Quantidade</p>
-                                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="qnt"
+                                    <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="qnt"
                                         placeholder="Ex: 1" value="<%=material.qnt%>" />
                                     <p>Valor Unitário</p>
                                     <input type="text" inputmode="decimal"
-                                        class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="unitaryVal"
+                                        class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="unitaryVal"
                                         placeholder="Ex: 11,99" value="<%=material.unitaryVal%>" />
 
                                     <button
-                                        class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                        class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-material-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                                         type="submit">Editar Material</button>
                                     <p class="actionError text-red-400"></p>
                                     <a href="/job/<%=job.id%>/material/<%=material.id%>/delete"
-                                        class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">
+                                        class="-mt-1 rounded-2xl border-3 border-payment-accent font-bold text-center px-4 py-2 text-lg text-payment-accent transition-all hover:bg-payment-accent hover:text-gray-900">
                                         Apagar Material</a>
                                 </form>
                             </dialog>
@@ -182,30 +182,30 @@
 
                     <% if(payments.length>0 ) { %>
                         <div id="paymentsList" class="flex flex-col gap-2">
-                            <p class="px-6 py-2 font-trispace text-xl text-[#ca2e55]">Pagamentos</p>
+                            <p class="px-6 py-2 font-trispace text-xl text-payment-accent">Pagamentos</p>
 
                             <div class="flex flex-row overflow-x-auto px-4 pb-4 font-lato font-bold">
                                 <% payments.forEach(payment=> { %>
                                     <div
-                                        class="mx-2 flex w-full max-w-3xs shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-[#142333] to-[#142333]/50 p-4 text-lg shadow-sm">
-                                        <p>Valor do Pagamento: <span class="text-[#ca2e55]">R$<%=payment.value%></span>
+                                        class="mx-2 flex w-full max-w-3xs shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-card-background to-card-background/50 p-4 text-lg shadow-sm">
+                                        <p>Valor do Pagamento: <span class="text-payment-accent">R$<%=payment.value%></span>
                                         </p>
                                         <p class="truncate text-base text-gray-400">Método: <%=payment.method%>
                                         </p>
-                                        <p>Parcela: <span class="text-[#ca2e55]">
+                                        <p>Parcela: <span class="text-payment-accent">
                                                 <%=payment.installment%>x
                                             </span></p>
 
                                         <button data-id="<%=payment.id%>"
-                                            class="editPaymentButton my-1 rounded-2xl border-3 border-[#ca2e55] px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">Editar
+                                            class="editPaymentButton my-1 rounded-2xl border-3 border-payment-accent px-4 py-2 text-lg text-payment-accent transition-all hover:bg-payment-accent hover:text-gray-900">Editar
                                             Pagamento</button>
                                     </div>
                                     <dialog data-id="<%=payment.id%>"
-                                        class="editPaymentDialog flex-col text-[#f0e8db]/85">
+                                        class="editPaymentDialog flex-col text-main-text/85">
                                         <form method="POST" action="/job/<%=job.id%>/payment/<%=payment.id%>/edit"
-                                            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                                            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
                                             <div class="inline-flex items-center justify-between">
-                                                <p class="font-trispace text-2xl text-[#46cca4]">Editar Pagamento</p>
+                                                <p class="font-trispace text-2xl text-main-accent">Editar Pagamento</p>
                                                 <button data-id="<%=payment.id%>" class="closeEditPayment"
                                                     type="button">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -218,26 +218,26 @@
                                             </div>
 
                                             <p>Valor</p>
-                                            <input type="text" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                                            <input type="text" class="valueInput mx-2 rounded-2xl bg-input-box p-3"
                                                 name="value" placeholder="Valor do Pagamento"
                                                 value="<%=payment.value%>" />
                                             <p>Método de Pagamento</p>
-                                            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="method"
+                                            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="method"
                                                 placeholder="Ex: Pix" value="<%=payment.method%>" />
                                             <p>Número da Parcela</p>
-                                            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                                            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3"
                                                 name="installment" placeholder="Ex: 1"
                                                 value="<%=payment.installment%>" />
                                             <p>Data do Pagamento</p>
-                                            <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3"
+                                            <input type="date" class="mx-2 rounded-2xl bg-input-box p-3"
                                                 name="paymentDate" />
 
                                             <button
-                                                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-payment-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                                                 type="submit">Editar Pagamento</button>
                                             <p class="actionError text-red-400"></p>
                                             <a href="/job/<%=job.id%>/payment/<%=payment.id%>/delete"
-                                                class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">
+                                                class="-mt-1 rounded-2xl border-3 border-payment-accent font-bold text-center px-4 py-2 text-lg text-payment-accent transition-all hover:bg-payment-accent hover:text-gray-900">
                                                 Apagar Pagamento</a>
                                         </form>
                                     </dialog>
@@ -246,20 +246,20 @@
                         </div>
                         <%}%>
         </div>
-        <footer class="flex w-full flex-col gap-6 bg-[#0d1722] p-6 font-lato text-sm text-[#bdc8c0]/80">
+        <footer class="flex w-full flex-col gap-6 bg-footer p-6 font-lato text-sm text-[#bdc8c0]/80">
             <p>Freelas é um serviço independente criado para fins educativos e praticidade de usuários, para saber mais
                 sobre
-                o projeto acesse nossa <a class="text-[#46cca4] underline underline-offset-2 hover:opacity-85"
+                o projeto acesse nossa <a class="text-main-accent underline underline-offset-2 hover:opacity-85"
                     href="https://github.com/fbetarelli/FreelanceManager">página no Github.</a></p>
             <p>Freelas™ 2026 Todos os Direitos Resevados.</p>
         </footer>
     </div>
 
-    <dialog id="jobDialog" class="flex-col text-[#f0e8db]/85">
+    <dialog id="jobDialog" class="flex-col text-main-text/85">
         <form method="POST" action="/job/<%=job.id%>/edit"
-            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
-                <p class="font-trispace text-2xl text-[#46cca4]">Editar Serviço</p>
+                <p class="font-trispace text-2xl text-main-accent">Editar Serviço</p>
                 <button id="closeJob" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
@@ -268,16 +268,16 @@
                 </button>
             </div>
             <p>Descrição</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr"
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
                 placeholder="Ex: Manutenção Preventiva" value="<%=job.descr%>" />
             <p>Data</p>
-            <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="date" />
+            <input type="date" class="mx-2 rounded-2xl bg-input-box p-3" name="date" />
             <p>Valor Total</p>
-            <input type="text" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="totalValue"
+            <input type="text" class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="totalValue"
                 value="<%=job.totalValue%>" placeholder="150,00" />
             <p>Serviço foi pago?</p>
             <div class="relative w-full px-1">
-                <select name="payed" class="w-full appearance-none rounded-2xl bg-[#1b2f44] p-3">
+                <select name="payed" class="w-full appearance-none rounded-2xl bg-input-box p-3">
                     <option value="">Não alterar</option>
                     <option value="true">Pago</option>
                     <option value="false">Não pago</option>
@@ -290,16 +290,16 @@
             </div>
 
             <button
-                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#DEAD23] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-service-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                 type="submit">Salvar Alterações</button>
             <p class="actionError text-red-400"></p>
             <button type="button" id="deleteJobBtn"
-                class="-mt-1 rounded-2xl border-3 border-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-[#ca2e55] transition-all hover:bg-[#ca2e55] hover:text-gray-900">Apagar
+                class="-mt-1 rounded-2xl border-3 border-payment-accent font-bold text-center px-4 py-2 text-lg text-payment-accent transition-all hover:bg-payment-accent hover:text-gray-900">Apagar
                 Serviço</button>
         </form>
     </dialog>
-    <dialog id="deleteJobDialog" class="flex-col text-[#f0e8db]/85">
-        <div class="m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+    <dialog id="deleteJobDialog" class="flex-col text-main-text/85">
+        <div class="m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
                 <p class="font-trispace text-2xl text-red-400">Apagar Serviço?</p>
                 <button id="closeDeleteJob" type="button">
@@ -314,16 +314,16 @@
                 <p>Esta ação é <b class="text-red-400">Irreversível!</b></p>
             </div>
             <a href="/job/<%=job.id%>/delete"
-                class="-mt-1 rounded-2xl bg-[#ca2e55] font-bold text-center px-4 py-2 text-lg text-gray-900 transition-all hover:bg-[#ca2e55] hover:text-gray-900">
+                class="-mt-1 rounded-2xl bg-payment-accent font-bold text-center px-4 py-2 text-lg text-gray-900 transition-all hover:bg-payment-accent hover:text-gray-900">
                 Estou ciente disso.</a>
         </div>
 
     </dialog>
-    <dialog id="addMaterialDialog" class="flex-col text-[#f0e8db]/85">
+    <dialog id="addMaterialDialog" class="flex-col text-main-text/85">
         <form method="POST" action="/job/<%=job.id%>/material/add"
-            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
-                <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Material</p>
+                <p class="font-trispace text-2xl text-main-accent">Adicionar Material</p>
                 <button id="closeAddMaterial" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
@@ -331,30 +331,31 @@
                     </svg>
                 </button>
             </div>
-            <p>Descrição</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="descr" placeholder="Ex: Lâmpada LED 9W"
+            <p class="text-material-accent">Campos obrigatórios*</p>
+            <p>Descrição<span class="text-material-accent">*</span></p>
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr" placeholder="Ex: Lâmpada LED 9W"
                 required />
             <p>Fornecedor</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="supplier"
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="supplier"
                 placeholder="Loja/Fornecedor do Material" />
-            <p>Quantidade</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="qnt" placeholder="Ex: 1" required />
-            <p>Valor Unitário</p>
+            <p>Quantidade<span class="text-material-accent">*</span></p>
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="qnt" placeholder="Ex: 1" required />
+            <p>Valor Unitário<span class="text-material-accent">*</span></p>
             <input id="addUnitaryVal" type="text" inputmode="decimal"
-                class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="unitaryVal" placeholder="Ex: 11,99"
+                class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="unitaryVal" placeholder="Ex: 11,99"
                 required />
 
             <button id="submitAddMaterial"
-                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#F06543] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-material-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                 type="submit">Adicionar Material</button>
             <p class="actionError text-red-400"></p>
         </form>
     </dialog>
-    <dialog id="addPaymentDialog" class="flex-col text-[#f0e8db]/85">
+    <dialog id="addPaymentDialog" class="flex-col text-main-text/85">
         <form method="POST" action="/job/<%=job.id%>/payment/add"
-            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+            class="actionForm m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
             <div class="inline-flex items-center justify-between">
-                <p class="font-trispace text-2xl text-[#46cca4]">Adicionar Pagamento</p>
+                <p class="font-trispace text-2xl text-main-accent">Adicionar Pagamento</p>
                 <button id="closeAddPayment" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="ml-4 size-6 opacity-80 hover:opacity-100">
@@ -362,20 +363,20 @@
                     </svg>
                 </button>
             </div>
-
-            <p>Valor</p>
-            <input type="text" id="paymentValue" class="valueInput mx-2 rounded-2xl bg-[#1b2f44] p-3" name="value"
+            <p class="text-payment-accent">Campos obrigatórios*</p>
+            <p>Valor <span class="text-payment-accent">*</span></p>
+            <input type="text" id="paymentValue" class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="value"
                 placeholder="Valor do Pagamento" required />
             <p>Método de Pagamento</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="method" placeholder="Ex: Pix" />
-            <p>Número da Parcela</p>
-            <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="installment" placeholder="Ex: 1"
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="method" placeholder="Ex: Pix" />
+            <p>Número da Parcela<span class="text-payment-accent">*</span></p>
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="installment" placeholder="Ex: 1"
                 required />
-            <p>Data do Pagamento</p>
-            <input type="date" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="paymentDate" required />
+            <p>Data do Pagamento<span class="text-payment-accent">*</span></p>
+            <input type="date" class="mx-2 rounded-2xl bg-input-box p-3" name="paymentDate" required />
 
             <button id="submitAddPayment"
-                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-[#ca2e55] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-payment-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                 type="submit">Adicionar Pagamento</button>
             <p class="actionError text-red-400"></p>
         </form>

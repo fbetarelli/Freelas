@@ -17,47 +17,47 @@
 <body>
     <div class="flex min-h-screen flex-col">
         <div
-            class="inset-0 min-h-screen w-full   bg-[#0a131f] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-[#f0e8db]/85">
+            class="inset-0 min-h-screen w-full   bg-main-background bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-main-text/85">
             <header
-                class="w-full mb-3  bg-linear-to-t from-[#142333] to-[#0d1722] text-shadow-lg/30 text-[#46cca4] rounded-b-4xl text-4xl p-5 font-momo">
+                class="w-full mb-3  bg-linear-to-t from-card-background to-footer text-shadow-lg/30 text-main-accent rounded-b-4xl text-4xl p-5 font-momo">
                 Freelas</header>
 
-            <p class="p-3 font-trispace text-3xl text-[#46cca4]">Registrar-se</p>
-            <div class="flex-col text-[#f0e8db]/85">
+            <p class="p-3 font-trispace text-3xl text-main-accent">Registrar-se</p>
+            <div class="flex-col text-main-text/85">
                 <form method="POST" action="/register"
-                    class="mx-4 flex flex-col gap-2 rounded-2xl bg-[#142333] px-7 py-4 font-lato text-lg shadow-sm">
+                    class="mx-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
                     <div class="inline-flex items-center justify-between">
                         <p class="font-trispace text-2xl">É um prazer te conhecer.</p>
                     </div>
                     <p class="text-[#bdc8c0]">Já tem uma conta? </br><a
-                            class="text-[#46cca4] hover:opacity-85 underline underline-offset-2" href="/login">faça
+                            class="text-main-accent hover:opacity-85 underline underline-offset-2" href="/login">faça
                             login aqui!</a></p>
                     <p>Nome de Usuário </p>
-                    <input type="text" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="username" required
+                    <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="username" required
                         placeholder="Como devemos te chamar?" />
                     <p>Email </p>
-                    <input type="email" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="email" required
+                    <input type="email" class="mx-2 rounded-2xl bg-input-box p-3" name="email" required
                         placeholder="email@exemplo.com" />
                     <p>Senha</p>
-                    <input type="password" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="password"
+                    <input type="password" class="mx-2 rounded-2xl bg-input-box p-3" name="password"
                         placeholder="Insira sua senha aqui" />
                     <p>Confirmar Senha</p>
-                    <input type="password" class="mx-2 rounded-2xl bg-[#1b2f44] p-3" name="confirmpassword"
+                    <input type="password" class="mx-2 rounded-2xl bg-input-box p-3" name="confirmpassword"
                         placeholder="Escreva sua senha novamente" />
 
 
                     <button
-                        class="my-2 w-full cursor-pointer rounded-2xl bg-[#46cca4] py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                        class="my-2 w-full cursor-pointer rounded-2xl bg-main-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                         type="submit">Criar Conta</button>
                 </form>
             </div>
 
         </div>
-        <footer class="w-full  gap-6  flex flex-col bg-[#0d1722] text-[#bdc8c0]/80  text-sm p-6 font-lato">
+        <footer class="w-full  gap-6  flex flex-col bg-footer text-[#bdc8c0]/80  text-sm p-6 font-lato">
             <div>
                 <p>Freelas é um serviço independente criado para fins educativos e praticidade de usuários, para saber
                     mais sobre o projeto acesse nossa <a
-                        class="text-[#46cca4] hover:opacity-85 underline underline-offset-2"
+                        class="text-main-accent hover:opacity-85 underline underline-offset-2"
                         href="https://github.com/fbetarelli/FreelanceManager">página no Github.</a>
                 </p>
             </div>
