@@ -77,11 +77,11 @@
                                 </svg>
                             </button>
                         </div>
-                        <p class="text-service-accent">Campos obrigatórios*</p>
-                        <p>Descrição<i class="text-service-accent">*</i></p>
+                        <p class="text-job-accent">Campos obrigatórios*</p>
+                        <p>Descrição<i class="text-job-accent">*</i></p>
                         <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
                             placeholder="Ex: Manutenção Preventiva" required />
-                        <p>Data <i class="text-service-accent">*</i></p>
+                        <p>Data <i class="text-job-accent">*</i></p>
                         <input type="date" class="mx-2 rounded-2xl bg-input-box p-3" name="date" required />
                         <p>Valor Total</p>
                         <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="totalValue"
@@ -104,7 +104,7 @@
 
 
                         <button
-                            class="my-2 w-full cursor-pointer rounded-2xl bg-service-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            class="my-2 w-full cursor-pointer rounded-2xl bg-job-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                             type="submit">Criar Novo Serviço</button>
                     </form>
                 </dialog>
@@ -134,7 +134,7 @@
                         <p>Novo Cliente</p>
                     </button>
                     <button id="newJobBtn"
-                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-service-accent p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
+                        class="mx-auto inline-flex w-1/2 cursor-pointer items-center rounded-2xl bg-job-accent p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="mr-2 size-8">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -150,7 +150,7 @@
                 <div class="flex flex-col gap-2">
                     <% if(jobs.length>0 ) { %>
 
-                        <p class="px-6 font-trispace pb-2 text-xl text-service-accent">Últimos Serviços</p>
+                        <p class="px-6 font-trispace pb-2 text-xl text-job-accent">Últimos Serviços</p>
 
                         <div class="flex flex-row overflow-x-auto px-4  pb-4 font-lato font-bold">
                             <% jobs.forEach(job=> { %>
@@ -165,7 +165,7 @@
                                         <%=job.payed%>
                                     </p>
                                     <a href="/job/<%=job.id%>"
-                                        class="my-1 rounded-2xl border-3 border-service-accent hover:bg-service-accent hover:text-gray-900 transition-all px-4 py-2 text-lg text-service-accent">Ver
+                                        class="my-1 rounded-2xl border-3 border-job-accent hover:bg-job-accent hover:text-gray-900 transition-all px-4 py-2 text-lg text-job-accent">Ver
                                         Serviço</a>
                                 </div>
                                 <% }) %>
