@@ -41,7 +41,7 @@
                         class="m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-main-accent">Adicionar Cliente</p>
-                            <button id="closeClient">
+                            <button id="closeClient" type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                     stroke="currentColor" class="ml-4 size-6 hover:opacity-100 opacity-80">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -70,7 +70,7 @@
                         class="m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
                         <div class="inline-flex items-center justify-between">
                             <p class="font-trispace text-2xl text-main-accent">Adicionar Serviço</p>
-                            <button id="closeJob">
+                            <button id="closeJob" type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                     stroke="currentColor" class="ml-4 size-6 hover:opacity-100 opacity-80">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -171,6 +171,8 @@
                                 <% }) %>
                         </div>
                         <% }; %>
+
+
                 </div>
             </div>
 
@@ -191,6 +193,12 @@
                             Detalhes</a>
                     </div>
                     <% })%>
+                        <% if(clients.length>=5 ) { %>
+                            <a href="/clients?page=0"
+                                class="my-1 rounded-2xl bg-client-accent text-center hover:opacity-80 text-gray-900 font-bold font-lato transition-all px-4 py-4 text-xl ">Ver
+                                todos os clientes</a>
+
+                            <% }; %>
 
             </div>
 

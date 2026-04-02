@@ -46,4 +46,28 @@ exports.getClientPage = asyncHandler(async (req, res) => {
     res.render('clientPage', { client: clientResult.client, jobs: jobsResult.jobsArray })
 
 })
+exports.showClientList = asyncHandler(async (req, res) => {
+    let page = Number(req.query.page);
+
+    let params = {
+        page: page,
+        userId: req.session.user.id,
+        search: req.query.search || null
+    }
+
+
+    const totalPages = await ClientServices.getClientPages(params);
+    const searchQuery = req.query.search ? `&search=${encodeURIComponent(req.query.search)}` : ''
+    if (isNaN(page) || page < 1 || page > totalPages) {
+        return res.redirect(`/clients?page=1${searchQuery}`);
+    }
+
+    const clientsResult = await ClientServices.getClientListByPage(params);
+
+    return res.render('clientsList', {
+        clients: clientsResult.clients, totalPages,
+        search: req.query.search, searchQuery, page: page
+    })
+
+})
 

@@ -1,4 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION unaccent;
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),  
@@ -64,12 +65,19 @@ select * from materials;
 
 SELECT * FROM clients JOIN jobs ON clients.id = jobs.clientId  ORDER BY jobDate DESC LIMIT 5
 
-SELECT * FROM clients JOIN (SELECT clientId, MAX(jobDate)
+SELECT * FROM clients LEFT JOIN (SELECT clientId, MAX(jobDate) AS lastJobDate
 FROM jobs
-GROUP BY clientId)
+GROUP BY clientId) AS latest_jobs ON clients.id = latest_jobs.clientid WHERE clients.userId = $1 ORDER BY  latest_jobs.lastJobDate DESC NULLS FIRST
+
 SELECT clientId, MAX(jobDate)
 FROM jobs
 GROUP BY clientId
+
+SELECT COUNT(*) FROM clients LEFT JOIN (SELECT clientId, MAX(jobDate) AS lastJobDate
+                        FROM jobs
+                        GROUP BY clientId) AS latest_jobs ON clients.id = latest_jobs.clientid WHERE clients.userId = $1 AND (unaccent(name) ILIKE unaccent($2) OR $2 IS NULL) ORDER BY  latest_jobs.lastJobDate DESC NULLS FIRST LIMIT 10 OFFSET $3 AS count_cols
+                        
+ SELECT COUNT(*) AS count_cols FROM clients WHERE userId = $1 AND (unaccent(name) ILIKE unaccent($2) OR $2 IS NULL) 
 
 INSERT INTO clients(name,address,contact,userID) VALUES ('nome','endereco','contato','2') RETURNING 1
 
