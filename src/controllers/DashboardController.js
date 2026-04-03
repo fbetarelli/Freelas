@@ -5,14 +5,15 @@ const asyncHandler = require('../utils/asyncHandler');
 
 exports.showDashboard = asyncHandler(async (req, res) => {
 
-    const clientsResult = await ClientServices.getLatestClients(req.session.user.id);
-    const jobsResult = await JobServices.getLastJobsByUser(req.session.user.id)
-    const userResult = await UserServices.getProfitFromLastMonth(req.session.user.id)
+    const clients = await ClientServices.getLatestClients(req.session.user.id);
+    const jobs = await JobServices.getLastJobsByUser(req.session.user.id);
+    const user = await UserServices.getProfitFromLastMonth(req.session.user.id);
+    const lastJobs = await UserServices.getJobCount(req.session.user.id);
 
 
     res.render('dashboard', {
-        clients: clientsResult.clients, jobs: jobsResult.jobs,
-        profit: userResult.profit, username: req.session.user.username
+        clients: clients.clients, jobs: jobs.jobs,
+        profit: user.profit, username: req.session.user.username, count: lastJobs
     })
 
 })

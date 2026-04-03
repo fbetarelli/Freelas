@@ -1,4 +1,5 @@
 const UserDAO = require('../repositories/UserDAO')
+const JobDAO = require('../repositories/JobDAO')
 const PaymentDAO = require('../repositories/PaymentDAO')
 const MaterialDAO = require('../repositories/MaterialDAO')
 const { formatarValor } = require('../utils/formattingHelpers');
@@ -23,7 +24,10 @@ exports.register = async (username, login, password) => {
     let check = await dao.findByLogin(login)
 
     if (check) {
-        return { success: false, errMsg: 'Esse login já existe!' }
+        const err = new Error()
+        err.customMessage = 'Cadastro Existente';
+        err.code = 409;
+        return { err }
     }
 
     let saltRounds = 10;
@@ -44,4 +48,12 @@ exports.getProfitFromLastMonth = async (userid) => {
 
     const final = (paymentTotal - materialTotal)
     return { profit: formatarValor(final) }
+}
+
+exports.getJobCount = async (userid) => {
+    let dao = new JobDAO
+
+    let jobcount = await dao.getJobCount(userid)
+
+    return jobcount;
 }

@@ -152,6 +152,22 @@ class JobDAO {
         }
 
     }
+    async getJobCount(userId) {
+        const query = `SELECT COUNT(*) FROM jobs AS count
+                        WHERE userId = $1 AND jobDate >= CURRENT_DATE - INTERVAL '1 month'`
+        const params = [userId]
+
+        try {
+            const res = await pool.query(query, params);
+
+            return res.rows[0].count
+
+        } catch (error) {
+            console.error('Erro no JobDAO getJobCount ' + error)
+            throw error
+        }
+
+    }
 
 
 

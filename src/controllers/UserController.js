@@ -30,12 +30,16 @@ exports.showRegister = (req, res) => {
     res.render('register')
 }
 
-exports.register = asyncHandler(async (req, res) => {
+exports.register = asyncHandler(async (req, res, next) => {
     let username = req.body.username
     let login = req.body.email
     let password = req.body.password
 
     let result = await UserServices.register(username, login, password)
+
+    if (result.err) {
+        return next(result.err)
+    }
 
     req.session.user = {
         id: result.user.getId(),

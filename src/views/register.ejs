@@ -13,6 +13,7 @@
     href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Momo+Signature&family=Trispace:wght@100..800&display=swap"
     rel="stylesheet">
 <link rel="stylesheet" href="/styles/output.css" />
+<script src="/js/register.js" defer></script>
 
 <body>
     <div class="flex min-h-screen flex-col">
@@ -39,16 +40,17 @@
                     <input type="email" class="mx-2 rounded-2xl bg-input-box p-3" name="email" required
                         placeholder="email@exemplo.com" />
                     <p>Senha</p>
-                    <input type="password" class="mx-2 rounded-2xl bg-input-box p-3" name="password"
-                        placeholder="Insira sua senha aqui" />
+                    <input type="password" id="password" class="mx-2 rounded-2xl bg-input-box p-3" name="password"
+                        placeholder="Insira sua senha aqui" required/>
                     <p>Confirmar Senha</p>
-                    <input type="password" class="mx-2 rounded-2xl bg-input-box p-3" name="confirmpassword"
-                        placeholder="Escreva sua senha novamente" />
+                    <input type="password" id="confirmpassword" class="mx-2 rounded-2xl bg-input-box p-3"
+                        name="confirmpassword" placeholder="Escreva sua senha novamente" require/>
 
 
-                    <button
+                    <button id="submit"
                         class="my-2 w-full cursor-pointer rounded-2xl bg-main-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                         type="submit">Criar Conta</button>
+                    <p id="error" class="text-red-400"></p>
                 </form>
             </div>
 
