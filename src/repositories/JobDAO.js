@@ -169,6 +169,61 @@ class JobDAO {
 
     }
 
+    async getJobListByPage(obj) {
+        const searchValue = obj.search ? `%${obj.search}%` : null;
+        const query = `
+                        SELECT * FROM jobs  WHERE userId = $1 AND (unaccent(descr) ILIKE unaccent($2) OR $2 IS NULL) ORDER BY  jobDate DESC NULLS FIRST LIMIT 10 OFFSET $3
+                        `
+        const params = [obj.userId, searchValue, obj.page]
+
+
+        try {
+            const res = await pool.query(query, params);
+            const jobsArray = [];
+            if (res.rows.length > 0) {
+
+
+                res.rows.forEach(obj => {
+                    let job = new Job({
+                        id: obj.id,
+                        jobDate: obj.jobdate,
+                        descr: obj.descr,
+                        payed: obj.payed,
+                        totalValue: obj.totalvalue,
+                    })
+                    jobsArray.push(job);
+
+                });
+                return jobsArray;
+            } else {
+                return jobsArray;
+            }
+        } catch (error) {
+            console.error('Erro no ClienteDAO getLatestClients ' + error)
+            throw error
+        }
+
+    }
+    async getJobListCount(obj) {
+        const searchValue = obj.search ? `%${obj.search}%` : null;
+        const query = `
+                       SELECT COUNT(*) AS count_cols FROM jobs WHERE userId = $1 AND (unaccent(descr) ILIKE unaccent($2) OR $2 IS NULL)    
+             `
+        const params = [obj.userId, searchValue]
+
+
+        try {
+            const res = await pool.query(query, params);
+
+            return Number(res.rows[0].count_cols);
+
+        } catch (error) {
+            console.error('Erro no ClienteDAO getLatestClients ' + error)
+            throw error
+        }
+
+    }
+
 
 
 }

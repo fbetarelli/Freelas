@@ -4,6 +4,7 @@ const JobController = require('../controllers/JobController')
 const MaterialController = require('../controllers/MaterialController')
 const PaymentController = require('../controllers/PaymentController')
 const authorize = require('../middlewares/jobAuth');
+const authenticate = require('../middlewares/userAuth');
 
 
 
@@ -19,7 +20,7 @@ router.post('/job/:id/payment/add', authorize, PaymentController.addPayment);
 router.post('/job/:id/payment/:paymentid/edit', authorize, PaymentController.editPayment);
 router.get('/job/:id/payment/:paymentid/delete', authorize, PaymentController.deletePayment);
 
-
+router.get('/jobs', authenticate, JobController.showJobList);
 
 
 module.exports = router;

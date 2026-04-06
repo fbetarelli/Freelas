@@ -68,3 +68,30 @@ exports.getJobPage = asyncHandler(async (req, res) => {
 
     })
 })
+
+exports.showJobList = asyncHandler(async (req, res) => {
+    console.log('estou rodando')
+    let page = Number(req.query.page);
+
+    let params = {
+        page: page,
+        userId: req.session.user.id,
+        search: req.query.search || null
+    }
+
+
+    const totalPages = await JobServices.getJobPages(params);
+    const searchQuery = req.query.search ? `&search=${encodeURIComponent(req.query.search)}` : ''
+    if (isNaN(page) || page < 1 || page > totalPages) {
+        return res.redirect(`/jobs?page=1${searchQuery}`);
+    }
+
+    const jobsResult = await JobServices.getJobListByPage(params);
+
+    console.log('cheguei no render')
+    return res.render('jobsList', {
+        jobs: jobsResult.jobs, totalPages,
+        search: req.query.search, searchQuery, page: page
+    })
+
+})

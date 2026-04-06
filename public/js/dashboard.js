@@ -4,6 +4,10 @@ const clientList = document.getElementById('clientList')
 const closeClient = document.getElementById('closeClient')
 const closeJob = document.getElementById('closeJob')
 
+
+
+
+
 ClientBtn.addEventListener('click', () => {
     clientDialog.showModal()
 })
