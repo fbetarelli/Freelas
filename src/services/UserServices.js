@@ -4,6 +4,7 @@ const PaymentDAO = require('../repositories/PaymentDAO')
 const MaterialDAO = require('../repositories/MaterialDAO')
 const { formatarValor } = require('../utils/formattingHelpers');
 const bcrypt = require('bcrypt');
+const { runDAO } = require('../utils/serviceHelper');
 
 exports.login = async (login, password) => {
 
@@ -37,6 +38,27 @@ exports.register = async (username, login, password) => {
     return { user }
 
 
+
+}
+
+exports.editUser = async (id, username, login, password) => {
+    let hash = null;
+    saltRounds = 10;
+    if (password) {
+        hash = await bcrypt.hash(password, saltRounds);
+    }
+
+    const user = ({
+        id: id,
+        username: username,
+        login: login,
+        hashPassword: hash || password,
+    })
+
+    let dao = new UserDAO;
+    let res = await dao.editUser(user);
+
+    return res
 
 }
 exports.getProfitFromLastMonth = async (userid) => {

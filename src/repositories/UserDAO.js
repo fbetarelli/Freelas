@@ -50,6 +50,46 @@ class UserDAO {
 
 
     }
+    async editUser(user) {
+
+        try {
+            let fields = []
+            let values = []
+            let index = 1;
+
+            Object.entries(user).forEach(([key, value]) => {
+                if (value) {
+
+                    fields.push(`${key} = $${index++}`)
+                    values.push(value)
+                }
+            });
+            values.push(user.id)
+
+            const query = `UPDATE users SET ${fields.join(', ')} WHERE id=$${index} RETURNING id, username, login `
+
+
+            const res = await pool.query(query, values);
+
+
+            if (res.rows.length > 0) {
+                let user = new User({
+                    id: res.rows[0].id,
+                    username: res.rows[0].username,
+                    login: res.rows[0].login,
+                });
+                return user
+            }
+
+            return null
+
+
+        } catch (error) {
+            console.error('Erro no userDAO editUsers ' + error)
+            throw error
+        }
+
+    }
 }
 
 
