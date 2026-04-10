@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freelas: Registrar-se</title>
-    <link rel="icon" type="image/png" href="/images/favicon.png"/>
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
 </head>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,40 +21,43 @@
         <div
             class="inset-0 min-h-screen w-full   bg-main-background bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-main-text/85">
             <header
-                class="w-full mb-3  bg-linear-to-t from-card-background to-footer text-shadow-lg/30 text-main-accent rounded-b-4xl text-4xl p-5 font-momo">
+                class="w-full mb-3 md:text-2xl md:py-3 bg-linear-to-t from-card-background to-footer text-shadow-lg/30 text-main-accent rounded-b-4xl text-4xl p-5 font-momo">
                 Freelas</header>
+            <div class="md:min-w-0 md:w-1/3 md:mx-auto">
+                <p class="p-3 font-trispace text-3xl md:text-2xl text-main-accent">Registrar-se</p>
+                <div class="flex-col text-main-text/85">
+                    <form method="POST" action="/register"
+                        class="mx-4 flex flex-col gap-2 md:text-sm rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
+                        <div class="inline-flex items-center justify-between">
+                            <p class="font-trispace text-2xl md:text-base">É um prazer te conhecer.</p>
+                        </div>
+                        <p class="text-[#bdc8c0]">Já tem uma conta? </br><a
+                                class="text-main-accent hover:opacity-85 underline underline-offset-2"
+                                href="/login">faça
+                                login aqui!</a></p>
+                        <p>Nome de Usuário </p>
+                        <input type="text" class="mx-2 rounded-2xl bg-input-box p-3 md:p-2 md:rounded-xl"
+                            name="username" required placeholder="Como devemos te chamar?" />
+                        <p>Email </p>
+                        <input type="email" class="mx-2 rounded-2xl bg-input-box p-3 md:p-2 md:rounded-xl" name="email"
+                            required placeholder="email@exemplo.com" />
+                        <p>Senha</p>
+                        <input type="password" id="password"
+                            class="mx-2 rounded-2xl bg-input-box p-3 md:p-2 md:rounded-xl" name="password"
+                            placeholder="Insira sua senha aqui" required />
+                        <p>Confirmar Senha</p>
+                        <input type="password" id="confirmpassword"
+                            class="mx-2 rounded-2xl bg-input-box p-3 md:p-2 md:rounded-xl" name="confirmpassword"
+                            placeholder="Escreva sua senha novamente" require />
 
-            <p class="p-3 font-trispace text-3xl text-main-accent">Registrar-se</p>
-            <div class="flex-col text-main-text/85">
-                <form method="POST" action="/register"
-                    class="mx-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
-                    <div class="inline-flex items-center justify-between">
-                        <p class="font-trispace text-2xl">É um prazer te conhecer.</p>
-                    </div>
-                    <p class="text-[#bdc8c0]">Já tem uma conta? </br><a
-                            class="text-main-accent hover:opacity-85 underline underline-offset-2" href="/login">faça
-                            login aqui!</a></p>
-                    <p>Nome de Usuário </p>
-                    <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="username" required
-                        placeholder="Como devemos te chamar?" />
-                    <p>Email </p>
-                    <input type="email" class="mx-2 rounded-2xl bg-input-box p-3" name="email" required
-                        placeholder="email@exemplo.com" />
-                    <p>Senha</p>
-                    <input type="password" id="password" class="mx-2 rounded-2xl bg-input-box p-3" name="password"
-                        placeholder="Insira sua senha aqui" required />
-                    <p>Confirmar Senha</p>
-                    <input type="password" id="confirmpassword" class="mx-2 rounded-2xl bg-input-box p-3"
-                        name="confirmpassword" placeholder="Escreva sua senha novamente" require />
 
-
-                    <button id="submit"
-                        class="my-2 w-full cursor-pointer rounded-2xl bg-main-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
-                        type="submit">Criar Conta</button>
-                    <p id="error" class="text-red-400"></p>
-                </form>
+                        <button id="submit"
+                            class="my-2 w-full cursor-pointer md:text-base rounded-2xl bg-main-accent py-4 md:py-2 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                            type="submit">Criar Conta</button>
+                        <p id="error" class="text-red-400"></p>
+                    </form>
+                </div>
             </div>
-
         </div>
         <footer class="w-full  gap-6  flex flex-col bg-footer text-[#bdc8c0]/80  text-sm p-6 font-lato">
             <div>

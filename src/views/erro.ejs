@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freelas: Erro!</title>
-    <link rel="icon" type="image/png" href="/images/favicon.png"/>
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
 </head>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,25 +20,30 @@
         <div
             class="inset-0 min-h-screen w-full bg-main-background bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-main-text/85">
             <header
-                class="mb-3 w-full rounded-b-4xl bg-linear-to-t from-card-background to-footer p-5 font-momo text-4xl text-main-accent text-shadow-lg/30">
+                class="mb-3 w-full rounded-b-4xl bg-linear-to-t md:text-2xl md:py-3 from-card-background to-footer p-5 font-momo text-4xl text-main-accent text-shadow-lg/30">
                 Freelas</header>
+            <div class="md:min-w-0 md:w-1/2 md:mx-auto">
 
-            <p class="p-3 font-trispace text-3xl text-[#cc4646]">Erro
-                <%=title%>:
-                    <%=message%>
+                <p class="p-3 font-trispace text-3xl text-[#cc4646]">Erro
+                    <%=title%>:
+                        <%=message%>
 
-            </p>
-
-            <div class="mx-4 flex flex-col gap-5 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg shadow-sm">
-                <div class="inline-flex items-center justify-between">
-                    <p class="font-trispace text-2xl">Ops! parece que ocorreu um erro em nosso sistema. :/</p>
-                </div>
-                <p class="text-[#bdc8c0]">Caso o erro persista por favor nos contate ou mande um issue report em
-                    <a class="text-[#cc4646] underline underline-offset-2 hover:opacity-85"
-                        href="https://github.com/fbetarelli/FreelanceManager">nosso Github.</a>
                 </p>
-                <a class="text-xl text-main-accent underline underline-offset-2 hover:opacity-85" href="/">Voltar ao
-                    início</a>
+
+                <div
+                    class="mx-4 flex flex-col gap-5 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg md:text-sm shadow-sm">
+                    <div class="inline-flex items-center justify-between">
+                        <p class="font-trispace md:text-base text-2xl">Ops! parece que ocorreu um erro em nosso sistema.
+                            :/</p>
+                    </div>
+                    <p class="text-[#bdc8c0]">Caso o erro persista por favor nos contate ou mande um issue report em
+                        <a class="text-[#cc4646] underline underline-offset-2 hover:opacity-85"
+                            href="https://github.com/fbetarelli/FreelanceManager">nosso Github.</a>
+                    </p>
+                    <a class="text-xl md:text-base text-main-accent underline underline-offset-2 hover:opacity-85"
+                        href="/">Voltar ao
+                        início</a>
+                </div>
             </div>
         </div>
         <footer class="flex w-full flex-col gap-6 bg-footer p-6 font-lato text-sm text-[#bdc8c0]/80">

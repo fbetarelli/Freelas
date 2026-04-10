@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freelas: clientes</title>
-    <link rel="icon" type="image/png" href="/images/favicon.png"/>
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
 </head>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,13 +18,57 @@
 
 
 <body>
-    <div class="flex min-h-screen flex-col">
+    <div class="flex min-h-screen relative flex-col">
         <div
             class="inset-0 min-h-screen w-full bg-main-background bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-main-text/85">
             <header id="header"
-                class="w-full z-10 mb-3 md:static transition-all  
-                duration-300 ease-in-out sticky top-0 translate-y-0 md:translate-y-0 flex justify-between bg-linear-to-t from-card-background to-footer text-shadow-lg/30 text-main-accent rounded-b-4xl text-4xl p-5 font-momo">
+                class="w-full z-10 mb-3  transition-all  
+                duration-250 ease-in-out items-center w-full sticky top-0 translate-y-0  flex justify-between bg-linear-to-t from-card-background to-footer text-shadow-lg/30 text-main-accent rounded-b-4xl text-4xl md:text-2xl md:py-3 p-5 font-momo">
                 <a href="/">Freelas</a>
+                <nav class=" max-sm:hidden flex text-xs gap-2 font-trispace text-nowrap text-main-text/80">
+                    <a href="/dashboard" class="
+                         px-4   w-full  inline-flex items-center hover:underline cursor-pointer    ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                        Dashboard
+                    </a>
+                    |
+                    <a href="/clients" class="
+                         px-4  w-full inline-flex items-center hover:underline cursor-pointer  ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                        </svg>
+                        Lista de Clientes</a>
+                    |
+                    <a href="/jobs" class="
+                        px-4  w-full inline-flex  items-center hover:underline cursor-pointer  ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
+                        </svg>
+
+                        Lista de Serviços</a>
+
+
+
+                </nav>
+                <span class="invisible max-sm:hidden px-4 text-xs font-trispace inline-flex items-center hover:underline cursor-pointer
+                text-red-400">
+                    <p class="font-medium ">Sair</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4 self-center">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+
+                </span>
+
                 <button class="md:hidden mr-2
                 " id="hamburgerMenu">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -57,7 +101,6 @@
                             </svg>
                             Dashboard
                         </a>
-
                         <a href="/clients" class="
                          px-4  w-full inline-flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -76,12 +119,35 @@
                             </svg>
 
                             Lista de Serviços</a>
+                        <div class="w-full p-[1px]   bg-linear-to-r from-transparent via-[#243e5c] to-transparent">
+                        </div>
+                        <a href="/profile" class="
+                        px-4  w-full inline-flex items-center text-main-accent hover:opacity-75">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6 mr-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+
+
+                            Perfil</a>
+                        <a href="/logout" class="
+                        px-4  w-full inline-flex items-center text-red-400 hover:opacity-75">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6 mr-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                            </svg>
+
+                            Sair</a>
+
                     </div>
+
                 </div>
             </div>
 
 
-            <div class="flex w-full flex-col gap-4 px-6 py-4 pb-8">
+            <div class="flex w-full md:min-w-0 flex-col md:w-1/2 md:mx-auto gap-4 px-6 py-4 pb-8">
                 <div class="">
                     <p class="font-trispace text-3xl font-medium text-client-accent">Lista de Clientes</p>
                     <ul class="flex gap-1 truncate p-1 text-sm text-gray-500">
@@ -100,7 +166,7 @@
                         method="GET" action="/clients">
                         <input name="search" class=" w-full rounded-2xl bg-input-box p-3"
                             placeholder="Buscar clientes por nome" value="<%=search%>" />
-                        <button name="submit" class="bg-client-accent p-3 rounded-full hover:opacity-80 mx-2">
+                        <button name="submit" class=" bg-client-accent p-3 rounded-full hover:opacity-80 mx-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="size-6 text-gray-900">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -121,7 +187,7 @@
                             <%= client.contact%>
                         </p>
                         <a href="/client/<%=client.id%>"
-                            class="h-sm my-2 rounded-2xl inline-flex items-center border-3 border-client-accent hover:bg-client-accent transition-all hover:text-gray-900 px-4 py-2 font-lato font-bold text-client-accent">
+                            class="h-sm my-2 rounded-2xl inline-flex md:border-2 items-center border-3 border-client-accent hover:bg-client-accent transition-all hover:text-gray-900 px-4 py-2 font-lato font-bold text-client-accent">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-6 mr-2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -140,10 +206,16 @@
                                 class="w-full rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent px-3 py-4 text-center font-lato  shadow-sm">
                                 <p class="text-2xl">Ops!</p>
                                 <p>parece que não tem ninguém aqui,</p>
-                                <a href="/clients"
-                                    class=" hover:opacity-80 text-client-accent font-bold underline font-lato ">Voltar
-                                    a todos os clientes </a>
+                                <% if (search){ %>
+                                    <a href="/clients"
+                                        class=" hover:opacity-80 text-client-accent font-bold underline font-lato ">Voltar
+                                        a todos os clientes. </a>
+                                    <% } else{ %>
 
+                                        <a href="/dashboard"
+                                            class=" hover:opacity-80 text-client-accent font-bold underline font-lato ">Voltar
+                                            ao dashboard. </a>
+                                        <% }%>
 
                             </div>
                             <% }; %>
