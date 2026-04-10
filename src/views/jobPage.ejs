@@ -292,7 +292,7 @@
                                             </div>
                                             <p>Descrição</p>
                                             <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
-                                                placeholder="Ex: Lâmpada LED 9W" value="<%=material.descr%>" />
+                                                placeholder="Material Utilizado" value="<%=material.descr%>" />
                                             <p>Fornecedor</p>
                                             <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="supplier"
                                                 placeholder="Loja/Fornecedor do Material"
@@ -303,7 +303,7 @@
                                             <p>Valor Unitário</p>
                                             <input type="text" inputmode="decimal"
                                                 class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="unitaryVal"
-                                                placeholder="Ex: 11,99" value="<%=material.unitaryVal%>" />
+                                                placeholder="Ex: 12,34" value="<%=material.unitaryVal%>" />
 
                                             <button
                                                 class="submitForm my-2 md:my-0 w-full md:text-base cursor-pointer rounded-2xl bg-material-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
@@ -431,12 +431,12 @@
             </div>
             <p>Descrição</p>
             <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
-                placeholder="Ex: Manutenção Preventiva" value="<%=job.descr%>" />
+                 value="<%=job.descr%>" />
             <p>Data</p>
             <input type="date" class="mx-2 rounded-2xl bg-input-box p-3" name="date" />
             <p>Valor Total</p>
             <input type="text" class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="totalValue"
-                value="<%=job.totalValue%>" placeholder="150,00" />
+                value="<%=job.totalValue%>" placeholder="123,45" />
             <p>Serviço foi pago?</p>
             <div class="relative w-full px-1">
                 <select name="payed" class="w-full appearance-none rounded-2xl bg-input-box p-3">
@@ -496,7 +496,7 @@
             </div>
             <p class="text-material-accent">Campos obrigatórios*</p>
             <p>Descrição<span class="text-material-accent">*</span></p>
-            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr" placeholder="Ex: Lâmpada LED 9W"
+            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr" placeholder="Material Utilizado"
                 required />
             <p>Fornecedor</p>
             <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="supplier"
@@ -506,7 +506,7 @@
                 required />
             <p>Valor Unitário<span class="text-material-accent">*</span></p>
             <input id="addUnitaryVal" type="text" inputmode="decimal"
-                class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="unitaryVal" placeholder="Ex: 11,99"
+                class="valueInput mx-2 rounded-2xl bg-input-box p-3" name="unitaryVal" placeholder="Ex: 12,34"
                 required />
 
             <button id="submitAddMaterial"
