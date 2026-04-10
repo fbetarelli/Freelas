@@ -22,6 +22,7 @@ dialog[open] {
 
 }
 
+
 dialog::backdrop {
     background: rgba(17, 24, 39, 0.9);
     /* igual ao gray-900/90 */
@@ -44,4 +45,11 @@ dialog::backdrop {
     --color-payment-accent: #ca2e55;
 
 
+}
+
+
+@layer utilities {
+    .scrollbar {
+        @apply [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:h-[8px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-card-background/60 [&::-webkit-scrollbar-thumb]:rounded-full;
+    }
 }
