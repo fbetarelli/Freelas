@@ -10,7 +10,7 @@ const path = require('path');
 const flash = require('connect-flash')
 
 const logger = require('morgan');
-//const helmet = require('helmet');
+const helmet = require('helmet');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 //App.use imports
 app.use(logger('dev'))
 app.use(flash())
-//app.use(helmet())
+app.use(helmet())
 
 //Body parser
 app.use(express.urlencoded({ extended: true }));
