@@ -55,7 +55,7 @@ app.use((err, req, res, next) => {
 
     console.error(err)
 
-    res.status(err.code || 500).render("erro", {
+    res.status(isNaN(err.code) ? 500 : err.code).render("erro", {
         title: err.code || '500',
         message: err.customMessage || 'Indeterminado'
     })
