@@ -100,16 +100,16 @@ document.addEventListener('DOMContentLoaded', (e) => {
     let buttons = document.querySelectorAll('.submitForm')
     buttons.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            let input = btn.closest('.actionForm').querySelector('.valueInput')
+            let inputs = btn.closest('.actionForm').querySelectorAll('.valueInput')
             let errMsg = btn.closest('.actionForm').querySelector('.actionError')
-            let valor = formatarParaFloat(input.value)
 
-            if (isNaN(valor) || valor <= 0) {
-                e.preventDefault();
-                errMsg.innerHTML = 'Insira um valor válido!'
-            } else {
-                errMsg.innerHTML = ''
-            }
+            inputs.forEach(element => {
+                let valor = formatarParaFloat(element.value)
+                if (isNaN(valor) || valor <= 0) {
+                    e.preventDefault();
+                    errMsg.innerHTML = 'Insira um valor válido!'
+                }
+            });
         })
     });
 })
