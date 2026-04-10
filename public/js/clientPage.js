@@ -7,6 +7,16 @@ const newJobBtn = document.getElementById('newJobBtn')
 const closeClient = document.getElementById('closeClient')
 const closeJob = document.getElementById('closeJob')
 
+const editClientBtn = document.getElementById('editClientBtn')
+const deleteClientBtn = document.getElementById('deleteClientBtn')
+const deleteClientDialog = document.getElementById('deleteClientDialog')
+deleteClientBtn.addEventListener('click', () => {
+    deleteClientDialog.showModal()
+})
+closeDeleteClient.addEventListener('click', () => {
+    deleteClientDialog.close()
+})
+
 ClientBtn.addEventListener('click', () => {
     clientDialog.showModal()
 })
