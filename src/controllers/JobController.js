@@ -9,7 +9,6 @@ const { formatarParaFloat, formatarValor } = require('../utils/formattingHelpers
 exports.addJob = asyncHandler(async (req, res) => {
     const valorTotal = formatarParaFloat(req.body.totalValue);
 
-
     const job = new Job({
         descr: req.body.descr,
         jobDate: req.body.date,
@@ -70,7 +69,6 @@ exports.getJobPage = asyncHandler(async (req, res) => {
 })
 
 exports.showJobList = asyncHandler(async (req, res) => {
-    console.log('estou rodando')
     let page = Number(req.query.page);
 
     let params = {
@@ -88,7 +86,6 @@ exports.showJobList = asyncHandler(async (req, res) => {
 
     const jobsResult = await JobServices.getJobListByPage(params);
 
-    console.log('cheguei no render')
     return res.render('jobsList', {
         jobs: jobsResult.jobs, totalPages,
         search: req.query.search, searchQuery, page: page

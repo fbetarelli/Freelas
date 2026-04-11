@@ -48,7 +48,6 @@ class UserDAO {
             throw error
         }
 
-
     }
     async editUser(user) {
 
@@ -67,8 +66,6 @@ class UserDAO {
             values.push(user.id)
 
             const query = `UPDATE users SET ${fields.join(', ')} WHERE id=$${index} RETURNING id, username, login `
-
-
             const res = await pool.query(query, values);
 
 

@@ -6,15 +6,11 @@ class PaymentDAO {
 
     async addPayment(payment) {
         try {
-            console.log('rodou add payment dao')
+
             const query = `INSERT INTO payments(method,paymentDate,value,installment,jobId) VALUES ($1,$2,$3,$4,$5)`
             const params = [payment.getMethod(), payment.getPaymentDate(), payment.getValue(), payment.getInstallment(), payment.getJobId()]
-            console.log(query)
-            console.log(params)
 
-
-            const res = await pool.query(query, params);
-            console.log('rodou add payment dao query')
+            await pool.query(query, params);
 
         } catch (error) {
             console.error('Erro no PaymentDAO addPayments ' + error)
@@ -39,10 +35,7 @@ class PaymentDAO {
             values.push(payment.id)
 
             const query = `UPDATE payments SET ${fields.join(', ')} WHERE id=$${index}`
-
-
-            const res = await pool.query(query, values);
-
+            await pool.query(query, values);
 
         } catch (error) {
             console.error('Erro no PaymentDAO editPayments ' + error)
@@ -55,19 +48,15 @@ class PaymentDAO {
         const params = [paymentid]
 
         try {
-
-            const res = await pool.query(query, params);
-
-
+            await pool.query(query, params);
         } catch (error) {
-            console.error('Erro no PaymentDAO addPayments ' + error)
+            console.error('Erro no PaymentDAO editPayments ' + error)
             throw error
         }
 
     }
 
     async getPaymentsByJob(jobId) {
-
         const query = `SELECT * FROM payments WHERE jobId=$1 ORDER BY paymentDate`
         const params = [jobId]
 
@@ -75,8 +64,6 @@ class PaymentDAO {
             const res = await pool.query(query, params);
             const paymentsArray = [];
             if (res.rows.length > 0) {
-
-
                 res.rows.forEach(obj => {
                     const payment = new Payment({
                         id: obj.id,

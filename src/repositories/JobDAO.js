@@ -10,10 +10,7 @@ class JobDAO {
         const params = [job.getDescription(), job.getJobDate(), job.getTotalValue(), job.getClientId(), job.getUserId()]
 
         try {
-
-            const res = await pool.query(query, params);
-
-
+            await pool.query(query, params);
         } catch (error) {
             console.error('Erro no JobDAO addJobs ' + error)
             throw error
@@ -37,12 +34,9 @@ class JobDAO {
 
             const query = `UPDATE jobs SET ${fields.join(', ')} WHERE id=$${index}`
 
-
-            const res = await pool.query(query, values);
-
-
+            await pool.query(query, values);
         } catch (error) {
-            console.error('Erro no JobDAO addJobs ' + error)
+            console.error('Erro no JobDAO editJob ' + error)
             throw error
         }
 
@@ -52,12 +46,9 @@ class JobDAO {
         const params = [jobid]
 
         try {
-
-            const res = await pool.query(query, params);
-
-
+            await pool.query(query, params);
         } catch (error) {
-            console.error('Erro no JobDAO addJobs ' + error)
+            console.error('Erro no JobDAO deleteJob ' + error)
             throw error
         }
 
@@ -67,7 +58,6 @@ class JobDAO {
         const params = [id]
 
         try {
-
             const res = await pool.query(query, params);
             if (res.rows.length > 0) {
                 let job = new Job({
@@ -82,10 +72,8 @@ class JobDAO {
                 return job
             }
             return null
-
-
         } catch (error) {
-            console.error('Erro no JobDAO getJobsByClient ' + error)
+            console.error('Erro no JobDAO getJobById ' + error)
             throw error
         }
 
@@ -112,9 +100,9 @@ class JobDAO {
 
                 });
                 return jobsArray;
-            } else {
-                return jobsArray;
             }
+            return jobsArray;
+
         } catch (error) {
             console.error('Erro no JobDAO getJobsByClient ' + error)
             throw error
@@ -129,8 +117,6 @@ class JobDAO {
             const res = await pool.query(query, params);
             const jobsArray = [];
             if (res.rows.length > 0) {
-
-
                 res.rows.forEach(obj => {
                     let job = new Job({
                         id: obj.id,
@@ -143,11 +129,11 @@ class JobDAO {
 
                 });
                 return jobsArray;
-            } else {
-                return jobsArray;
             }
+            return jobsArray;
+
         } catch (error) {
-            console.error('Erro no JobDAO getJobsByClient ' + error)
+            console.error('Erro no JobDAO getLastJobsByUser ' + error)
             throw error
         }
 
@@ -195,11 +181,11 @@ class JobDAO {
 
                 });
                 return jobsArray;
-            } else {
-                return jobsArray;
             }
+            return jobsArray;
+
         } catch (error) {
-            console.error('Erro no ClienteDAO getLatestClients ' + error)
+            console.error('Erro no ClienteDAO getJobListByPage ' + error)
             throw error
         }
 
@@ -218,7 +204,7 @@ class JobDAO {
             return Number(res.rows[0].count_cols);
 
         } catch (error) {
-            console.error('Erro no ClienteDAO getLatestClients ' + error)
+            console.error('Erro no ClienteDAO getJobListCount ' + error)
             throw error
         }
 

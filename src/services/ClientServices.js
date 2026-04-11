@@ -17,14 +17,15 @@ exports.deleteClient = async (clientId) => {
 exports.getLatestClients = async (userId) => {
     return runDAO(dao, "getLatestClients", userId, toDTO, "clients")
 }
+
+exports.getClientById = async (id) => {
+    return runDAO(dao, "getClientById", id, toDTO, "client")
+}
+
 exports.getClientListByPage = async (params) => {
     params.page -= 1
     params.page *= 10
     return runDAO(dao, "getClientListByPage", params, toDTO, "clients")
-}
-
-exports.getClientById = async (id) => {
-    return runDAO(dao, "getClientById", id, toDTO, "client")
 }
 
 exports.getClientPages = async (params) => {

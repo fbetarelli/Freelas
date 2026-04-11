@@ -6,8 +6,6 @@ const PaymentController = require('../controllers/PaymentController')
 const authorize = require('../middlewares/jobAuth');
 const authenticate = require('../middlewares/userAuth');
 
-
-
 router.get('/job/:id', authorize, JobController.getJobPage);
 router.post('/job/:id/edit', authorize, JobController.editJob);
 router.get('/job/:id/delete', authorize, JobController.deleteJob);
@@ -21,6 +19,5 @@ router.post('/job/:id/payment/:paymentid/edit', authorize, PaymentController.edi
 router.get('/job/:id/payment/:paymentid/delete', authorize, PaymentController.deletePayment);
 
 router.get('/jobs', authenticate, JobController.showJobList);
-
 
 module.exports = router;

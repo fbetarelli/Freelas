@@ -14,7 +14,6 @@ exports.deleteMaterial = async (materialId) => {
     return runDAO(dao, "deleteMaterial", materialId);
 }
 
-
 exports.getMaterialsByJob = async (jobId) => {
     return runDAO(dao, "getMaterialsByJob", jobId, toDTO, "materials", true, "totalVal");
 }

@@ -8,13 +8,7 @@ class ClientDAO {
         const params = [client.getName(), client.getAddress(), client.getContact(), client.getUserId()]
 
         try {
-            const res = await pool.query(query, params);
-
-            if (res.rows.length > 0) {
-                return true
-            } else {
-                return false
-            }
+            await pool.query(query, params);
         } catch (error) {
             console.error('Erro no ClienteDAO addClient ' + error)
             throw error
@@ -26,9 +20,9 @@ class ClientDAO {
         const params = [clientId]
 
         try {
-            const res = await pool.query(query, params);
-
-        } catch (error) {
+            await pool.query(query, params)
+        }
+        catch (error) {
             console.error('Erro no ClienteDAO deleteClient ' + error)
             throw error
         }
@@ -42,23 +36,20 @@ class ClientDAO {
 
         //Object entries: separa objeto em dois atributos: chave e valor;
         Object.entries(client).forEach(([key, value]) => {
-            console.log(key, value);
             if (value) {
                 //cria fields dinamicamente, EX: key=name, index=1, field gerado: name = $1;
                 fields.push(`${key} = $${index++}`);
                 values.push(value);
             }
-
-
         });
+
         values.push(client.id)
         const query = `UPDATE clients SET ${fields.join(', ')} WHERE id=$${index}`
 
         try {
-            const res = await pool.query(query, values);
+            await pool.query(query, values);
         } catch (error) {
-
-            console.error('Erro no ClienteDAO addClient ' + error)
+            console.error('Erro no ClienteDAO editClient ' + error)
             throw error
         }
 
@@ -71,15 +62,11 @@ class ClientDAO {
                         `
         const params = [userId]
 
-
         try {
             const res = await pool.query(query, params);
             const clientsArray = [];
 
             if (res.rows.length > 0) {
-
-
-
                 res.rows.forEach(obj => {
                     let client = new Client({
                         id: obj.id,
@@ -92,9 +79,9 @@ class ClientDAO {
 
                 });
                 return clientsArray;
-            } else {
-                return clientsArray;
             }
+            return clientsArray;
+
         } catch (error) {
             console.error('Erro no ClienteDAO getLatestClients ' + error)
             throw error
@@ -116,9 +103,6 @@ class ClientDAO {
             const clientsArray = [];
 
             if (res.rows.length > 0) {
-
-
-
                 res.rows.forEach(obj => {
                     let client = new Client({
                         id: obj.id,
@@ -131,11 +115,11 @@ class ClientDAO {
 
                 });
                 return clientsArray;
-            } else {
-                return clientsArray;
             }
+            return clientsArray;
+
         } catch (error) {
-            console.error('Erro no ClienteDAO getLatestClients ' + error)
+            console.error('Erro no ClienteDAO getClientListByPage ' + error)
             throw error
         }
 
@@ -150,14 +134,10 @@ class ClientDAO {
 
         try {
             const res = await pool.query(query, params);
-
-
-            console.log('count_cols')
-            console.log(res.rows[0].count_cols)
             return Number(res.rows[0].count_cols);
 
         } catch (error) {
-            console.error('Erro no ClienteDAO getLatestClients ' + error)
+            console.error('Erro no ClienteDAO getClientCount ' + error)
             throw error
         }
 
@@ -181,19 +161,15 @@ class ClientDAO {
                 })
 
                 return client;
-            } else {
-                return null
             }
+            return null
+
         } catch (error) {
-            console.error('Erro no ClienteDAO getClients ' + error)
+            console.error('Erro no ClienteDAO getClientById ' + error)
             throw error
         }
 
     }
-
-
-
-
 }
 
 

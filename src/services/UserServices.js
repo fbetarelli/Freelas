@@ -9,7 +9,6 @@ const { runDAO } = require('../utils/serviceHelper');
 exports.login = async (login, password) => {
 
     let dao = new UserDAO;
-
     let user = await dao.findByLogin(login)
     if (user) {
         let validate = await bcrypt.compare(password, user.gethashPassword())
@@ -36,8 +35,6 @@ exports.register = async (username, login, password) => {
 
     let user = await dao.register(username, login, hash)
     return { user }
-
-
 
 }
 
@@ -74,7 +71,6 @@ exports.getProfitFromLastMonth = async (userid) => {
 
 exports.getJobCount = async (userid) => {
     let dao = new JobDAO
-
     let jobcount = await dao.getJobCount(userid)
 
     return jobcount;
