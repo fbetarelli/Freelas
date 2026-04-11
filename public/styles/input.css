@@ -1,6 +1,31 @@
 @import 'tailwindcss';
 
+/* Definição de Variáveis */
+@theme {
+    --font-trispace: "Trispace", serif;
+    --font-lato: "Lato", serif;
+    --font-momo: "Momo Signature", serif;
 
+    --color-main-background: #0a131f;
+    --color-main-accent: #46cca4;
+    --color-main-text: #f0e8db;
+    --color-card-background: #142333;
+    --color-input-box: #1b2f44;
+    --color-footer: #0d1722;
+    --color-client-accent: #1c8da6;
+    --color-job-accent: #DEAD23;
+    --color-material-accent: #F06543;
+    --color-payment-accent: #ca2e55;
+
+
+}
+
+/* Classe pra Scrollbar Customizada */
+@layer utilities {
+    .scrollbar {
+        @apply [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:h-[8px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-card-background/60 [&::-webkit-scrollbar-thumb]:rounded-full;
+    }
+}
 
 /* Arrumando Dialog */
 dialog {
@@ -22,34 +47,7 @@ dialog[open] {
 
 }
 
-
 dialog::backdrop {
     background: rgba(17, 24, 39, 0.9);
     /* igual ao gray-900/90 */
-}
-
-@theme {
-    --font-trispace: "Trispace", serif;
-    --font-lato: "Lato", serif;
-    --font-momo: "Momo Signature", serif;
-
-    --color-main-background: #0a131f;
-    --color-main-accent: #46cca4;
-    --color-main-text: #f0e8db;
-    --color-card-background: #142333;
-    --color-input-box: #1b2f44;
-    --color-footer: #0d1722;
-    --color-client-accent: #1c8da6;
-    --color-job-accent: #DEAD23;
-    --color-material-accent: #F06543;
-    --color-payment-accent: #ca2e55;
-
-
-}
-
-
-@layer utilities {
-    .scrollbar {
-        @apply [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:h-[8px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-card-background/60 [&::-webkit-scrollbar-thumb]:rounded-full;
-    }
 }
