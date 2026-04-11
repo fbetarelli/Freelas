@@ -1,3 +1,4 @@
+/* Instanciando variáveis */
 const clientDialog = document.getElementById('clientDialog')
 const jobDialog = document.getElementById('jobDialog')
 
@@ -10,28 +11,8 @@ const closeJob = document.getElementById('closeJob')
 const editClientBtn = document.getElementById('editClientBtn')
 const deleteClientBtn = document.getElementById('deleteClientBtn')
 const deleteClientDialog = document.getElementById('deleteClientDialog')
-deleteClientBtn.addEventListener('click', () => {
-    deleteClientDialog.showModal()
-})
-closeDeleteClient.addEventListener('click', () => {
-    deleteClientDialog.close()
-})
 
-ClientBtn.addEventListener('click', () => {
-    clientDialog.showModal()
-})
-newJobBtn.addEventListener('click', () => {
-    jobDialog.showModal()
-})
-
-closeClient.addEventListener('click', () => {
-    clientDialog.close()
-})
-
-closeJob.addEventListener('click', () => {
-    jobDialog.close()
-})
-
+/* Função para validação de input no form */
 document.addEventListener('DOMContentLoaded', (e) => {
     let buttons = document.querySelectorAll('.submitForm')
     buttons.forEach(btn => {
@@ -56,3 +37,26 @@ function formatarParaFloat(valor) {
     const final = temp.replace(/,/g, '.')
     return (final)
 }
+
+/* Gerenciando Modals */
+deleteClientBtn.addEventListener('click', () => {
+    deleteClientDialog.showModal()
+})
+closeDeleteClient.addEventListener('click', () => {
+    deleteClientDialog.close()
+})
+
+ClientBtn.addEventListener('click', () => {
+    clientDialog.showModal()
+})
+newJobBtn.addEventListener('click', () => {
+    jobDialog.showModal()
+})
+
+closeClient.addEventListener('click', () => {
+    clientDialog.close()
+})
+
+closeJob.addEventListener('click', () => {
+    jobDialog.close()
+})

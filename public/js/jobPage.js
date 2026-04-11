@@ -1,5 +1,4 @@
-
-
+/* Instanciando variáveis */
 const addMaterialDialog = document.getElementById('addMaterialDialog')
 const addPaymentDialog = document.getElementById('addPaymentDialog')
 const jobDialog = document.getElementById('jobDialog')
@@ -18,7 +17,7 @@ const closeAddPayment = document.getElementById('closeAddPayment')
 const closeJob = document.getElementById('closeJob')
 
 
-
+/* Gerenciando Modals */
 newMaterialBtn.addEventListener('click', () => {
     addMaterialDialog.showModal()
 })
@@ -45,14 +44,6 @@ closeDeleteJob.addEventListener('click', () => {
     deleteJobDialog.close()
 })
 
-
-
-function formatarParaFloat(valor) {
-    //retira os pontos EX: 12,99 para 12.99
-    const temp = valor.replace(/\./g, '')
-    const final = temp.replace(/,/g, '.')
-    return (final)
-}
 
 const materialsList = document.getElementById('materialsList')
 if (materialsList) {
@@ -96,6 +87,7 @@ function toggleModals(btn, cssselector, action) {
     dialog[action]()
 }
 
+/* Função para validação de input no form */
 document.addEventListener('DOMContentLoaded', (e) => {
     let buttons = document.querySelectorAll('.submitForm')
     buttons.forEach(btn => {
@@ -113,3 +105,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
         })
     });
 })
+
+function formatarParaFloat(valor) {
+    //retira os pontos EX: 12,99 para 12.99
+    const temp = valor.replace(/\./g, '')
+    const final = temp.replace(/,/g, '.')
+    return (final)
+}

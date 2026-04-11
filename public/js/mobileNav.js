@@ -2,6 +2,7 @@ const hamburguerMenu = document.getElementById('hamburgerMenu')
 const menubackground = document.getElementById('menubackground')
 const menu = document.getElementById('menu')
 
+/* Animação de Esconder/Mostrar menu mobile */
 hamburguerMenu.addEventListener('click', () => {
     menu.classList.replace('left-full', 'left-[30%]')
 
@@ -14,9 +15,10 @@ menubackground.addEventListener('click', () => {
     menubackground.classList.replace('absolute', 'hidden')
 })
 
+
+/* Animação de Esconder/Mostrar header */
 const header = document.getElementById('header')
 let lastScroll
-
 document.addEventListener('scroll', () => {
     let currentScroll = window.scrollY;
 

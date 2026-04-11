@@ -1,3 +1,4 @@
+/* Instanciando variáveis */
 const clientDialog = document.getElementById('clientDialog')
 const clientList = document.getElementById('clientList')
 
@@ -7,36 +8,15 @@ const closeJob = document.getElementById('closeJob')
 
 
 
-
+/* Gerenciando Modals */
 ClientBtn.addEventListener('click', () => {
     clientDialog.showModal()
 })
 
 
-closeClient.addEventListener('click', () => {
-    clientDialog.close()
-})
-
-clientList.addEventListener('click', (e) => {
-    let btn = e.target.closest('.openJobDialog')
-    if (!btn) return;
-
-    toggleModals(btn, 'jobDialog', 'showModal')
-})
-clientList.addEventListener('click', (e) => {
-    let btn = e.target.closest('.closeDialog')
-    if (!btn) return;
-
-    toggleModals(btn, 'jobDialog', 'close')
-})
 
 
-function toggleModals(btn, cssselector, action) {
-    let id = btn.dataset.id
-    let dialog = document.querySelector(`.${cssselector}[data-id="${id}"]`)
-    dialog[action]()
-}
-
+/* Função para validação de input no form */
 document.addEventListener('DOMContentLoaded', (e) => {
     let buttons = document.querySelectorAll('.submitForm')
     buttons.forEach(btn => {
@@ -60,4 +40,28 @@ function formatarParaFloat(valor) {
     const temp = valor.replace(/\./g, '')
     const final = temp.replace(/,/g, '.')
     return (final)
+}
+
+closeClient.addEventListener('click', () => {
+    clientDialog.close()
+})
+
+clientList.addEventListener('click', (e) => {
+    let btn = e.target.closest('.openJobDialog')
+    if (!btn) return;
+
+    toggleModals(btn, 'jobDialog', 'showModal')
+})
+clientList.addEventListener('click', (e) => {
+    let btn = e.target.closest('.closeDialog')
+    if (!btn) return;
+
+    toggleModals(btn, 'jobDialog', 'close')
+})
+
+
+function toggleModals(btn, cssselector, action) {
+    let id = btn.dataset.id
+    let dialog = document.querySelector(`.${cssselector}[data-id="${id}"]`)
+    dialog[action]()
 }
