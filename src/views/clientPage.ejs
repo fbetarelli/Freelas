@@ -23,13 +23,14 @@
     <div class="flex min-h-screen  relative flex-col">
         <div
             class="inset-0 min-h-screen w-full bg-main-background bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] text-main-text/85">
+
             <header id="header"
                 class="w-full z-10 mb-3 transition-all  
                 duration-250 ease-in-out items-center w-full sticky top-0 translate-y-0  flex justify-between bg-linear-to-t from-card-background to-footer text-shadow-lg/30 text-main-accent rounded-b-4xl text-4xl md:text-2xl md:py-3 p-5 font-momo">
                 <a href="/">Freelas</a>
+
                 <nav class=" max-sm:hidden flex text-xs gap-2 font-trispace text-nowrap text-main-text/80">
-                    <a href="/dashboard" class="
-                         px-4   w-full  inline-flex items-center hover:underline cursor-pointer    ">
+                    <a href="/dashboard" class="px-4 w-full  inline-flex items-center hover:underline cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-4 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -56,9 +57,6 @@
                         </svg>
 
                         Lista de Serviços</a>
-
-
-
                 </nav>
 
                 <span class="invisible max-sm:hidden px-4 text-xs font-trispace inline-flex items-center hover:underline cursor-pointer
@@ -69,8 +67,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                     </svg>
-
                 </span>
+                
                 <button class="md:hidden mr-2
                 " id="hamburgerMenu">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -86,7 +84,7 @@
             </div>
             <div id="menu"
                 class="fixed z-20 text-xl font-lato transition-all  
-                duration-500  ease-in-out w-[70%] left-full top-0  min-h-screen bg-linear-to-t from-card-background from-60% to-footer">
+                duration-250  ease-in-out w-[70%] left-full top-0  min-h-screen bg-linear-to-t from-card-background from-60% to-footer">
                 <div class="my-4">
                     <p class="text-4xl text-main-accent p-6  font-trispace">
                         Menu</p>
@@ -182,7 +180,8 @@
                                 value="<%=client.name%>" maxlength="50" />
                             <p>Endereço</p>
                             <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="address"
-                                value="<%=client.address%>" placeholder="Ex: Bairro Exemplo, Rua Exemplo, 123" maxlength="60" />
+                                value="<%=client.address%>" placeholder="Ex: Bairro Exemplo, Rua Exemplo, 123"
+                                maxlength="60" />
                             <p>Contato</p>
                             <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="contact"
                                 value="<%=client.contact%>" placeholder="Ex: (12) 12345-1234" maxlength="30" />
@@ -234,8 +233,7 @@
                             </div>
                             <p class="text-job-accent">Campos obrigatórios*</p>
                             <p>Descrição<i class="text-job-accent">*</i></p>
-                            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
-                                 required />
+                            <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr" required />
                             <p>Data <i class="text-job-accent">*</i></p>
                             <input type="date" class="mx-2 rounded-2xl bg-input-box p-3" name="date" required />
                             <p>Valor Total<i class="text-job-accent">*</i></p>
