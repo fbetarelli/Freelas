@@ -14,6 +14,8 @@ Full-stack practice project: An all-in one manager for freelance workers to trac
 
 ![Workflow](./public/assets/demo.gif)
 
+![MobileWorkflow](./public/assets/demoMobile.gif)
+
 
 Checkout the website [here!](https://freelas.up.railway.app)
 
