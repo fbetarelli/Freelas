@@ -166,7 +166,7 @@
 
                     <dialog id="clientDialog" class="  text-main-text/85  flex-col ">
                         <form method="POST" action="/addClient"
-                            class="m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg md:text-sm shadow-sm">
+                            class="m-4 flex flex-col gap-2 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg md:text-xs shadow-sm">
                             <div class="inline-flex items-center justify-between">
                                 <p class="font-trispace text-2xl text-main-accent">Adicionar Cliente</p>
                                 <button id="closeClient" type="button">
@@ -189,7 +189,7 @@
                                 placeholder="Ex: (12) 12345-1234" required />
 
                             <button
-                                class="my-2 w-full md:text-base  cursor-pointer rounded-2xl bg-client-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
+                                class="my-2 w-full md:text-sm  cursor-pointer rounded-2xl bg-client-accent py-4 font-lato text-xl font-bold text-gray-900 transition-all hover:opacity-80"
                                 type="submit">Criar Novo Cliente</button>
                         </form>
                     </dialog>
@@ -197,26 +197,26 @@
 
 
                     <div
-                        class="w-full rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent px-3 py-4 text-center font-lato md:text-lg text-xl font-bold shadow-sm">
+                        class="w-full rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent px-3 py-4 text-center font-lato md:text-base text-xl font-bold shadow-sm">
                         <p>Balanço:</p>
                         <p class="text-4xl md:text-2xl text-main-accent">R$<%=profit%>
                         </p>
-                        <p class="text-base text-[#bdc8c0] md:text-sm">(último mês)</p>
+                        <p class="text-base text-[#bdc8c0] md:text-xs">(último mês)</p>
                     </div>
                     <div
-                        class="w-full rounded-2xl border-5 md:text-lg border-card-background bg-linear-to-br from-card-background to-transparent px-3 py-4 text-center font-lato text-xl font-bold shadow-sm">
+                        class="w-full rounded-2xl border-5 md:text-base border-card-background bg-linear-to-br from-card-background to-transparent px-3 py-4 text-center font-lato text-xl font-bold shadow-sm">
                         <p>Serviços:</p>
                         <p class="text-4xl md:text-2xl text-main-accent">
                             <%=count%>
                         </p>
-                        <p class="text-base md:text-sm text-[#bdc8c0]">(último mês)</p>
+                        <p class="text-base md:text-xs text-[#bdc8c0]">(último mês)</p>
                     </div>
                     <div class="flex flex-row gap-2">
                         <button id="ClientBtn"
                             class=" inline-flex w-full justify-center text-center cursor-pointer items-center rounded-2xl bg-client-accent p-6 md:p-4 font-lato text-base font-bold text-gray-900 transition-all hover:opacity-80">
 
 
-                            <p class="text-xl md:text-base relative flex">Adicionar Cliente
+                            <p class="text-xl md:text-sm relative flex">Adicionar Cliente
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor"
                                     class=" absolute right-full top-1/2 translate-y-[-50%] mr-4 md:mr-2 md:size-6 size-8">
@@ -241,18 +241,18 @@
                                 <% jobs.forEach(job=> { %>
                                     <div id="detalhesJob"
                                         class="mx-2 flex w-full max-w-3xs md:basis-46  md:min-w-0   shrink-0 flex-col justify-center gap-1 rounded-2xl bg-linear-to-b from-card-background to-card-background/50 p-4 shadow-sm">
-                                        <p class="truncate font-lato md:text-base text-lg font-bold">
+                                        <p class="truncate font-lato md:text-sm text-lg font-bold">
                                             <%=job.descr%> <span class="text-gray-400 text-base md:text-xs">
                                                     (<%=job.jobDate%>)
                                                 </span>
                                         </p>
-                                        <p class="text-base md:text-sm text-[#bdc8c0]">R$<%=job.totalValue%>
+                                        <p class="text-base md:text-xs text-[#bdc8c0]">R$<%=job.totalValue%>
                                         </p>
                                         <p class="text-sm md:text-xs text-gray-400">
                                             <%=job.payed%>
                                         </p>
                                         <a href="/job/<%=job.id%>"
-                                            class="my-1 rounded-2xl border-3 md:border-2 border-job-accent hover:bg-job-accent hover:text-gray-900 transition-all px-4 py-2  md:text-sm  text-lg text-job-accent">Ver
+                                            class="my-1 rounded-2xl border-3 md:border-2 border-job-accent hover:bg-job-accent hover:text-gray-900 transition-all px-4 py-2  md:text-xs  text-lg text-job-accent">Ver
                                             Serviço</a>
                                     </div>
                                     <% }) %>
@@ -283,11 +283,11 @@
 
                         <% clients.forEach(client=> { %>
                             <div
-                                class="flex w-full flex-col rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent p-4 text-base shadow-sm">
-                                <p class="text truncate font-lato font-bold">
+                                class="flex w-full md:text-sm flex-col rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent p-4 text-base shadow-sm">
+                                <p class=" truncate font-lato font-bold">
                                     <%= client.name %>
                                 </p>
-                                <p class="text-base text-client-accent">
+                                <p class=" text-client-accent">
                                     <%= client.contact%>
                                 </p>
 
@@ -316,11 +316,11 @@
                             </div>
                             <dialog data-id='<%=client.id%>' class="jobDialog  text-main-text/85  flex-col ">
                                 <form method="POST" action="/client/<%=client.id%>/addJob"
-                                    class="actionForm m-4 flex flex-col gap-2 shrink-0 md:w-sm md:min-w-0 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg md:text-sm shadow-sm">
+                                    class="actionForm m-4 flex flex-col gap-2 shrink-0 md:w-sm md:min-w-0 rounded-2xl bg-card-background px-7 py-4 font-lato text-lg md:text-xs shadow-sm">
                                     <div class="inline-flex items-center justify-between">
-                                        <p class="font-trispace text-2xl md:text-base text-job-accent  ">Adicionar
+                                        <p class="font-trispace text-2xl md:text-sm text-job-accent  ">Adicionar
                                             Serviço: </br>
-                                            <span class="text-main-accent text-wrap md:text-xl ">
+                                            <span class="text-main-accent text-wrap md:text-base ">
                                                 <%=client.name%>
                                             </span>
                                         </p>
@@ -336,7 +336,7 @@
                                     <p class="text-job-accent">Campos obrigatórios*</p>
                                     <p>Descrição<i class="text-job-accent">*</i></p>
                                     <input type="text" class="mx-2 rounded-2xl bg-input-box p-3" name="descr"
-                                        required />
+                                        placeholder="Ex: Manutenção Preventiva" required />
                                     <p>Data <i class="text-job-accent">*</i></p>
                                     <input type="date" class="mx-2 rounded-2xl bg-input-box p-3" name="date" required />
                                     <p>Valor Total</p>
@@ -346,7 +346,7 @@
 
 
                                     <button
-                                        class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-job-accent py-4 font-lato text-xl md:text-base font-bold text-gray-900 transition-all hover:opacity-80"
+                                        class="submitForm my-2 w-full cursor-pointer rounded-2xl bg-job-accent py-4 font-lato text-xl md:text-sm font-bold text-gray-900 transition-all hover:opacity-80"
                                         type="submit">Criar Novo Serviço</button>
                                     <p class="actionError text-red-400"></p>
                                 </form>
@@ -366,7 +366,7 @@
                                         <% if(clients.length==0 ) { %>
                                             <div
                                                 class="w-full rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent px-3 py-4 text-center font-lato  shadow-sm">
-                                                <p class="text-2xl md:text-xl font-bold text-client-accent">Aqui está
+                                                <p class="text-2xl md:text-base font-bold text-client-accent">Aqui está
                                                     tão vazio...
                                                 </p>
                                                 <p>Tente criar o seu primeiro cliente!</p>

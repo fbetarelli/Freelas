@@ -179,11 +179,11 @@
 
                 <% clients.forEach(client=> { %>
                     <div
-                        class="flex w-full flex-col rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent p-4 text-base shadow-sm">
-                        <p class="text truncate font-lato font-bold">
+                        class="flex w-full md:text-sm flex-col rounded-2xl border-5 border-card-background bg-linear-to-tl from-card-background to-transparent p-4 text-base shadow-sm">
+                        <p class=" truncate font-lato font-bold">
                             <%= client.name %>
                         </p>
-                        <p class="text-base text-client-accent">
+                        <p class=" text-client-accent">
                             <%= client.contact%>
                         </p>
                         <a href="/client/<%=client.id%>"
