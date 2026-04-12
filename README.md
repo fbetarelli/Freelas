@@ -10,9 +10,9 @@ Full-stack practice project: An all-in one manager for freelance workers to trac
 
 ## Preview
 
-![Home](./assets/screenshots/page.png)
+![Home](./public/assets/screenshots/page.png)
 
-![Workflow](./assets/demo.gif)
+![Workflow](./public/assets/demo.gif)
 
 
 Checkout the website [here!](https://freelas.up.railway.app)
@@ -56,7 +56,7 @@ __Repositories__: A collection of Data Acess Objects that perform the requested 
 
 ### Database Diagram
 
-![Diagram](./assets/dbDiagram.png)
+![Diagram](./public/assets/dbDiagram.png)
 
 ## Getting Started
 Firstly, make sure you have a postgreSQL database up and running and have  configured a .env file complete with the specified required variables in the provided .env.example file, then, open up an integrated terminal in the project's folder from your IDE, where you'll be able to run the following commands.   
