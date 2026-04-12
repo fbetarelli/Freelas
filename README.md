@@ -1,4 +1,4 @@
-# FreelanceManager
+# Freelas, a freelance job manager
 ## 🇧🇷 Português
 
 Projeto Full-stack criado para prática: Um gereciador multicapacitado criado para trabalhadores freelance controlarem, organizarem e visualizarem seus clientes, serviços, pagamentos e mais.
