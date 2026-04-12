@@ -9,13 +9,17 @@ Full-stack practice project: An all-in one manager for freelance workers to trac
 
 
 ## Preview
+
 **Homescreen on desktop**
+
 ![Home](./public/assets/screenshots/page.png)
 
 **Desktop Workflow**
+
 ![Workflow](./public/assets/demo.gif)
 
 **Mobile Workflow**
+
 ![MobileWorkflow](./public/assets/demoMobile.gif)
 
 
