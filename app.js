@@ -74,5 +74,5 @@ app.listen(PORT, '0.0.0.0', (err) => {
     if (err) {
         console.error('Erro ao iniciar server ' + err);
     }
-    console.log(`Servidor rodando em localhost:${PORT}!`)
+    console.log(`Servidor rodando na porta: ${PORT}!`)
 })
