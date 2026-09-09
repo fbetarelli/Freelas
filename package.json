@@ -12,13 +12,13 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run migrate && npm run prod",
     "prod": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css  && node app.js",
-    "dev": "node --watch src/app.js",
+    "dev": "node --watch app.ts",
     "tailwind": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch",
     "migrate": "node-pg-migrate up"
   },
@@ -37,7 +37,11 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tailwindcss/cli": "^4.2.2",
+    "@types/bcrypt": "^6.0.0",
+    "@types/connect-flash": "^0.0.40",
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^26.5.0",
     "@types/pg": "^8.23.1",
     "eslint": "^10.10.0",

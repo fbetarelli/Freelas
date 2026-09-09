@@ -4,13 +4,19 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   js.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
+
+  ...tseslint.configs.recommendedTypeChecked.map((config) => ({
+    ...config,
+    files: ["**/*.{ts,tsx}"],
+  })),
+
   {
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
-      projectService: {
-        allowDefaultProject: ["eslint.config.mjs"],
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
-      tsconfigRootDir: import.meta.dirname,
     },
     rules: {
       "@typescript-eslint/no-floating-promises": "error",
