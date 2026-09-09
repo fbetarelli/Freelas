@@ -1,6 +1,8 @@
 import { type RequestHandler } from "express";
-import * as UserServices from "./user-services.ts";
+import { RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { CustomError } from "../Error/error.ts";
+import * as UserServices from "./user-services.ts";
 
 export const showLogin: RequestHandler = (req, res) => {
   return res.render("login", { message: req.flash("info") });
@@ -19,61 +21,59 @@ export const logout: RequestHandler = (req, res) => {
   return res.redirect("/login");
 };
 
-export const login = asyncHandler(async (req, res) => {
-  let login = req.body.email;
-  let password = req.body.password;
+export const login = asyncHandler(
+  async (req: RequestWithBody<{ email: string; password: string }>, res) => {
+    const { email: login, password } = req.body;
+    const result = await UserServices.login(login, password);
 
-  let result = await UserServices.login(login, password);
+    if (result.user) {
+      // eslint-disable-next-line
+      const { hashPassword, ...user } = result.user;
+      req.session.user = user;
+      return res.redirect("/dashboard");
+    } else {
+      req.flash("info", "Login ou Senha inválidos.");
+      return res.redirect("/login");
+    }
+  },
+);
 
-  if (result.user) {
-    req.session.user = {
-      id: result.user.getId(),
-      username: result.user.getUsername(),
-      login: result.user.getLogin(),
-    };
+export const register = asyncHandler(
+  async (
+    req: RequestWithBody<{ username: string; email: string; password: string }>,
+    res,
+    next,
+  ) => {
+    const { username, email: login, password } = req.body;
+
+    const result = await UserServices.register(username, login, password);
+    if ("err" in result) {
+      return next(result.err);
+    }
+    req.session.user = result.user;
     return res.redirect("/dashboard");
-  } else {
-    req.flash("info", "Login ou Senha inválidos.");
-    return res.redirect("/login");
-  }
-});
+  },
+);
 
-export const register = asyncHandler(async (req, res, next) => {
-  let username = req.body.username;
-  let login = req.body.email;
-  let password = req.body.password;
+export const editUser = asyncHandler(
+  async (
+    req: RequestWithBody<{ username: string; email: string; password: string }>,
+    res,
+    next,
+  ) => {
+    const { email: login, password, username } = req.body;
+    const result = await UserServices.editUser(
+      req.session.user!.id,
+      username,
+      login,
+      password,
+    );
 
-  let result = await UserServices.register(username, login, password);
-
-  if (result.err) {
-    return next(result.err);
-  }
-
-  req.session.user = {
-    id: result.user.getId(),
-    username: result.user.getUsername(),
-    login: result.user.getLogin(),
-  };
-
-  return res.redirect("/dashboard");
-});
-
-export const editUser = asyncHandler(async (req, res) => {
-  let username = req.body.username;
-  let login = req.body.email;
-  let password = req.body.password;
-
-  const result = await UserServices.editUser(
-    req.session.user!.id,
-    username,
-    login,
-    password,
-  );
-
-  req.session.user = {
-    id: req.session.user!.id,
-    username: result?.getUsername() ?? username,
-    login: result?.getLogin() ?? login,
-  };
-  return res.redirect("/dashboard");
-});
+    if (result === null) {
+      const err = new CustomError(500, "Edição de perfil mal-sucedida!");
+      return next(err);
+    }
+    req.session.user = result;
+    return res.redirect("/dashboard");
+  },
+);

@@ -1,4 +1,4 @@
-export const dynamicFieldsBuilder = <T extends Record<string, unknown>>(
+export const dynamicFieldsBuilder = <T extends { [K in keyof T]: T[K] }>(
   object: T,
 ) => {
   const fields: string[] = [];
@@ -16,5 +16,5 @@ export const dynamicFieldsBuilder = <T extends Record<string, unknown>>(
     }
   }
 
-  return { fields, values };
+  return { fields, values, index };
 };

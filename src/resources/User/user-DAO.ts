@@ -1,81 +1,87 @@
-//@ts-nocheck
-import { pool } from "../../database/Database.ts";
-import { User, type UserType } from "./types.ts";
+import { pool } from "../../database/database.ts";
+import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
+import { User } from "./types.ts";
+
+interface UserQueryResult extends Omit<User, "hashPassword"> {
+  hashpassword: string;
+}
 
 export class UserDAO {
-  async register({ username, login, hashPassword }: Omit<UserType, "id">) {
+  async register({
+    username,
+    login,
+    hashPassword: incomingHash,
+  }: Omit<User, "id">) {
     try {
-      const query = `INSERT INTO users(username,login,hashpassword) VALUES($1,$2,$3) RETURNING id, username, login, hashpassword `;
-      const params = [username, login, hashPassword];
-      const res = await pool.query<User>(query, params);
+      const query = daoQueries.register;
+      const params = [username, login, incomingHash];
 
-      let user = new User({
-        id: res.rows[0].id,
-        username: res.rows[0].username,
-        login: res.rows[0].login,
-      });
+      const res = await pool.query<UserQueryResult>(query, params);
+
+      // eslint-disable-next-line
+      const { hashpassword, ...user } = res.rows[0];
 
       return user;
     } catch (error) {
-      console.error("Erro no UserDAO register" + error);
+      errorLog("register");
       throw error;
     }
   }
 
   async findByLogin(login: string) {
     try {
-      const query = `SELECT * FROM users WHERE login=$1 LIMIT 1`;
+      const query = daoQueries.findByLogin;
       const params = [login];
 
-      const res = await pool.query<UserType>(query, params);
+      const res = await pool.query<UserQueryResult>(query, params);
 
-      if (res.rows.length > 0) {
-        let user = new User({
-          id: res.rows[0].id,
-          username: res.rows[0].username,
-          login: res.rows[0].login,
-          //Caps
-          hashPassword: res.rows[0].hashpassword,
-        });
-        return user;
+      if (res.rows.length === 0) {
+        return null;
       }
 
-      return null;
+      const { hashpassword: hashPassword, ...rest } = res.rows[0];
+      const user: User = {
+        ...rest,
+        hashPassword,
+      };
+
+      return user;
     } catch (error) {
-      console.error("Erro no UserDAO loginExiste" + error);
+      errorLog("findByLogin");
       throw error;
     }
   }
-  async editUser(user: UserType) {
+  async editUser(userData: Partial<User> & { id: string }) {
     try {
-      let fields: string[] = [];
-      let values: string[] = [];
-      let index = 1;
+      const { fields, values, index } = dynamicFieldsBuilder(userData);
+      values.push(userData.id);
 
-      Object.entries(user).forEach(([key, value]) => {
-        if (value) {
-          fields.push(`${key} = $${index++}`);
-          values.push(value);
-        }
-      });
-      values.push(user.id);
+      const query = daoQueries.editUser(fields, index);
+      const res = await pool.query<Omit<UserQueryResult, "hashpassword">>(
+        query,
+        values,
+      );
 
-      const query = `UPDATE users SET ${fields.join(", ")} WHERE id=$${index} RETURNING id, username, login `;
-      const res = await pool.query<UserType>(query, values);
-
-      if (res.rows.length > 0) {
-        let user = new User({
-          id: res.rows[0].id,
-          username: res.rows[0].username,
-          login: res.rows[0].login,
-        });
-        return user;
+      if (res.rows.length === 0) {
+        return null;
       }
 
-      return null;
+      const updatedUser: Omit<User, "hashPassword"> = res.rows[0];
+      return updatedUser;
     } catch (error) {
-      console.error("Erro no userDAO editUsers " + error);
+      errorLog("editUser");
       throw error;
     }
   }
 }
+
+const daoQueries = {
+  register: `INSERT INTO users(username,login,hashpassword) VALUES($1,$2,$3) RETURNING id, username, login, hashpassword `,
+  findByLogin: `SELECT * FROM users WHERE login=$1 LIMIT 1`,
+  editUser: (fields: string[], index: number) =>
+    `UPDATE users SET ${fields.join(", ")} WHERE id=${index} RETURNING id, username, login `,
+};
+
+export const errorLog = (message: string) => {
+  console.error("Error in userDAO: " + message);
+};

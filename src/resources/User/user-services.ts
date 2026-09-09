@@ -1,41 +1,38 @@
 import bcrypt from "bcrypt";
-import { formatarValor } from "../../utils/formattingHelpers.ts";
+import { CustomError } from "../Error/error.ts";
 import { UserDAO } from "./user-DAO.ts";
-import { JobDAO } from "../Job/job-DAO.ts";
-import { MaterialDAO } from "../Material/material-DAO.ts";
-import { PaymentDAO } from "../Payment/payment-DAO.ts";
+import { User } from "./types.ts";
+
+const userDAO = new UserDAO();
+const saltRounds = 10;
 
 export const login = async (login: string, password: string) => {
-  let dao = new UserDAO();
-  let user = await dao.findByLogin(login);
-  if (user) {
-    let validate = await bcrypt.compare(password, user.gethashPassword()!);
-    if (validate) {
-      return { user };
-    }
+  const user = await userDAO.findByLogin(login);
+  if (user === null) {
+    return { user };
   }
-  return { user: null };
+
+  const validate = await bcrypt.compare(password, user.hashPassword);
+  if (!validate) {
+    return { user: null };
+  }
+  return { user };
 };
+
 export const register = async (
   username: string,
   login: string,
   password: string,
-) => {
-  let dao = new UserDAO();
-  let check = await dao.findByLogin(login);
-
-  if (check) {
-    const err = Object.assign(new Error(), {
-      customMessage: "Cadastro Existente",
-      code: 409,
-    });
+): Promise<{ err: CustomError } | { user: Omit<User, "hashPassword"> }> => {
+  const check = await userDAO.findByLogin(login);
+  const hasLogin = check !== null;
+  if (hasLogin) {
+    const err = new CustomError(409, "Cadastro Existente");
     return { err };
   }
+  const hash = await bcrypt.hash(password, saltRounds);
 
-  let saltRounds = 10;
-  let hash = await bcrypt.hash(password, saltRounds);
-
-  let user = await dao.register({ username, login, hashPassword: hash });
+  const user = await userDAO.register({ username, login, hashPassword: hash });
   return { user };
 };
 
@@ -43,40 +40,18 @@ export const editUser = async (
   id: string,
   username: string,
   login: string,
-  password: string,
+  password: string | undefined,
 ) => {
-  let hash = null;
-  let saltRounds = 10;
+  let hash = undefined;
+
   if (password) {
     hash = await bcrypt.hash(password, saltRounds);
   }
 
-  const user = {
-    id: id,
-    username: username,
-    login: login,
-    hashPassword: hash || password,
-  };
-
-  let dao = new UserDAO();
-  let res = await dao.editUser(user);
-
-  return res;
-};
-export const getProfitFromLastMonth = async (userid: string) => {
-  let paymentDao = new PaymentDAO();
-  let materialDao = new MaterialDAO();
-
-  let paymentTotal = await paymentDao.getTotalFromLastMonth(userid);
-  let materialTotal = await materialDao.getTotalFromLastMonth(userid);
-
-  const final = Number(paymentTotal) - Number(materialTotal);
-  return { profit: formatarValor(final) };
-};
-
-export const getJobCount = async (userid: string) => {
-  let dao = new JobDAO();
-  let jobcount = await dao.getJobCount(userid);
-
-  return jobcount;
+  return await userDAO.editUser({
+    id,
+    username,
+    login,
+    hashPassword: hash,
+  });
 };

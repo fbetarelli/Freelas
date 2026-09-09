@@ -3,15 +3,17 @@ const router = express.Router();
 import { authenticate } from "./user-authentication.ts";
 import * as UserController from "./user-controller.ts";
 
-router.get("/login", UserController.showLogin);
-router.post("/login", UserController.login);
+export const userRoutes = (app: express.Application) => {
+  app.use("/", router);
 
-router.get("/register", UserController.showRegister);
-router.post("/register", UserController.register);
+  router.get("/login", UserController.showLogin);
+  router.post("/login", UserController.login);
 
-router.get("/logout", UserController.logout);
+  router.get("/register", UserController.showRegister);
+  router.post("/register", UserController.register);
 
-router.get("/profile", authenticate, UserController.showProfile);
-router.post("/profile/edit", authenticate, UserController.editUser);
+  router.get("/logout", UserController.logout);
 
-export default router;
+  router.get("/profile", authenticate, UserController.showProfile);
+  router.post("/profile/edit", authenticate, UserController.editUser);
+};

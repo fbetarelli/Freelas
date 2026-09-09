@@ -8,7 +8,7 @@ import express, {
   type ErrorRequestHandler,
 } from "express";
 import session from "express-session";
-import UserRoutes from "./src/resources/User/routes.ts";
+import { userRoutes } from "./src/resources/User/routes.ts";
 import DashboardRoutes from "./src/features/Dashboard/routes.ts";
 import ClientRoutes from "./src/resources/Client/routes.ts";
 import JobRoutes from "./src/resources/Job/routes.ts";
@@ -52,7 +52,7 @@ app.get("/", (req, res) => {
   res.redirect("/dashboard");
 });
 
-app.use("/", UserRoutes);
+userRoutes(app);
 app.use("/", DashboardRoutes);
 app.use("/", ClientRoutes);
 app.use("/", JobRoutes);
@@ -64,6 +64,7 @@ const errorHandler: ErrorRequestHandler = (
   },
   _req,
   res,
+  //eslint-disable-next-line
   _next,
 ) => {
   console.error(err);
@@ -77,7 +78,6 @@ const errorHandler: ErrorRequestHandler = (
 app.use(errorHandler);
 
 //middleware generico pega tudo que nao foi tratado antes
-
 app.use((req, res) => {
   res.status(404).render("erro", {
     title: "404",
@@ -85,9 +85,11 @@ app.use((req, res) => {
   });
 });
 
-app.listen(Number(PORT) ?? 3000, "0.0.0.0", (err) => {
+const port = PORT ? Number(PORT) : 3000;
+
+app.listen(port, "0.0.0.0", (err) => {
   if (err) {
-    console.error("Erro ao iniciar server " + err);
+    console.error(`Erro ao iniciar server ${err}`);
   }
   console.log(`Servidor rodando na porta: ${PORT}!`);
 });
