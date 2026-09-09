@@ -8,10 +8,10 @@ import express, {
   type ErrorRequestHandler,
 } from "express";
 import session from "express-session";
-import UserRoutes from "./src/routes/UserRoutes.ts";
-import DashboardRoutes from "./src/routes/DashboardRoutes.ts";
-import ClientRoutes from "./src/routes/ClientRoutes.ts";
-import JobRoutes from "./src/routes/JobRoutes.ts";
+import UserRoutes from "./src/resources/User/routes.ts";
+import DashboardRoutes from "./src/features/Dashboard/routes.ts";
+import ClientRoutes from "./src/resources/Client/routes.ts";
+import JobRoutes from "./src/resources/Job/routes.ts";
 import { join } from "path";
 import flash from "connect-flash";
 
