@@ -1,6 +1,8 @@
 import { pool } from "../../database/database.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
+import { errorLog } from "../../utils/error-log.ts";
 import { SessionUser, User } from "./types.ts";
+
 
 interface UserQueryResult extends Omit<User, "hashPassword"> {
   hashpassword: string;
@@ -23,7 +25,7 @@ export class UserDAO {
 
       return user;
     } catch (error) {
-      errorLog("register");
+      errorLog("UserDAO", "register");
       throw error;
     }
   }
@@ -47,7 +49,7 @@ export class UserDAO {
 
       return user;
     } catch (error) {
-      errorLog("findByLogin");
+      errorLog("UserDAO", "findByLogin");
       throw error;
     }
   }
@@ -71,7 +73,7 @@ export class UserDAO {
       const updatedUser: SessionUser = res.rows[0];
       return updatedUser;
     } catch (error) {
-      errorLog("editUser");
+      errorLog("UserDAO", "editUser");
       throw error;
     }
   }
@@ -82,8 +84,4 @@ const daoQueries = {
   findByLogin: `SELECT * FROM users WHERE login=$1 LIMIT 1`,
   editUser: (fields: string[], index: number) =>
     `UPDATE users SET ${fields.join(", ")} WHERE id=${index} RETURNING id, username, login `,
-};
-
-export const errorLog = (message: string) => {
-  console.error("Error in userDAO: " + message);
 };

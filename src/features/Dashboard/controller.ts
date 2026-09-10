@@ -1,4 +1,4 @@
-import * as ClientServices from "../../resources/Client/client-services.ts";
+import * as ClientServices from "../../resources/Client/services.ts";
 import * as JobServices from "../../resources/Job/job-services.ts";
 import * as UserServices from "../../resources/User/services.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";

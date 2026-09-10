@@ -57,17 +57,17 @@ export const register = asyncHandler(
 
 export const editUser = asyncHandler(
   async (
-    req: RequestWithBody<{ username: string; email: string; password: string }>,
+    req: RequestWithBody<{ username?: string; email?: string; password?: string }>,
     res,
     next,
   ) => {
     const { email: login, password, username } = req.body;
-    const result = await UserServices.editUser(
-      req.session.user!.id,
+    const result = await UserServices.editUser({
+      id: req.session.user!.id,
       username,
       login,
-      password,
-    );
+      hashPassword: password,
+    });
 
     if (result === null) {
       const err = new CustomError(500, "Edição de perfil mal-sucedida!");

@@ -36,12 +36,10 @@ export const register = async (
   return { user };
 };
 
-export const editUser = async (
-  id: string,
-  username: string,
-  login: string,
-  password: string | undefined,
-) => {
+export const editUser = async ({
+  hashPassword: password,
+  ...user
+}: Partial<User> & { id: string }) => {
   let hash = undefined;
 
   if (password) {
@@ -49,9 +47,7 @@ export const editUser = async (
   }
 
   return await userDAO.editUser({
-    id,
-    username,
-    login,
+    ...user,
     hashPassword: hash,
   });
 };
