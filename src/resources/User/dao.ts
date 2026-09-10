@@ -1,6 +1,6 @@
 import { pool } from "../../database/database.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
-import { User } from "./types.ts";
+import { SessionUser, User } from "./types.ts";
 
 interface UserQueryResult extends Omit<User, "hashPassword"> {
   hashpassword: string;
@@ -11,7 +11,7 @@ export class UserDAO {
     username,
     login,
     hashPassword: incomingHash,
-  }: Omit<User, "id">) {
+  }: Omit<User, "id">): Promise<SessionUser> {
     try {
       const query = daoQueries.register;
       const params = [username, login, incomingHash];
@@ -28,7 +28,7 @@ export class UserDAO {
     }
   }
 
-  async findByLogin(login: string) {
+  async findByLogin(login: string): Promise<User | null> {
     try {
       const query = daoQueries.findByLogin;
       const params = [login];
@@ -51,7 +51,9 @@ export class UserDAO {
       throw error;
     }
   }
-  async editUser(userData: Partial<User> & { id: string }) {
+  async editUser(
+    userData: Partial<User> & { id: string },
+  ): Promise<SessionUser | null> {
     try {
       const { fields, values, index } = dynamicFieldsBuilder(userData);
       values.push(userData.id);
@@ -66,7 +68,7 @@ export class UserDAO {
         return null;
       }
 
-      const updatedUser: Omit<User, "hashPassword"> = res.rows[0];
+      const updatedUser: SessionUser = res.rows[0];
       return updatedUser;
     } catch (error) {
       errorLog("editUser");

@@ -4,3 +4,5 @@ export interface User {
   login: string;
   hashPassword: string;
 }
+
+export type SessionUser = Omit<User, "hashPassword">;

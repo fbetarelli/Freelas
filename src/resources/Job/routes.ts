@@ -4,7 +4,7 @@ import * as JobController from "./job-controller.ts";
 import * as MaterialController from "../Material/material-controller.ts";
 import * as PaymentController from "../Payment/payment-controller.ts";
 import { authorize } from "./job-authentication.ts";
-import { authenticate } from "../User/user-authentication.ts";
+import { authenticate } from "../User/authentication.ts";
 
 router.get("/job/:id", authorize, JobController.getJobPage);
 router.post("/job/:id/edit", authorize, JobController.editJob);

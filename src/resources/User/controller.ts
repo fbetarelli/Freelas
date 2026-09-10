@@ -2,7 +2,7 @@ import { type RequestHandler } from "express";
 import { RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { CustomError } from "../Error/error.ts";
-import * as UserServices from "./user-services.ts";
+import * as UserServices from "./services.ts";
 
 export const showLogin: RequestHandler = (req, res) => {
   return res.render("login", { message: req.flash("info") });

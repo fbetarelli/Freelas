@@ -1,12 +1,9 @@
 import "express-session";
+import { SessionUser } from "../resources/User/types.ts";
 
 declare module "express-session" {
   interface SessionData {
-    user?: {
-      id: string;
-      username: string;
-      login: string;
-    } | null;
+    user?: SessionUser | null;
     returnTo?: string;
   }
 }

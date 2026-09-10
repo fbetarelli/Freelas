@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { CustomError } from "../Error/error.ts";
-import { UserDAO } from "./user-DAO.ts";
+import { UserDAO } from "./dao.ts";
 import { User } from "./types.ts";
 
 const userDAO = new UserDAO();

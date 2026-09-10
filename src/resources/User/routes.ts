@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
-import { authenticate } from "./user-authentication.ts";
-import * as UserController from "./user-controller.ts";
+import { authenticate } from "./authentication.ts";
+import * as UserController from "./controller.ts";
 
 export const userRoutes = (app: express.Application) => {
   app.use("/", router);

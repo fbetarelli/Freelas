@@ -3,7 +3,7 @@ const router = express.Router();
 import * as ClientController from "./client-controller.ts";
 import * as JobController from "../Job/job-controller.ts";
 import { authorize } from "./client-authentication.ts";
-import { authenticate } from "../User/user-authentication.ts";
+import { authenticate } from "../User/authentication.ts";
 import { saveLastPage } from "../../middlewares/saveLastPage.ts";
 
 router.get(
