@@ -9,9 +9,9 @@ import express, {
 } from "express";
 import session from "express-session";
 import { userRoutes } from "./src/resources/User/routes.ts";
-import DashboardRoutes from "./src/features/Dashboard/routes.ts";
+import { dashboardRoutes } from "./src/features/Dashboard/routes.ts";
 import { clientRoutes } from "./src/resources/Client/routes.ts";
-import JobRoutes from "./src/resources/Job/routes.ts";
+import { jobRoutes } from "./src/resources/Job/routes.ts";
 import { join } from "path";
 import flash from "connect-flash";
 
@@ -54,9 +54,8 @@ app.get("/", (req, res) => {
 
 userRoutes(app);
 clientRoutes(app);
-
-app.use("/", DashboardRoutes);
-app.use("/", JobRoutes);
+jobRoutes(app);
+dashboardRoutes(app);
 
 const errorHandler: ErrorRequestHandler = (
   err: Error & {

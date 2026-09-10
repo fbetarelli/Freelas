@@ -1,9 +1,9 @@
 import { pool } from "../../database/database.ts";
-import { SearchObject } from "../../types/search-types.ts";
+import { type SearchObject } from "../../types/search-types.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
 import { errorLog } from "../../utils/error-log.ts";
 import { validateSearch } from "../../utils/validate-search.ts";
-import { Client } from "./types.ts";
+import { type Client } from "./types.ts";
 
 interface ClientQueryResult extends Omit<Client, "userId"> {
   userid: string;

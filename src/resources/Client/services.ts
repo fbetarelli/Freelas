@@ -1,6 +1,6 @@
-import { SearchObject } from "../../types/search-types.ts";
+import { type SearchObject } from "../../types/search-types.ts";
 import { ClientDAO } from "./dao.ts";
-import { Client } from "./types.ts";
+import { type Client } from "./types.ts";
 
 const dao = new ClientDAO();
 
@@ -24,9 +24,11 @@ export const getClientById = async (id: string) => {
   return await dao.getClientById(id);
 };
 
-export const getClientListByPage = async (params: SearchObject) => {
-  params.page -= 1;
-  params.page *= 10;
+export const getClientListByPage = async (query: SearchObject) => {
+  const params = {
+    ...query,
+    page: (query.page - 1) * 10,
+  };
   return await dao.getClientListByPage(params);
 };
 

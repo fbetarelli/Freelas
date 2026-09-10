@@ -1,5 +1,5 @@
 import { type RequestHandler } from "express";
-import { RequestWithBody } from "../../types/express-types.ts";
+import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { CustomError } from "../Error/error.ts";
 import * as UserServices from "./services.ts";
@@ -57,16 +57,20 @@ export const register = asyncHandler(
 
 export const editUser = asyncHandler(
   async (
-    req: RequestWithBody<{ username?: string; email?: string; password?: string }>,
+    req: RequestWithBody<{
+      username?: string;
+      email?: string;
+      password?: string;
+    }>,
     res,
     next,
   ) => {
     const { email: login, password, username } = req.body;
     const result = await UserServices.editUser({
       id: req.session.user!.id,
-      username,
-      login,
-      hashPassword: password,
+      ...(username && { username }),
+      ...(login && { login }),
+      ...(password && { hashPassword: password }),
     });
 
     if (result === null) {

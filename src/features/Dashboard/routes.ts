@@ -5,12 +5,15 @@ import * as ClientController from "../../resources/Client/controller.ts";
 import { authenticate } from "../../resources/User/authentication.ts";
 import { saveLastPage } from "../../middlewares/saveLastPage.ts";
 
-router.get(
-  "/dashboard",
-  saveLastPage,
-  authenticate,
-  DashboardController.showDashboard,
-);
+export const dashboardRoutes = (app: express.Application) => {
+  app.use("/", router);
 
-router.post("/addClient", authenticate, ClientController.addClient);
-export default router;
+  router.get(
+    "/dashboard",
+    saveLastPage,
+    authenticate,
+    DashboardController.showDashboard,
+  );
+
+  router.post("/addClient", authenticate, ClientController.addClient);
+};

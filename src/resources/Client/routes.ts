@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import * as ClientController from "./controller.ts";
-import * as JobController from "../Job/job-controller.ts";
+import * as JobController from "../Job/controller.ts";
 import { authorize } from "./authentication.ts";
 import { authenticate } from "../User/authentication.ts";
 import { saveLastPage } from "../../middlewares/saveLastPage.ts";

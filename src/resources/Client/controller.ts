@@ -1,11 +1,11 @@
-import { Request } from "express";
-import { RequestWithBody } from "../../types/express-types.ts";
+import type { Request } from "express";
+import { type RequestWithBody } from "../../types/express-types.ts";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { CustomError } from "../Error/error.ts";
-import * as JobServices from "../Job/job-services.ts";
+import * as JobServices from "../Job/services.ts";
 import * as ClientServices from "./services.ts";
-import { Client } from "./types.ts";
+import { type Client } from "./types.ts";
 
 export const addClient = asyncHandler(
   async (req: RequestWithBody<Omit<Client, "id" | "userId">>, res) => {
@@ -25,11 +25,13 @@ export const editClient = asyncHandler(
     const clientId = req.params.id;
     assertIsString(clientId, "clientId");
 
-    const incomingClient = req.body;
+    const { address, contact, name } = req.body;
 
     const client = {
       id: clientId,
-      ...incomingClient,
+      ...(name && { name }),
+      ...(address && { address }),
+      ...(contact && { contact }),
       userId: req.session.user!.id,
     };
 
@@ -52,18 +54,17 @@ export const getClientPage = asyncHandler(async (req, res, next) => {
   const clientId = req.params.id;
   assertIsString(clientId, "clientId");
 
-  const clientResult = await ClientServices.getClientById(clientId);
-  const jobsResult = await JobServices.getJobsByClient(clientId);
+  const client = await ClientServices.getClientById(clientId);
+  const jobs = await JobServices.getJobsByClient(clientId);
 
-  if (clientResult === null) {
+  if (client === null) {
     const error = new CustomError(404, "Client not found");
     return next(error);
   }
 
   res.render("clientPage", {
-    client: clientResult,
-    //es-lint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    jobs: jobsResult.jobsArray,
+    client,
+    jobs,
   });
 });
 export const showClientList = asyncHandler(async (req, res) => {
@@ -74,7 +75,7 @@ export const showClientList = asyncHandler(async (req, res) => {
   }
 
   const params = {
-    page: Number(incoming.page) ? Number(incoming.page) : 1,
+    page: Number(incoming.page) > 0 ? Number(incoming.page) : 1,
     userId: req.session.user?.id,
     search: typeof incoming.search === "string" ? incoming.search : "",
   };

@@ -1,8 +1,7 @@
 import { pool } from "../../database/database.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
 import { errorLog } from "../../utils/error-log.ts";
-import { SessionUser, User } from "./types.ts";
-
+import { type SessionUser, type User } from "./types.ts";
 
 interface UserQueryResult extends Omit<User, "hashPassword"> {
   hashpassword: string;
