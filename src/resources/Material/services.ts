@@ -17,8 +17,8 @@ export const editMaterial = async (
     jobId,
     ...(descr !== undefined && descr.trim() !== "" ? { descr } : {}),
     ...(supplier !== undefined ? { supplier } : {}),
-    ...(qnt !== undefined ? { qnt } : {}),
-    ...(unitaryVal !== undefined ? { unitaryVal } : {}),
+    ...(qnt ? { qnt } : {}),
+    ...(unitaryVal ? { unitaryVal } : {}),
   };
 
   return await dao.editMaterial(material);

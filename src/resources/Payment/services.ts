@@ -15,12 +15,12 @@ export const editPayment = async (
   const payment = {
     id,
     jobId,
-    ...(installment !== undefined ? { installment } : {}),
+    ...(installment ? { installment } : {}),
     ...(method !== undefined ? { method } : {}),
     ...(paymentDate !== undefined && paymentDate.trim() !== ""
       ? { paymentDate }
       : {}),
-    ...(value !== undefined ? { value } : {}),
+    ...(value ? { value } : {}),
   };
 
   return await dao.editPayment(payment);

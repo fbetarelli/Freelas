@@ -16,8 +16,8 @@ export const editClient = async (
     id,
     userId,
     ...(name?.trim() !== "" && { name }),
-    ...(address && { address }),
-    ...(contact && { contact }),
+    ...(address !== undefined && { address }),
+    ...(contact?.trim() !== "" && { contact }),
   };
   return await dao.editClient(client);
 };
