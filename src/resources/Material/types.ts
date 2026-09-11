@@ -6,3 +6,8 @@ export interface Material {
   unitaryVal: number;
   jobId: string;
 }
+
+export interface FormattedMaterial extends Omit<Material, "unitaryVal"> {
+  unitaryVal: string;
+  totalVal: string;
+}

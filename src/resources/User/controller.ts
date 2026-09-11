@@ -65,12 +65,11 @@ export const editUser = asyncHandler(
     res,
     next,
   ) => {
-    const { email: login, password, username } = req.body;
+    const { email: login, ...rest } = req.body;
     const result = await UserServices.editUser({
+      ...rest,
       id: req.session.user!.id,
-      ...(username && { username }),
-      ...(login && { login }),
-      ...(password && { hashPassword: password }),
+      login,
     });
 
     if (result === null) {

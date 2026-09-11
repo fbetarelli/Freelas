@@ -6,3 +6,7 @@ export interface Payment {
   installment: number;
   jobId: string;
 }
+
+export interface FormattedPayment extends Omit<Payment, "value"> {
+  value: string;
+}

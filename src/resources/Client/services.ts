@@ -8,7 +8,17 @@ export const addClient = async (client: Omit<Client, "id">) => {
   return await dao.addClient(client);
 };
 
-export const editClient = async (client: Partial<Client> & { id: string }) => {
+export const editClient = async (
+  incomingClient: Partial<Client> & { id: string },
+) => {
+  const { id, name, address, contact, userId } = incomingClient;
+  const client = {
+    id,
+    userId,
+    ...(name?.trim() !== "" && { name }),
+    ...(address && { address }),
+    ...(contact && { contact }),
+  };
   return await dao.editClient(client);
 };
 export const deleteClient = async (clientId: string) => {

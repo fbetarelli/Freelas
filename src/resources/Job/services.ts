@@ -7,7 +7,38 @@ const dao = new JobDAO();
 export const addJob = async (job: Omit<Job, "id">) => {
   return await dao.addJob(job);
 };
-export const editJob = async (job: Partial<Job> & { id: string }) => {
+export const editJob = async (
+  incomingJob: Partial<Omit<Job, "payed">> & {
+    id: string;
+    payed: "true" | "false" | undefined;
+  },
+) => {
+  const {
+    id,
+    clientId,
+    descr,
+    jobDate,
+    payed: incomingPayed,
+    totalValue,
+    userId,
+  } = incomingJob;
+
+  const job = {
+    id,
+    clientId,
+    userId,
+    ...(descr?.trim() !== "" && { descr }),
+    ...(jobDate?.trim() !== "" && { jobDate }),
+    payed:
+      incomingPayed === "true"
+        ? true
+        : incomingPayed === "false"
+          ? false
+          : undefined,
+    ...(jobDate && { jobDate: jobDate }),
+    ...(totalValue !== undefined && { totalValue }),
+  };
+
   return await dao.editJob(job);
 };
 export const deleteJob = async (jobId: string) => {

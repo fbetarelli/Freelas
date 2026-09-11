@@ -42,16 +42,23 @@ export const register = async (
 
 export const editUser = async ({
   hashPassword: password,
-  ...user
+  id,
+  login,
+  username,
 }: Partial<User> & { id: string }) => {
-  let hash = undefined;
+  const incomingUser = {
+    id,
+    ...(username?.trim() !== "" && { username }),
+    ...(login?.trim() !== "" && { login }),
+  };
 
+  let hash = undefined;
   if (password) {
     hash = await bcrypt.hash(password, saltRounds);
   }
 
   return await userDAO.editUser({
-    ...user,
+    ...incomingUser,
     hashPassword: hash,
   });
 };

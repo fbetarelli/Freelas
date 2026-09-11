@@ -8,17 +8,7 @@ import {
 import * as MaterialServices from "../Material/services.ts";
 import * as PaymentServices from "../Payment/services.ts";
 import * as JobServices from "./services.ts";
-import { type Job } from "./types.ts";
-
-interface IncomingJob extends Omit<Job, "jobDate" | "payed"> {
-  date: string;
-  payed: "true" | "false" | undefined;
-}
-
-interface FormattedJob extends Omit<Job, "payed" | "totalValue"> {
-  payed: string;
-  totalValue: string;
-}
+import { type FormattedJob, type IncomingJob } from "./types.ts";
 
 export const addJob = asyncHandler(
   async (
@@ -59,16 +49,11 @@ export const editJob = asyncHandler(
 
     const { date: jobDate, ...incoming } = req.body;
 
-    const job: Partial<Job> & { id: string } = {
+    const job = {
       ...incoming,
+      payed: incoming.payed,
       id,
-      payed:
-        incoming.payed === "true"
-          ? true
-          : incoming.payed === "false"
-            ? false
-            : undefined,
-      ...(jobDate && { jobDate: jobDate }),
+      jobDate,
       totalValue,
       userId: req.session.user!.id,
     };
@@ -98,7 +83,7 @@ export const getJobPage = asyncHandler(async (req, res) => {
     job = {
       ...jobRes,
       totalValue: formatarValor(jobRes.totalValue),
-    }
+    };
   }
 
   const profit = formatarValor(payments.totalValue - materials.totalValue);

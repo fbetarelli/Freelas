@@ -4,7 +4,7 @@ import * as JobController from "./controller.ts";
 import * as MaterialController from "../Material/controller.ts";
 import * as PaymentController from "../Payment/controller.ts";
 import { authorize } from "./authentication.ts";
-import { authenticate } from "../User/authentication.ts";
+import { authenticate } from "../User/middleware/authentication.ts";
 
 export const jobRoutes = (app: express.Application) => {
   app.use("/", router);

@@ -25,13 +25,9 @@ export const editClient = asyncHandler(
     const clientId = req.params.id;
     assertIsString(clientId, "clientId");
 
-    const { address, contact, name } = req.body;
-
     const client = {
+      ...req.body,
       id: clientId,
-      ...(name && { name }),
-      ...(address && { address }),
-      ...(contact && { contact }),
       userId: req.session.user!.id,
     };
 

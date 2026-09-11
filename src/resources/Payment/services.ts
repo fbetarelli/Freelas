@@ -7,8 +7,22 @@ export const addPayment = async (payment: Omit<Payment, "id">) => {
   return await dao.addPayment(payment);
 };
 export const editPayment = async (
-  payment: Partial<Payment> & { id: string },
+  incomingPayment: Partial<Payment> & { id: string },
 ) => {
+  const { id, installment, jobId, method, paymentDate, value } =
+    incomingPayment;
+
+  const payment = {
+    id,
+    jobId,
+    ...(installment !== undefined ? { installment } : {}),
+    ...(method !== undefined ? { method } : {}),
+    ...(paymentDate !== undefined && paymentDate.trim() !== ""
+      ? { paymentDate }
+      : {}),
+    ...(value !== undefined ? { value } : {}),
+  };
+
   return await dao.editPayment(payment);
 };
 export const deletePayment = async (paymentId: string) => {
