@@ -1,4 +1,4 @@
-import { formatarValor } from "../../utils/formattingHelpers.ts";
+import { formatValueToString } from "../../utils/formatting-helpers.ts";
 import { MaterialDAO } from "./dao.ts";
 import { type FormattedMaterial, type Material } from "./types.ts";
 
@@ -43,8 +43,8 @@ export const getMaterialsByJob = async (jobId: string) => {
     (material) => {
       return {
         ...material,
-        unitaryVal: formatarValor(material.unitaryVal),
-        totalVal: formatarValor(material.qnt * material.unitaryVal),
+        unitaryVal: formatValueToString(material.unitaryVal),
+        totalVal: formatValueToString(material.qnt * material.unitaryVal),
       };
     },
   );

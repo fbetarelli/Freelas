@@ -1,9 +1,9 @@
-import { config } from "dotenv";
 import express from "express";
 import { loaders } from "./src/loaders/index.ts";
+import { config } from "dotenv";
+config();
 
 const app = express();
-config();
 loaders(app);
 
 app.get("/", (req, res) => {

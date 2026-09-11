@@ -1,13 +1,13 @@
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { formatarParaFloat } from "../../utils/formattingHelpers.ts";
+import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
 import * as PaymentServices from "./services.ts";
 import { type Payment } from "./types.ts";
 
 export const addPayment = asyncHandler(
   async (req: Request<{ id: string }, unknown, Omit<Payment, "id">>, res) => {
-    const valor = formatarParaFloat(req.body.value.toString());
+    const valor = formatValueToFloat(req.body.value.toString());
     assertIsString(req.params.id, "Job Id");
 
     const payment = {
@@ -26,7 +26,7 @@ export const editPayment = asyncHandler(
     req: Request<{ id: string; paymentid: string }, unknown, Partial<Payment>>,
     res,
   ) => {
-    const valor = formatarParaFloat(req.body.value?.toString() ?? "0");
+    const valor = formatValueToFloat(req.body.value?.toString() ?? "0");
     assertIsString(req.params.id, "Job Id");
     assertIsString(req.params.paymentid, "Payment Id");
 

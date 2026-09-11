@@ -1,4 +1,4 @@
-export function formatarData(data: Date | string): string {
+export function formatDate(data: Date | string): string {
   const dateFromDB = new Date(data);
   // Formatar para PT-BR (12/03/2026)
   return dateFromDB.toLocaleDateString("pt-BR", {
@@ -8,7 +8,7 @@ export function formatarData(data: Date | string): string {
   });
 }
 
-export function formatarValor(val: number): string {
+export function formatValueToString(val: number): string {
   //formata numero para separar casas.
   return new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 2,
@@ -16,9 +16,9 @@ export function formatarValor(val: number): string {
   }).format(val);
 }
 
-export function formatarParaFloat(valor: string): number {
+export function formatValueToFloat(val: string): number {
   //retira os pontos EX: 12,99 para 12.99
-  const temp = valor.replace(/\./g, "");
+  const temp = val.replace(/\./g, "");
   const final = temp.replace(/,/g, ".");
   return parseFloat(final);
 }

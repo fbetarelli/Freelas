@@ -1,7 +1,7 @@
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { formatarParaFloat } from "../../utils/formattingHelpers.ts";
+import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
 import * as MaterialServices from "./services.ts";
 import { type Material } from "./types.ts";
 
@@ -20,7 +20,7 @@ type RequestWithMaterialBody = Request<
 
 export const addMaterial = asyncHandler(
   async (req: RequestWithMaterialBody, res) => {
-    const formattedUnitaryVal = formatarParaFloat(req.body.unitaryVal);
+    const formattedUnitaryVal = formatValueToFloat(req.body.unitaryVal);
     const jobId = req.params.id;
 
     assertIsString(jobId, "Job Id");
@@ -42,7 +42,7 @@ export const editMaterial = asyncHandler(
   ) => {
     let valorUnitario;
     if (req.body.unitaryVal) {
-      valorUnitario = formatarParaFloat(req.body.unitaryVal);
+      valorUnitario = formatValueToFloat(req.body.unitaryVal);
     }
 
     assertIsString(req.params.materialid, "Material Id");

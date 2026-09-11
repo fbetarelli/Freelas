@@ -1,7 +1,7 @@
 import { pool } from "../../database/database.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
 import { errorLog } from "../../utils/error-log.ts";
-import { formatarData } from "../../utils/formattingHelpers.ts";
+import { formatDate } from "../../utils/formatting-helpers.ts";
 import { type Payment } from "./types.ts";
 
 type PaymentQueryResult = Omit<Payment, "paymentDate" | "jobId"> & {
@@ -59,7 +59,7 @@ export class PaymentDAO {
 
           const payment = {
             ...rest,
-            paymentDate: formatarData(paymentDate),
+            paymentDate: formatDate(paymentDate),
             jobId,
           };
           paymentsArray.push(payment);

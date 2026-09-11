@@ -2,7 +2,7 @@ import { pool } from "../../database/database.ts";
 import { type SearchObject } from "../../types/search-types.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
 import { errorLog } from "../../utils/error-log.ts";
-import { formatarData } from "../../utils/formattingHelpers.ts";
+import { formatDate } from "../../utils/formatting-helpers.ts";
 import { validateSearch } from "../../utils/validate-search.ts";
 import { type Job } from "./types.ts";
 
@@ -78,7 +78,7 @@ export class JobDAO {
           clientId,
           userId,
           payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-          jobDate: formatarData(jobDate),
+          jobDate: formatDate(jobDate),
           totalValue: Number(totalValue),
         };
         return job;
@@ -112,7 +112,7 @@ export class JobDAO {
             clientId,
             userId,
             payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-            jobDate: formatarData(jobDate),
+            jobDate: formatDate(jobDate),
             totalValue: Number(totalValue),
           };
           jobsArray.push(job);
@@ -147,7 +147,7 @@ export class JobDAO {
             clientId,
             userId,
             payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-            jobDate: formatarData(jobDate),
+            jobDate: formatDate(jobDate),
             totalValue: Number(totalValue),
           };
           jobsArray.push(job);
@@ -197,7 +197,7 @@ export class JobDAO {
             clientId,
             userId,
             payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-            jobDate: formatarData(jobDate),
+            jobDate: formatDate(jobDate),
             totalValue: Number(totalValue),
           };
           jobsArray.push(job);

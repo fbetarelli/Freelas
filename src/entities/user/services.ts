@@ -4,7 +4,7 @@ import { UserDAO } from "./dao.ts";
 import { type User } from "./types.ts";
 import { PaymentDAO } from "../Payment/dao.ts";
 import { MaterialDAO } from "../Material/dao.ts";
-import { formatarValor } from "../../utils/formattingHelpers.ts";
+import { formatValueToString } from "../../utils/formatting-helpers.ts";
 import { JobDAO } from "../Job/dao.ts";
 
 const userDAO = new UserDAO();
@@ -68,7 +68,7 @@ export const getProfitFromLastMonth = async (userid: string) => {
   const materialTotal = await new MaterialDAO().getTotalFromLastMonth(userid);
 
   const final = paymentTotal - materialTotal;
-  return formatarValor(final);
+  return formatValueToString(final);
 };
 
 export const getJobCount = async (userid: string) => {

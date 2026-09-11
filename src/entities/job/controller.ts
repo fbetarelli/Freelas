@@ -2,9 +2,9 @@ import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import {
-  formatarParaFloat,
-  formatarValor,
-} from "../../utils/formattingHelpers.ts";
+  formatValueToFloat,
+  formatValueToString,
+} from "../../utils/formatting-helpers.ts";
 import * as MaterialServices from "../Material/services.ts";
 import * as PaymentServices from "../Payment/services.ts";
 import * as JobServices from "./services.ts";
@@ -15,7 +15,7 @@ export const addJob = asyncHandler(
     req: Request<{ id: string }, unknown, Omit<IncomingJob, "id">>,
     res,
   ) => {
-    const valorTotal = formatarParaFloat(
+    const valorTotal = formatValueToFloat(
       req.body.totalValue?.toString() ?? "0",
     );
 
@@ -41,7 +41,7 @@ export const addJob = asyncHandler(
 export const editJob = asyncHandler(
   async (req: Request<{ id: string }, unknown, Partial<IncomingJob>>, res) => {
     const totalValue = req.body.totalValue
-      ? formatarParaFloat(req.body.totalValue.toString())
+      ? formatValueToFloat(req.body.totalValue.toString())
       : undefined;
 
     const id = req.params.id;
@@ -82,18 +82,20 @@ export const getJobPage = asyncHandler(async (req, res) => {
   if (jobRes) {
     job = {
       ...jobRes,
-      totalValue: formatarValor(jobRes.totalValue),
+      totalValue: formatValueToString(jobRes.totalValue),
     };
   }
 
-  const profit = formatarValor(payments.totalValue - materials.totalValue);
+  const profit = formatValueToString(
+    payments.totalValue - materials.totalValue,
+  );
 
   res.render("jobPage", {
     job,
     materials: materials.data,
-    materialsVal: formatarValor(materials.totalValue),
+    materialsVal: formatValueToString(materials.totalValue),
     payments: payments.data,
-    paymentsVal: formatarValor(payments.totalValue),
+    paymentsVal: formatValueToString(payments.totalValue),
     profit,
   });
 });
