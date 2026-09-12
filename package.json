@@ -1,54 +1,18 @@
 {
   "name": "freelancemanager",
-  "version": "1.0.0",
-  "description": "An all-in one freelance job and client manager",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "license": "ISC",
   "homepage": "https://github.com/fbetarelli/FreelanceManager#readme",
-  "bugs": {
-    "url": "https://github.com/fbetarelli/FreelanceManager/issues"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fbetarelli/FreelanceManager.git"
   },
-  "license": "ISC",
-  "author": "",
-  "type": "module",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run migrate && npm run prod",
-    "prod": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css  && node app.js",
-    "dev": "node --watch app.ts",
-    "tailwind": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch",
-    "migrate": "node-pg-migrate up"
-  },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "connect-flash": "^0.1.1",
-    "dotenv": "^17.3.1",
-    "ejs": "^5.0.1",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "helmet": "^8.1.0",
-    "node-pg-migrate": "^8.0.4",
-    "path": "^0.12.7",
-    "pg": "^8.20.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@tailwindcss/cli": "^4.2.2",
-    "@types/bcrypt": "^6.0.0",
-    "@types/connect-flash": "^0.0.40",
-    "@types/express": "^5.0.6",
-    "@types/express-session": "^1.19.0",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^26.5.0",
-    "@types/pg": "^8.23.1",
-    "eslint": "^10.10.0",
-    "morgan": "^1.10.1",
-    "nodemon": "^3.1.14",
-    "tsx": "^4.23.13",
-    "typescript": ">=5.0.0 <6.1.0",
-    "typescript-eslint": "^8.70.0"
+    "dev:api": "npm run dev -w apps/api",
+    "migrate": "npm run migrate -w apps/api"
   }
 }

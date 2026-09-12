@@ -1,0 +1,42 @@
+{
+  "name": "@freelancemanager/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch app.ts",
+    "start": "node app.ts",
+    "migrate": "node-pg-migrate up",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^17.3.1",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.1.0",
+    "node-pg-migrate": "^8.0.4",
+    "path": "^0.12.7",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/cli": "^4.2.2",
+    "@types/bcrypt": "^6.0.0",
+    "@types/connect-flash": "^0.0.40",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^26.5.0",
+    "@types/pg": "^8.23.1",
+    "eslint": "^10.10.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.23.13",
+    "typescript": ">=5.0.0 <6.1.0",
+    "typescript-eslint": "^8.70.0"
+  }
+}
