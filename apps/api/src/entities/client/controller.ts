@@ -2,8 +2,8 @@ import type { Request } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { CustomError } from "../Error/error.ts";
-import * as JobServices from "../Job/services.ts";
+import { NotFoundError } from "../errors/errors.ts";
+import * as JobServices from "../job/services.ts";
 import * as ClientServices from "./services.ts";
 import { type Client } from "./types.ts";
 
@@ -54,7 +54,7 @@ export const getClientPage = asyncHandler(async (req, res, next) => {
   const jobs = await JobServices.getJobsByClient(clientId);
 
   if (client === null) {
-    const error = new CustomError(404, "Client not found");
+    const error = new NotFoundError("Client not found");
     return next(error);
   }
 

@@ -1,6 +1,6 @@
 import { type RequestHandler } from "express";
-import { ClientDAO } from "./dao.ts";
-import { assertIsString } from "../../utils/assert-is-string.ts";
+import { ClientDAO } from "../dao.ts";
+import { assertIsString } from "../../../utils/assert-is-string.ts";
 
 export const authorize: RequestHandler = async (req, res, next) => {
   const dao = new ClientDAO();

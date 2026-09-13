@@ -1,10 +1,10 @@
 import express from "express";
 const router = express.Router();
 import * as JobController from "./controller.ts";
-import * as MaterialController from "../Material/controller.ts";
-import * as PaymentController from "../Payment/controller.ts";
-import { authorize } from "./authentication.ts";
-import { authenticate } from "../User/middleware/authentication.ts";
+import * as MaterialController from "../material/controller.ts";
+import * as PaymentController from "../payment/controller.ts";
+import { authorize } from "./middleware/authentication.ts";
+import { authenticate } from "../user/middleware/authentication.ts";
 
 export const jobRoutes = (app: express.Application) => {
   app.use("/", router);

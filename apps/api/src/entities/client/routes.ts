@@ -1,9 +1,9 @@
 import express from "express";
 const router = express.Router();
 import * as ClientController from "./controller.ts";
-import * as JobController from "../Job/controller.ts";
-import { authorize } from "./authentication.ts";
-import { authenticate } from "../User/middleware/authentication.ts";
+import * as JobController from "../job/controller.ts";
+import { authorize } from "./middleware/authentication.ts";
+import { authenticate } from "../user/middleware/authentication.ts";
 import { saveLastPage } from "../../middlewares/saveLastPage.ts";
 
 export const clientRoutes = (app: express.Application) => {

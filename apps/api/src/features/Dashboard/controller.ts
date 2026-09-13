@@ -1,6 +1,6 @@
-import * as ClientServices from "../../entities/Client/services.ts";
-import * as JobServices from "../../entities/Job/services.ts";
-import * as UserServices from "../../entities/User/services.ts";
+import * as ClientServices from "../../entities/client/services.ts";
+import * as JobServices from "../../entities/job/services.ts";
+import * as UserServices from "../../entities/user/services.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 
 export const showDashboard = asyncHandler(async (req, res) => {

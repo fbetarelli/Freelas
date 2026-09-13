@@ -1,5 +1,5 @@
 import "express-session";
-import { SessionUser } from "../resources/user/types.ts";
+import { SessionUser } from "../entities/user/types.ts";
 
 declare module "express-session" {
   interface SessionData {

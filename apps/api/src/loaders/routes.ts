@@ -1,9 +1,9 @@
 import type { Application } from "express";
-import { clientRoutes } from "../entities/Client/routes.ts";
-import { userRoutes } from "../entities/User/routes.ts";
-import { jobRoutes } from "../entities/Job/routes.ts";
-import { dashboardRoutes } from "../features/dashboard/routes.ts";
-import { errorHandler } from "../entities/Error/error.ts";
+import { clientRoutes } from "../entities/client/routes.ts";
+import { userRoutes } from "../entities/user/routes.ts";
+import { jobRoutes } from "../entities/job/routes.ts";
+import { dashboardRoutes } from "../features/Dashboard/routes.ts";
+import { errorHandler } from "../entities/errors/errors.ts";
 
 export const routes = (app: Application) => {
   userRoutes(app);

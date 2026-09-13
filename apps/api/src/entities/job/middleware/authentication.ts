@@ -1,7 +1,7 @@
 import { type RequestHandler } from "express";
-import { JobDAO } from "./dao.ts";
-import { assertIsString } from "../../utils/assert-is-string.ts";
-import { CustomError } from "../Error/error.ts";
+import { JobDAO } from "../dao.ts";
+import { assertIsString } from "../../../utils/assert-is-string.ts";
+import { ForbiddenError } from "../../errors/errors.ts";
 
 export const authorize: RequestHandler = async (req, res, next) => {
   const dao = new JobDAO();
@@ -10,7 +10,9 @@ export const authorize: RequestHandler = async (req, res, next) => {
   if (job && req.session.user && req.session.user.id === job.userId) {
     next();
   } else {
-    const err = new CustomError(403, "Acesso Proibido");
+    const err = new ForbiddenError(
+      "Access denied: You do not have permission to access this job.",
+    );
     return next(err);
   }
 };

@@ -6,15 +6,10 @@ config();
 const app = express();
 loaders(app);
 
-app.get("/", (req, res) => {
-  res.redirect("/dashboard");
-});
-
 // Middleware genérico pra 404
 app.use((req, res) => {
-  res.status(404).render("erro", {
-    title: "404",
-    message: "Página não encontrada",
+  res.status(404).json({
+    message: "Resource not found",
   });
 });
 

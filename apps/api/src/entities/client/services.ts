@@ -10,7 +10,7 @@ export const addClient = async (client: Omit<Client, "id">) => {
 
 export const editClient = async (
   incomingClient: Partial<Client> & { id: string },
-) => {
+): Promise<void> => {
   const { id, name, address, contact, userId } = incomingClient;
   const client = {
     id,

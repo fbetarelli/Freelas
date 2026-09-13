@@ -5,8 +5,8 @@ import {
   formatValueToFloat,
   formatValueToString,
 } from "../../utils/formatting-helpers.ts";
-import * as MaterialServices from "../Material/services.ts";
-import * as PaymentServices from "../Payment/services.ts";
+import * as MaterialServices from "../material/services.ts";
+import * as PaymentServices from "../payment/services.ts";
 import * as JobServices from "./services.ts";
 import { type FormattedJob, type IncomingJob } from "./types.ts";
 

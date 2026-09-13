@@ -1,7 +1,7 @@
 import { type RequestHandler } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { CustomError } from "../Error/error.ts";
+import { ApiError } from "../errors/errors.ts";
 import * as UserServices from "./services.ts";
 
 export const showLogin: RequestHandler = (req, res) => {
@@ -73,7 +73,7 @@ export const editUser = asyncHandler(
     });
 
     if (result === null) {
-      const err = new CustomError(500, "Edição de perfil mal-sucedida!");
+      const err = new ApiError(500, "Profile Edit Failed");
       return next(err);
     }
     req.session.user = result;

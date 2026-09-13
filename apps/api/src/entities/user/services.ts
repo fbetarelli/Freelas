@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
-import { CustomError } from "../Error/error.ts";
+import { ApiError } from "../errors/errors.ts";
 import { UserDAO } from "./dao.ts";
 import { type User } from "./types.ts";
-import { PaymentDAO } from "../Payment/dao.ts";
-import { MaterialDAO } from "../Material/dao.ts";
+import { PaymentDAO } from "../payment/dao.ts";
+import { MaterialDAO } from "../material/dao.ts";
 import { formatValueToString } from "../../utils/formatting-helpers.ts";
-import { JobDAO } from "../Job/dao.ts";
+import { JobDAO } from "../job/dao.ts";
 
 const userDAO = new UserDAO();
 const saltRounds = 10;
@@ -27,11 +27,11 @@ export const register = async (
   username: string,
   login: string,
   password: string,
-): Promise<{ err: CustomError } | { user: Omit<User, "hashPassword"> }> => {
+): Promise<{ err: ApiError } | { user: Omit<User, "hashPassword"> }> => {
   const check = await userDAO.findByLogin(login);
   const hasLogin = check !== null;
   if (hasLogin) {
-    const err = new CustomError(409, "Cadastro Existente");
+    const err = new ApiError(409, "Login already exists");
     return { err };
   }
   const hash = await bcrypt.hash(password, saltRounds);
