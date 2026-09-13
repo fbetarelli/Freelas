@@ -2,7 +2,7 @@ import type { Request } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { NotFoundError } from "../errors/errors.ts";
+import { BadRequestError, NotFoundError } from "../errors/errors.ts";
 import * as JobServices from "../job/services.ts";
 import * as ClientServices from "./services.ts";
 import { type Client } from "./types.ts";
@@ -11,12 +11,20 @@ export const addClient = asyncHandler(
   async (req: RequestWithBody<Omit<Client, "id" | "userId">>, res) => {
     const incomingClient = req.body;
 
+    if (
+      incomingClient.name?.trim() === "" ||
+      incomingClient.contact?.trim() === ""
+    ) {
+      const err = new BadRequestError("Required fields are missing");
+      throw err;
+    }
+
     const client: Omit<Client, "id"> = {
       ...incomingClient,
       userId: req.session.user!.id,
     };
     await ClientServices.addClient(client);
-    res.redirect("dashboard");
+    res.status(201);
   },
 );
 

@@ -9,6 +9,7 @@ import { saveLastPage } from "../../middlewares/saveLastPage.ts";
 export const clientRoutes = (app: express.Application) => {
   app.use("/", router);
 
+  router.post("/addClient", authenticate, ClientController.addClient);
   router.get(
     "/client/:id",
     saveLastPage,

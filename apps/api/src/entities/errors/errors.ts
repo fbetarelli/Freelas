@@ -33,6 +33,12 @@ export class ForbiddenError extends ApiError {
   }
 }
 
+export class ConflictError extends ApiError {
+  constructor(message: string) {
+    super(409, message);
+  }
+}
+
 export const errorHandler = (app: Application) => {
   const errorHandlerMiddleware: ErrorRequestHandler = (
     err: ApiError | Error,
@@ -46,6 +52,20 @@ export const errorHandler = (app: Application) => {
         message: err.message,
       });
     }
+    if (isPgError(err)) {
+      if (err.code === "23505") {
+        return res
+          .status(409)
+          .json({ message: err.detail ?? "Duplicate entry" });
+      }
+      if (err.code === "23503") {
+        return res
+          .status(400)
+          .json({
+            message: err.detail ?? "Referenced resource does not exist",
+          });
+      }
+    }
     console.error(err);
     res.status(500).json({
       message: "Internal server error",
@@ -54,3 +74,9 @@ export const errorHandler = (app: Application) => {
 
   app.use(errorHandlerMiddleware);
 };
+
+function isPgError(
+  err: unknown,
+): err is { code: string; detail?: string; constraint?: string } {
+  return typeof err === "object" && err !== null && "code" in err;
+}

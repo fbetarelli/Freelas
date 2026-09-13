@@ -1,6 +1,7 @@
 import { type RequestHandler } from "express";
 import { ClientDAO } from "../dao.ts";
 import { assertIsString } from "../../../utils/assert-is-string.ts";
+import { ForbiddenError } from "../../errors/errors.ts";
 
 export const authorize: RequestHandler = async (req, res, next) => {
   const dao = new ClientDAO();
@@ -11,10 +12,9 @@ export const authorize: RequestHandler = async (req, res, next) => {
   if (client && req.session.user && req.session.user.id === client.userId) {
     return next();
   } else {
-    const err = Object.assign(new Error(), {
-      customMessage: "Acesso Proibido",
-      code: 401,
-    });
+    const err = new ForbiddenError(
+      "User not authorized to access this resource",
+    );
     return next(err);
   }
 };
