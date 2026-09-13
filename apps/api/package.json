@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch app.ts",
-    "start": "node app.ts",
+    "dev": "node --watch server.ts",
+    "start": "node server.ts",
     "migrate": "node-pg-migrate up",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
