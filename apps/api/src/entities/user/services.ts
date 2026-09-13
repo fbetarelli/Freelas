@@ -1,43 +1,41 @@
 import bcrypt from "bcrypt";
-import { ApiError } from "../errors/errors.ts";
+import { formatValueToString } from "../../utils/formatting-helpers.ts";
+import { BadRequestError, ConflictError } from "../errors/errors.ts";
+import { JobDAO } from "../job/dao.ts";
+import { MaterialDAO } from "../material/dao.ts";
+import { PaymentDAO } from "../payment/dao.ts";
 import { UserDAO } from "./dao.ts";
 import { type User } from "./types.ts";
-import { PaymentDAO } from "../payment/dao.ts";
-import { MaterialDAO } from "../material/dao.ts";
-import { formatValueToString } from "../../utils/formatting-helpers.ts";
-import { JobDAO } from "../job/dao.ts";
 
 const userDAO = new UserDAO();
 const saltRounds = 10;
+const DUMMYHASH = bcrypt.hashSync("dummyPassword", saltRounds);
 
 export const login = async (login: string, password: string) => {
   const user = await userDAO.findByLogin(login);
-  if (user === null) {
-    return { user };
-  }
 
-  const validate = await bcrypt.compare(password, user.hashPassword);
-  if (!validate) {
-    return { user: null };
+  const passwordHash = user?.hashPassword ?? DUMMYHASH;
+  const isValid = await bcrypt.compare(password, passwordHash);
+
+  if (!isValid || user === null) {
+    throw new BadRequestError("Invalid email or password");
   }
-  return { user };
+  return user;
 };
 
 export const register = async (
   username: string,
   login: string,
   password: string,
-): Promise<{ err: ApiError } | { user: Omit<User, "hashPassword"> }> => {
+): Promise<Omit<User, "hashPassword">> => {
   const check = await userDAO.findByLogin(login);
   const hasLogin = check !== null;
   if (hasLogin) {
-    const err = new ApiError(409, "Login already exists");
-    return { err };
+    throw new ConflictError("Login already exists");
   }
   const hash = await bcrypt.hash(password, saltRounds);
 
-  const user = await userDAO.register({ username, login, hashPassword: hash });
-  return { user };
+  return await userDAO.register({ username, login, hashPassword: hash });
 };
 
 export const editUser = async ({

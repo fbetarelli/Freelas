@@ -1,57 +1,36 @@
 import { type RequestHandler } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { ApiError } from "../errors/errors.ts";
 import * as UserServices from "./services.ts";
-
-export const showLogin: RequestHandler = (req, res) => {
-  return res.render("login", { message: req.flash("info") });
-};
-
-export const showRegister: RequestHandler = (req, res) => {
-  return res.render("register");
-};
-
-export const showProfile: RequestHandler = (req, res) => {
-  return res.render("profile", { user: req.session.user });
-};
 
 export const logout: RequestHandler = (req, res) => {
   req.session.user = null;
-  return res.redirect("/login");
+  return res.sendStatus(200);
 };
 
 export const login = asyncHandler(
-  async (req: RequestWithBody<{ email: string; password: string }>, res) => {
-    const { email: login, password } = req.body;
-    const result = await UserServices.login(login, password);
+  async (req: RequestWithBody<{ login: string; password: string }>, res) => {
+    const { login, password } = req.body;
 
-    if (result.user) {
-      // eslint-disable-next-line
-      const { hashPassword, ...user } = result.user;
-      req.session.user = user;
-      return res.redirect("/dashboard");
-    } else {
-      req.flash("info", "Login ou Senha inválidos.");
-      return res.redirect("/login");
-    }
+    const result = await UserServices.login(login, password);
+    //eslint-disable-next-line
+    const { hashPassword, ...user } = result;
+    req.session.user = user;
+    res.status(200).json({ ...user });
+    return;
   },
 );
 
 export const register = asyncHandler(
   async (
-    req: RequestWithBody<{ username: string; email: string; password: string }>,
+    req: RequestWithBody<{ username: string; login: string; password: string }>,
     res,
-    next,
   ) => {
-    const { username, email: login, password } = req.body;
+    const { username, login, password } = req.body;
 
     const result = await UserServices.register(username, login, password);
-    if ("err" in result) {
-      return next(result.err);
-    }
-    req.session.user = result.user;
-    return res.redirect("/dashboard");
+    req.session.user = result;
+    return res.status(201).json({ ...result });
   },
 );
 
@@ -59,24 +38,17 @@ export const editUser = asyncHandler(
   async (
     req: RequestWithBody<{
       username?: string;
-      email?: string;
+      login?: string;
       password?: string;
     }>,
     res,
-    next,
   ) => {
-    const { email: login, ...rest } = req.body;
     const result = await UserServices.editUser({
-      ...rest,
+      ...req.body,
       id: req.session.user!.id,
-      login,
     });
 
-    if (result === null) {
-      const err = new ApiError(500, "Profile Edit Failed");
-      return next(err);
-    }
     req.session.user = result;
-    return res.redirect("/dashboard");
+    return res.status(200).json({ ...result });
   },
 );

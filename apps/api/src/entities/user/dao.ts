@@ -82,5 +82,5 @@ const daoQueries = {
   register: `INSERT INTO users(username,login,hashpassword) VALUES($1,$2,$3) RETURNING id, username, login, hashpassword `,
   findByLogin: `SELECT * FROM users WHERE login=$1 LIMIT 1`,
   editUser: (fields: string[], index: number) =>
-    `UPDATE users SET ${fields.join(", ")} WHERE id=${index} RETURNING id, username, login `,
+    `UPDATE users SET ${fields.join(", ")} WHERE id=$${index} RETURNING id, username, login `,
 };
