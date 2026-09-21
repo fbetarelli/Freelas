@@ -2,8 +2,7 @@ import type { Request } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { BadRequestError, NotFoundError } from "../errors/errors.ts";
-import * as JobServices from "../job/services.ts";
+import { NotFoundError } from "../errors/errors.ts";
 import * as ClientServices from "./services.ts";
 import { type Client } from "./types.ts";
 
@@ -11,20 +10,12 @@ export const addClient = asyncHandler(
   async (req: RequestWithBody<Omit<Client, "id" | "userId">>, res) => {
     const incomingClient = req.body;
 
-    if (
-      incomingClient.name?.trim() === "" ||
-      incomingClient.contact?.trim() === ""
-    ) {
-      const err = new BadRequestError("Required fields are missing");
-      throw err;
-    }
-
     const client: Omit<Client, "id"> = {
       ...incomingClient,
       userId: req.session.user!.id,
     };
-    await ClientServices.addClient(client);
-    res.status(201);
+    const clientRes = await ClientServices.addClient(client);
+    return res.status(201).json(clientRes);
   },
 );
 
@@ -40,7 +31,7 @@ export const editClient = asyncHandler(
     };
 
     await ClientServices.editClient(client);
-    res.redirect(`/client/${clientId}`);
+    res.status(200).json(client);
   },
 );
 
@@ -50,59 +41,37 @@ export const deleteClient = asyncHandler(
     assertIsString(clientId, "clientId");
 
     await ClientServices.deleteClient(clientId);
-    res.redirect("/dashboard");
+    res.sendStatus(204);
   },
 );
 
-export const getClientPage = asyncHandler(async (req, res, next) => {
+export const getClientById = asyncHandler(async (req, res) => {
   const clientId = req.params.id;
   assertIsString(clientId, "clientId");
 
   const client = await ClientServices.getClientById(clientId);
-  const jobs = await JobServices.getJobsByClient(clientId);
 
   if (client === null) {
-    const error = new NotFoundError("Client not found");
-    return next(error);
+    throw new NotFoundError("Client not found");
   }
 
-  res.render("clientPage", {
-    client,
-    jobs,
-  });
+  res.status(200).json(client);
 });
+
 export const showClientList = asyncHandler(async (req, res) => {
   const incoming = req.query;
 
-  if (req.session.user?.id === undefined) {
-    return res.redirect("/login");
-  }
-
   const params = {
     page: Number(incoming.page) > 0 ? Number(incoming.page) : 1,
-    userId: req.session.user?.id,
+    userId: req.session.user!.id,
     search: typeof incoming.search === "string" ? incoming.search : "",
   };
 
-  const searchQuery = params.search
-    ? `&search=${encodeURIComponent(params.search)}`
-    : "";
-  if (isNaN(params.page) || params.page < 1) {
-    return res.redirect(`/clients?page=1${searchQuery}`);
-  }
-
   const totalPages = await ClientServices.getClientPages(params);
-  if (params.page > totalPages) {
-    return res.redirect(`/clients?page=1${searchQuery}`);
-  }
+  const clients = await ClientServices.getClientListByPage(params);
 
-  const clientsResult = await ClientServices.getClientListByPage(params);
-
-  return res.render("clientsList", {
-    clients: clientsResult,
+  res.status(200).json({
     totalPages,
-    search: params.search,
-    searchQuery,
-    page: params.page,
+    clients,
   });
 });

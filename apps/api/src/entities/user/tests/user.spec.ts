@@ -5,7 +5,7 @@ import { UserDAO } from "../dao.ts";
 import bcrypt from "bcrypt";
 const dao = new UserDAO();
 
-describe("User Authentication", () => {
+describe("User Authentication E2E", () => {
   const agent = request.agent(app);
 
   it("should register a new user successfully", async () => {

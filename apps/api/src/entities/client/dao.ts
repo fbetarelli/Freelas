@@ -15,7 +15,13 @@ export class ClientDAO {
     const params = [client.name, client.address, client.contact, client.userId];
 
     try {
-      await pool.query(query, params);
+      const res = await pool.query<ClientQueryResult>(query, params);
+      const { userid: userId, ...rest } = res.rows[0];
+
+      return {
+        ...rest,
+        userId,
+      };
     } catch (error) {
       errorLog("ClientDAO", "addClient");
       throw error;
@@ -141,7 +147,7 @@ export class ClientDAO {
 }
 
 const daoQueries = {
-  addClient: `INSERT INTO clients(name,address,contact,userID) VALUES ($1,$2,$3,$4) RETURNING 1`,
+  addClient: `INSERT INTO clients(name,address,contact,userID) VALUES ($1,$2,$3,$4) RETURNING *`,
   deleteClient: `DELETE FROM clients WHERE id=$1`,
   editClient: (fields: string[], index: number) =>
     `UPDATE clients SET ${fields.join(", ")} WHERE id=$${index}`,
