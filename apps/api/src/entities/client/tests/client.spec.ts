@@ -11,14 +11,14 @@ const agent = request.agent(app);
 
 describe("Client Controller E2E", () => {
   it("should fail adding a new client without login", async () => {
-    const clientResponse = await agent.post("/add-client").send(testClient);
+    const clientResponse = await agent.post("/clients").send(testClient);
     expect(clientResponse.status).toBe(401);
   });
 
   it("should add a new client successfully", async () => {
     const userAgent = await registerAndLogin();
 
-    const clientResponse = await userAgent.post("/add-client").send(testClient);
+    const clientResponse = await userAgent.post("/clients").send(testClient);
     expect(clientResponse.status).toBe(201);
     expect(clientResponse.body).toMatchObject(testClient);
   });
@@ -28,7 +28,7 @@ describe("Client Controller E2E", () => {
     const response = await createTestClient(userAgent);
 
     const deleteResponse = await userAgent.delete(
-      `/client/${response.id}/delete`,
+      `/clients/${response.id}`,
     );
     expect(deleteResponse.status).toBe(204);
   });
@@ -43,7 +43,7 @@ describe("Client Controller E2E", () => {
     };
 
     const editResponse = await userAgent
-      .patch(`/client/${response.id}/edit`)
+      .patch(`/clients/${response.id}`)
       .send(updatedClient);
     expect(editResponse.status).toBe(200);
     expect(editResponse.body).toMatchObject(updatedClient);
@@ -65,7 +65,7 @@ describe("Client Controller E2E", () => {
     };
 
     const editResponse = await userAgent
-      .patch(`/client/${response.id}/edit`)
+      .patch(`/clients/${response.id}`)
       .send(updatedClient);
     expect(editResponse.status).toBe(403);
     expect(editResponse.body).toHaveProperty("message");
@@ -74,7 +74,7 @@ describe("Client Controller E2E", () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
 
-    const getResponse = await userAgent.get(`/client/${client.id}`);
+    const getResponse = await userAgent.get(`/clients/${client.id}`);
     expect(getResponse.status).toBe(200);
     expect(getResponse.body).toMatchObject(client);
   });

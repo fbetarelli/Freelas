@@ -29,7 +29,7 @@ export const registerAndLogin = async () => {
 export const createTestClient = async (
   agent: ReturnType<typeof request.agent>,
 ) => {
-  const clientResponse = await agent.post("/add-client").send(testClient);
+  const clientResponse = await agent.post("/clients").send(testClient);
 
   return clientResponse.body as Client;
 };
@@ -38,7 +38,7 @@ export const createTestJob = async (
   clientId: string,
 ) => {
   const jobResponse = await agent
-    .post(`/client/${clientId}/add-job`)
+    .post(`/clients/${clientId}/jobs`)
     .send(testJob);
 
   return jobResponse.body as FormattedJob;

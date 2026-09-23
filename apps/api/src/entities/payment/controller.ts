@@ -20,6 +20,7 @@ export const addPayment = asyncHandler(
     res.redirect(`/job/${req.params.id}`);
   },
 );
+// get payment by job
 
 export const editPayment = asyncHandler(
   async (

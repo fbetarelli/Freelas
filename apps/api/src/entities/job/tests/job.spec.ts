@@ -29,7 +29,7 @@ describe("Job E2E Tests", () => {
       totalValue: 100.0,
     };
     const response = await userAgent
-      .post(`/client/${client.id}/add-job`)
+      .post(`/clients/${client.id}/jobs`)
       .send(jobData);
     expect(response.status).toBe(201);
     expect(response.body).toMatchObject(getExpectedJob(jobData));
@@ -45,7 +45,7 @@ describe("Job E2E Tests", () => {
       totalValue: 200.0,
     };
     const response = await userAgent
-      .patch(`/job/${job.id}/edit`)
+      .patch(`/jobs/${job.id}`)
       .send(updatedJobData);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject(getExpectedJob(updatedJobData));
@@ -54,7 +54,7 @@ describe("Job E2E Tests", () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
     const job = await createTestJob(userAgent, client.id);
-    const response = await userAgent.get(`/job/${job.id}`);
+    const response = await userAgent.get(`/jobs/${job.id}`);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject(job);
   });
@@ -62,14 +62,14 @@ describe("Job E2E Tests", () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
     const job = await createTestJob(userAgent, client.id);
-    const response = await userAgent.delete(`/job/${job.id}`);
+    const response = await userAgent.delete(`/jobs/${job.id}`);
     expect(response.status).toBe(204);
   });
   it("should get jobs by client ID", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
     const job = await createTestJob(userAgent, client.id);
-    const response = await userAgent.get(`/client/${client.id}/jobs`);
+    const response = await userAgent.get(`/clients/${client.id}/jobs`);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject([job]);
   });

@@ -34,6 +34,7 @@ export const addMaterial = asyncHandler(
     res.redirect(`/job/${req.params.id}`);
   },
 );
+// get materials by job
 
 export const editMaterial = asyncHandler(
   async (

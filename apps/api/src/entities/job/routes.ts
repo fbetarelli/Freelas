@@ -9,39 +9,36 @@ import { authorize as clientAuthorize } from "../client/middleware/authenticatio
 export const jobRoutes = (app: express.Application) => {
   app.use("/", router);
 
-  router.get("/client/:id/jobs", clientAuthorize, JobController.getByClient);
-
-  router.get("/job/:id", authorize, JobController.getById);
-  router.patch("/job/:id/edit", authorize, JobController.editJob);
-  router.delete("/job/:id", authorize, JobController.deleteJob);
-
-  router.post(
-    "/job/:id/material/add",
-    authorize,
-    MaterialController.addMaterial,
-  );
-  router.post(
-    "/job/:id/material/:materialid/edit",
+  router.get("/clients/:id/jobs", clientAuthorize, JobController.getByClient);
+  router.post("/clients/:id/jobs", clientAuthorize, JobController.addJob);
+  
+  router.get("/jobs", authenticate, JobController.showJobList);
+  router.get("/jobs/:id", authorize, JobController.getById);
+  router.patch("/jobs/:id", authorize, JobController.editJob);
+  router.delete("/jobs/:id", authorize, JobController.deleteJob);
+  
+  router.post("/jobs/:id/material", authorize, MaterialController.addMaterial);
+  router.patch(
+    "/materials/:materialid",
     authorize,
     MaterialController.editMaterial,
   );
-  router.get(
-    "/job/:id/material/:materialid/delete",
+  router.delete(
+    "/materials/:materialid",
     authorize,
     MaterialController.deleteMaterial,
   );
 
-  router.post("/job/:id/payment/add", authorize, PaymentController.addPayment);
-  router.post(
-    "/job/:id/payment/:paymentid/edit",
+  router.post("/jobs/:id/payment", authorize, PaymentController.addPayment);
+  router.patch(
+    "/jobs/:id/payment/:paymentid",
     authorize,
     PaymentController.editPayment,
   );
-  router.get(
-    "/job/:id/payment/:paymentid/delete",
+  router.delete(
+    "/jobs/:id/payment/:paymentid",
     authorize,
     PaymentController.deletePayment,
   );
 
-  router.get("/jobs", authenticate, JobController.showJobList);
 };
