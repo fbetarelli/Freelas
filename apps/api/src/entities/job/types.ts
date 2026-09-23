@@ -8,12 +8,18 @@ export interface Job {
   userId: string;
 }
 
-export interface FormattedJob extends Omit<Job, "payed" | "totalValue"> {
-  payed: string;
-  totalValue: string;
+
+export interface JobQueryResult extends Omit<
+  Job,
+  "jobDate" | "clientId" | "userId" | "totalValue"
+> {
+  totalvalue: string;
+  jobdate: string;
+  clientid: string;
+  userid: string;
 }
 
-export interface IncomingJob extends Omit<Job, "jobDate" | "payed"> {
-  date: string;
-  payed: "true" | "false" | undefined;
-}
+export type FormattedJob = Omit<Job, "payed" | "totalValue"> & {
+  payed: string;
+  totalValue: string;
+};

@@ -2,33 +2,19 @@ import { pool } from "../../database/database.ts";
 import { type SearchObject } from "../../types/search-types.ts";
 import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
 import { errorLog } from "../../utils/error-log.ts";
-import { formatDate } from "../../utils/formatting-helpers.ts";
 import { validateSearch } from "../../utils/validate-search.ts";
-import { type Job } from "./types.ts";
-
-interface JobQueryResult extends Omit<
-  Job,
-  "jobDate" | "clientId" | "userId" | "totalValue"
-> {
-  totalvalue: string;
-  jobdate: string;
-  clientid: string;
-  userid: string;
-}
-
-type FormattedJob = Omit<Job, "payed"> & {
-  payed: string;
-};
+import { type Job, type JobQueryResult } from "./types.ts";
 
 export class JobDAO {
   async addJob(job: Omit<Job, "id">) {
-    const { clientId, userId, descr, jobDate, totalValue } = job;
+    const { clientId, userId, descr, jobDate, totalValue, payed } = job;
 
     const query = daoQueries.addJob;
-    const params = [descr, jobDate, totalValue, clientId, userId];
+    const params = [descr, jobDate, totalValue, clientId, userId, payed];
 
     try {
-      await pool.query(query, params);
+      const res = await pool.query<JobQueryResult>(query, params);
+      return res.rows.length > 0 ? res.rows[0] : null;
     } catch (error) {
       errorLog("JobDAO", "addJob");
       throw error;
@@ -41,7 +27,8 @@ export class JobDAO {
 
       const query = daoQueries.editJob(fields, index);
 
-      await pool.query(query, values);
+      const res = await pool.query<JobQueryResult>(query, values);
+      return res.rows.length > 0 ? res.rows[0] : null;
     } catch (error) {
       errorLog("JobDAO", "editJob");
       throw error;
@@ -58,32 +45,14 @@ export class JobDAO {
       throw error;
     }
   }
-  async getJobById(id: string): Promise<FormattedJob | null> {
+  async getJobById(id: string): Promise<JobQueryResult | null> {
     const query = daoQueries.getJobById;
     const params = [id];
 
     try {
       const res = await pool.query<JobQueryResult>(query, params);
-      if (res.rows.length > 0) {
-        const {
-          jobdate: jobDate,
-          clientid: clientId,
-          userid: userId,
-          totalvalue: totalValue,
-          payed: isPayed,
-          ...rest
-        } = res.rows[0];
-        const job: FormattedJob = {
-          ...rest,
-          clientId,
-          userId,
-          payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-          jobDate: formatDate(jobDate),
-          totalValue: Number(totalValue),
-        };
-        return job;
-      }
-      return null;
+
+      return res.rows.length > 0 ? res.rows[0] : null;
     } catch (error) {
       errorLog("JobDAO", "getJobById");
       throw error;
@@ -95,65 +64,19 @@ export class JobDAO {
 
     try {
       const res = await pool.query<JobQueryResult>(query, params);
-      const jobsArray: FormattedJob[] = [];
-
-      if (res.rows.length > 0) {
-        res.rows.forEach((obj) => {
-          const {
-            jobdate: jobDate,
-            clientid: clientId,
-            userid: userId,
-            totalvalue: totalValue,
-            payed: isPayed,
-            ...rest
-          } = obj;
-          const job = {
-            ...rest,
-            clientId,
-            userId,
-            payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-            jobDate: formatDate(jobDate),
-            totalValue: Number(totalValue),
-          };
-          jobsArray.push(job);
-        });
-      }
-      return jobsArray;
+      return res.rows.length > 0 ? res.rows : [];
     } catch (error) {
       errorLog("JobDAO", "getJobsByClient");
       throw error;
     }
   }
-  async getLastJobsByUser(userId: string): Promise<FormattedJob[]> {
+  async getLastJobsByUser(userId: string) {
     const query = `SELECT * FROM jobs WHERE userId=$1 ORDER BY jobDate DESC LIMIT 5 `;
     const params = [userId];
 
     try {
       const res = await pool.query<JobQueryResult>(query, params);
-      const jobsArray: FormattedJob[] = [];
-
-      if (res.rows.length > 0) {
-        res.rows.forEach((obj) => {
-          const {
-            jobdate: jobDate,
-            clientid: clientId,
-            userid: userId,
-            totalvalue: totalValue,
-            payed: isPayed,
-            ...rest
-          } = obj;
-          const job = {
-            ...rest,
-            clientId,
-            userId,
-            payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-            jobDate: formatDate(jobDate),
-            totalValue: Number(totalValue),
-          };
-          jobsArray.push(job);
-        });
-      }
-      return jobsArray;
+        return res.rows.length > 0 ? res.rows : [];
     } catch (error) {
       errorLog("JobDAO", "getLastJobsByUser");
       throw error;
@@ -181,29 +104,7 @@ export class JobDAO {
 
     try {
       const res = await pool.query<JobQueryResult>(query, params);
-      const jobsArray: FormattedJob[] = [];
-      if (res.rows.length > 0) {
-        res.rows.forEach((obj) => {
-          const {
-            jobdate: jobDate,
-            clientid: clientId,
-            userid: userId,
-            totalvalue: totalValue,
-            payed: isPayed,
-            ...rest
-          } = obj;
-          const job = {
-            ...rest,
-            clientId,
-            userId,
-            payed: isPayed ? "Pagamento Realizado" : "Aguardando pagamento",
-            jobDate: formatDate(jobDate),
-            totalValue: Number(totalValue),
-          };
-          jobsArray.push(job);
-        });
-      }
-      return jobsArray;
+      return res.rows.length > 0 ? res.rows : [];
     } catch (error) {
       errorLog("JobDAO", "getJobListByPage");
       throw error;
@@ -226,9 +127,9 @@ export class JobDAO {
 }
 
 const daoQueries = {
-  addJob: `INSERT INTO jobs(descr,jobDate,totalValue,clientId,userId) VALUES ($1,$2,$3,$4,$5)`,
+  addJob: `INSERT INTO jobs(descr,jobDate,totalValue,clientId,userId,payed) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
   editJob: (fields: string[], index: number) =>
-    `UPDATE jobs SET ${fields.join(", ")} WHERE id=$${index}`,
+    `UPDATE jobs SET ${fields.join(", ")} WHERE id=$${index} RETURNING *`,
   deleteJob: `DELETE FROM jobs WHERE id=$1`,
   getJobById: `SELECT * FROM jobs WHERE id=$1`,
   getJobsByClient: `SELECT * FROM jobs WHERE clientId=$1 ORDER BY jobDate DESC`,

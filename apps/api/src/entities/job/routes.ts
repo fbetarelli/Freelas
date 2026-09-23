@@ -5,13 +5,15 @@ import * as MaterialController from "../material/controller.ts";
 import * as PaymentController from "../payment/controller.ts";
 import { authorize } from "./middleware/authentication.ts";
 import { authenticate } from "../user/middleware/authentication.ts";
-
+import { authorize as clientAuthorize } from "../client/middleware/authentication.ts";
 export const jobRoutes = (app: express.Application) => {
   app.use("/", router);
 
-  router.get("/job/:id", authorize, JobController.getJobPage);
-  router.post("/job/:id/edit", authorize, JobController.editJob);
-  router.get("/job/:id/delete", authorize, JobController.deleteJob);
+  router.get("/client/:id/jobs", clientAuthorize, JobController.getByClient);
+
+  router.get("/job/:id", authorize, JobController.getById);
+  router.patch("/job/:id/edit", authorize, JobController.editJob);
+  router.delete("/job/:id", authorize, JobController.deleteJob);
 
   router.post(
     "/job/:id/material/add",

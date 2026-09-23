@@ -1,60 +1,63 @@
 import { type SearchObject } from "../../types/search-types.ts";
+import { removeUndefined } from "../../utils/remove-undefined.ts";
+import { NotFoundError } from "../errors/errors.ts";
 import { JobDAO } from "./dao.ts";
 import { type Job } from "./types.ts";
+import { mapToJob } from "./utils/mapper.ts";
 
 const dao = new JobDAO();
 
 export const addJob = async (job: Omit<Job, "id">) => {
-  return await dao.addJob(job);
+  const dbJob = await dao.addJob(job);
+  if (!dbJob) {
+    throw new NotFoundError("Job not found");
+  }
+  return mapToJob(dbJob);
 };
 export const editJob = async (
-  incomingJob: Partial<Omit<Job, "payed">> & {
+  incomingJob: Partial<Job> & {
     id: string;
-    payed: "true" | "false" | undefined;
   },
 ) => {
-  const {
-    id,
-    clientId,
-    descr,
-    jobDate,
-    payed: incomingPayed,
-    totalValue,
-    userId,
-  } = incomingJob;
+  const { descr, jobDate, payed: incomingPayed, totalValue } = incomingJob;
+  const jobWithoutId = removeUndefined({
+    descr: descr?.trim() !== "" ? descr : undefined,
+    jobDate: jobDate?.trim() !== "" ? jobDate : undefined,
+    payed: incomingPayed !== undefined ? incomingPayed : undefined,
+    totalValue: totalValue !== undefined ? totalValue : undefined,
+  });
 
   const job = {
-    id,
-    clientId,
-    userId,
-    ...(descr?.trim() !== "" && { descr }),
-    ...(jobDate?.trim() !== "" && { jobDate }),
-    payed:
-      incomingPayed === "true"
-        ? true
-        : incomingPayed === "false"
-          ? false
-          : undefined,
-    ...(jobDate && { jobDate: jobDate }),
-    ...(totalValue !== undefined && { totalValue }),
+    ...jobWithoutId,
+    id: incomingJob.id,
   };
 
-  return await dao.editJob(job);
+  const dbJob = await dao.editJob(job);
+  if (!dbJob) {
+    throw new NotFoundError("Job not found");
+  }
+  return mapToJob(dbJob);
 };
 export const deleteJob = async (jobId: string) => {
   return await dao.deleteJob(jobId);
 };
 
 export const getJobById = async (id: string) => {
-  return await dao.getJobById(id);
+  const dbJob = await dao.getJobById(id);
+  if (!dbJob) {
+    throw new NotFoundError("Job not found");
+  }
+  return mapToJob(dbJob);
 };
 
 export const getJobsByClient = async (clientId: string) => {
-  return await dao.getJobsByClient(clientId);
+  const jobs = await dao.getJobsByClient(clientId);
+  return jobs.map(mapToJob);
 };
 
 export const getLastJobsByUser = async (userId: string) => {
-  return await dao.getLastJobsByUser(userId);
+  const jobs = await dao.getLastJobsByUser(userId);
+  return jobs.map(mapToJob);
 };
 
 export const getJobListByPage = async (query: SearchObject) => {
@@ -62,7 +65,8 @@ export const getJobListByPage = async (query: SearchObject) => {
     ...query,
     page: (query.page - 1) * 10,
   };
-  return await dao.getJobListByPage(params);
+  const jobs = await dao.getJobListByPage(params);
+  return jobs.map(mapToJob);
 };
 
 export const getJobPages = async (params: {
