@@ -1,52 +1,56 @@
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
 import * as PaymentServices from "./services.ts";
 import { type Payment } from "./types.ts";
 
 export const addPayment = asyncHandler(
   async (req: Request<{ id: string }, unknown, Omit<Payment, "id">>, res) => {
-    const valor = formatValueToFloat(req.body.value.toString());
     assertIsString(req.params.id, "Job Id");
 
-    const payment = {
-      ...req.body,
-      value: valor,
+    const incomingPayment = {
+      method: req.body.method,
+      installment: req.body.installment,
+      paymentDate: req.body.paymentDate,
+      value: req.body.value,
       jobId: req.params.id,
     };
 
-    await PaymentServices.addPayment(payment);
-    res.redirect(`/job/${req.params.id}`);
+    const payment = await PaymentServices.addPayment(incomingPayment);
+    res.status(200).json(payment);
   },
 );
-// get payment by job
+
+export const getByJob = asyncHandler(
+  async (req: Request<{ id: string }>, res) => {
+    assertIsString(req.params.id, "Job Id");
+
+    const payments = await PaymentServices.getPaymentsByJob(req.params.id);
+    res.status(200).json(payments);
+  },
+);
 
 export const editPayment = asyncHandler(
-  async (
-    req: Request<{ id: string; paymentid: string }, unknown, Partial<Payment>>,
-    res,
-  ) => {
-    const valor = formatValueToFloat(req.body.value?.toString() ?? "0");
-    assertIsString(req.params.id, "Job Id");
-    assertIsString(req.params.paymentid, "Payment Id");
+  async (req: Request<{ id: string }, unknown, Partial<Payment>>, res) => {
+    assertIsString(req.params.id, "Payment Id");
 
-    const payment = {
-      ...req.body,
-      id: req.params.paymentid,
-      value: valor,
-      jobId: req.params.id,
+    const incomingPayment = {
+      id: req.params.id,
+      method: req.body.method,
+      installment: req.body.installment,
+      paymentDate: req.body.paymentDate,
+      value: req.body.value,
     };
 
-    await PaymentServices.editPayment(payment);
-    res.redirect(`/job/${req.params.id}`);
+    const payment = await PaymentServices.editPayment(incomingPayment);
+    res.status(200).json(payment);
   },
 );
 
 export const deletePayment = asyncHandler(
-  async (req: Request<{ id: string; paymentid: string }>, res) => {
-    assertIsString(req.params.paymentid, "Payment Id");
-    await PaymentServices.deletePayment(req.params.paymentid);
-    res.redirect(`/job/${req.params.id}`);
+  async (req: Request<{ id: string }>, res) => {
+    assertIsString(req.params.id, "Payment Id");
+    await PaymentServices.deletePayment(req.params.id);
+    res.sendStatus(204);
   },
 );

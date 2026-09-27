@@ -1,27 +1,40 @@
-import { formatValueToString } from "../../utils/formatting-helpers.ts";
+import { removeUndefined } from "../../utils/remove-undefined.ts";
+import { ApiError } from "../errors/errors.ts";
 import { MaterialDAO } from "./dao.ts";
-import { type FormattedMaterial, type Material } from "./types.ts";
+import { type Material } from "./types.ts";
+import { toFormattedMaterial } from "./utils/mapper.ts";
 
 const dao = new MaterialDAO();
 
 export const addMaterial = async (material: Omit<Material, "id">) => {
-  return await dao.addMaterial(material);
+  const dbMaterial = await dao.addMaterial(material);
+  if (dbMaterial === null) {
+    throw new ApiError(500, "Failed to add material");
+  }
+  return toFormattedMaterial(dbMaterial);
 };
 export const editMaterial = async (
   incomingMaterial: Partial<Material> & { id: string },
 ) => {
-  const { id, descr, supplier, qnt, unitaryVal, jobId } = incomingMaterial;
+  const { id, descr, supplier, qnt, unitaryVal } = incomingMaterial;
+
+  const materialWithoutId = removeUndefined({
+    descr: descr?.trim() !== "" ? descr?.trim() : undefined,
+    supplier: supplier?.trim() !== "" ? supplier?.trim() : undefined,
+    qnt: qnt !== undefined ? qnt : undefined,
+    unitaryVal: unitaryVal !== undefined ? unitaryVal : undefined,
+  });
 
   const material = {
     id,
-    jobId,
-    ...(descr !== undefined && descr.trim() !== "" ? { descr } : {}),
-    ...(supplier !== undefined ? { supplier } : {}),
-    ...(qnt ? { qnt } : {}),
-    ...(unitaryVal ? { unitaryVal } : {}),
+    ...materialWithoutId,
   };
 
-  return await dao.editMaterial(material);
+  const dbMaterial = await dao.editMaterial(material);
+  if (dbMaterial === null) {
+    throw new ApiError(500, "Failed to edit material");
+  }
+  return toFormattedMaterial(dbMaterial);
 };
 
 export const deleteMaterial = async (materialId: string) => {
@@ -33,21 +46,13 @@ export const getTotalFromLastMonth = async (userId: string) => {
 };
 
 export const getMaterialsByJob = async (jobId: string) => {
-  const materialArr = await dao.getMaterialsByJob(jobId);
+  const res = await dao.getMaterialsByJob(jobId);
 
-  const totalValue = materialArr.reduce((acc, material) => {
-    return acc + material.qnt * material.unitaryVal;
+  const totalValue = res.reduce((acc, material) => {
+    return acc + Number(material.qnt) * Number(material.unitaryval);
   }, 0);
 
-  const formattedMaterialArr: FormattedMaterial[] = materialArr.map(
-    (material) => {
-      return {
-        ...material,
-        unitaryVal: formatValueToString(material.unitaryVal),
-        totalVal: formatValueToString(material.qnt * material.unitaryVal),
-      };
-    },
-  );
+  const materials = res.map(toFormattedMaterial);
 
-  return { data: formattedMaterialArr, totalValue };
+  return { materials, totalValue };
 };

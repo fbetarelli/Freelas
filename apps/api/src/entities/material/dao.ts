@@ -3,12 +3,10 @@ import { dynamicFieldsBuilder } from "../../utils/dynamic-fields-builder.ts";
 import { errorLog } from "../../utils/error-log.ts";
 import { type Material } from "./types.ts";
 
-interface MaterialQueryResult extends Omit<Material, "unitaryVal"> {
+export interface MaterialQueryResult extends Omit<Material, "unitaryVal" | "jobId"> {
   unitaryval: string;
+  jobid: string;
 }
-
-
-
 
 export class MaterialDAO {
   async addMaterial(material: Omit<Material, "id">) {
@@ -17,7 +15,8 @@ export class MaterialDAO {
       const query = daoQueries.addMaterial;
       const params = [descr, supplier, qnt, unitaryVal, jobId];
 
-      await pool.query(query, params);
+      const res = await pool.query<MaterialQueryResult>(query, params);
+      return res.rows.length > 0 ? res.rows[0] : null;
     } catch (error) {
       errorLog("Material DAO", "addMaterial");
       throw error;
@@ -30,7 +29,8 @@ export class MaterialDAO {
 
       const query = daoQueries.editMaterial(fields, index);
 
-      await pool.query(query, values);
+      const res = await pool.query<MaterialQueryResult>(query, values);
+      return res.rows.length > 0 ? res.rows[0] : null;
     } catch (error) {
       errorLog("Material DAO", "editMaterial");
       throw error;
@@ -54,20 +54,8 @@ export class MaterialDAO {
 
     try {
       const res = await pool.query<MaterialQueryResult>(query, params);
-      const materialsArray: Material[] = [];
+           return res.rows.length > 0 ? res.rows : [];
 
-      if (res.rows.length > 0) {
-        res.rows.forEach((obj) => {
-          const { unitaryval: unitaryVal, ...rest } = obj;
-          const material: Material = {
-            ...rest,
-            unitaryVal: Number(unitaryVal),
-          };
-          materialsArray.push(material);
-        });
-      }
-
-      return materialsArray;
     } catch (error) {
       errorLog("Material DAO", "getMaterialsByJob");
       throw error;
@@ -91,9 +79,9 @@ export class MaterialDAO {
 }
 
 const daoQueries = {
-  addMaterial: `INSERT INTO materials(descr,supplier,qnt, unitaryVal,jobId) VALUES ($1,$2,$3,$4,$5)`,
+  addMaterial: `INSERT INTO materials(descr,supplier,qnt, unitaryVal,jobId) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
   editMaterial: (fields: string[], index: number) =>
-    `UPDATE materials SET ${fields.join(", ")} WHERE id = $${index}`,
+    `UPDATE materials SET ${fields.join(", ")} WHERE id = $${index} RETURNING *`,
   deleteMaterial: `DELETE FROM materials WHERE id = $1`,
   getMaterialsByJob: `SELECT * FROM materials WHERE jobId = $1`,
   getTotalFromLastMonth: `SELECT SUM(materials.unitaryVal*qnt) FROM materials JOIN jobs ON materials.jobId = jobs.id WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`,

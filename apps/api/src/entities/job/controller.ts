@@ -79,7 +79,7 @@ export const getJobPage = asyncHandler(async (req, res) => {
 
   res.render("jobPage", {
     job: jobRes,
-    materials: materials.data,
+    materials: materials.materials,
     materialsVal: formatValueToString(materials.totalValue),
     payments: payments.data,
     paymentsVal: formatValueToString(payments.totalValue),
