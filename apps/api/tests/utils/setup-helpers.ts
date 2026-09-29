@@ -6,7 +6,7 @@ import type { FormattedMaterial } from "../../src/entities/material/types.ts";
 import type { FormattedPayment } from "../../src/entities/payment/types.ts";
 
 export const testUser = {
-  login: "a@a.com",
+  login: `${Math.random()}@a.com`,
   username: "Test User",
   password: "123",
 };

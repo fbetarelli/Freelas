@@ -2,6 +2,7 @@ import { type RequestHandler } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import * as UserServices from "./services.ts";
+import type { EditUser, LoginUser, RegisterUser } from "@freelancemanager/shared";
 
 export const logout: RequestHandler = (req, res) => {
   req.session.user = null;
@@ -9,7 +10,7 @@ export const logout: RequestHandler = (req, res) => {
 };
 
 export const login = asyncHandler(
-  async (req: RequestWithBody<{ login: string; password: string }>, res) => {
+  async (req: RequestWithBody<LoginUser>, res) => {
     const { login, password } = req.body;
 
     const result = await UserServices.login(login, password);
@@ -23,7 +24,7 @@ export const login = asyncHandler(
 
 export const register = asyncHandler(
   async (
-    req: RequestWithBody<{ username: string; login: string; password: string }>,
+    req: RequestWithBody<RegisterUser>,
     res,
   ) => {
     const { username, login, password } = req.body;
@@ -36,13 +37,10 @@ export const register = asyncHandler(
 
 export const editUser = asyncHandler(
   async (
-    req: RequestWithBody<{
-      username?: string;
-      login?: string;
-      password?: string;
-    }>,
+    req: RequestWithBody<EditUser>,
     res,
   ) => {
+
     const result = await UserServices.editUser({
       ...req.body,
       id: req.session.user!.id,

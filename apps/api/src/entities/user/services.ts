@@ -6,6 +6,7 @@ import { MaterialDAO } from "../material/dao.ts";
 import { PaymentDAO } from "../payment/dao.ts";
 import { UserDAO } from "./dao.ts";
 import { type User } from "./types.ts";
+import type { EditUser } from "@freelancemanager/shared";
 
 const userDAO = new UserDAO();
 const saltRounds = 10;
@@ -39,11 +40,11 @@ export const register = async (
 };
 
 export const editUser = async ({
-  hashPassword: password,
+  password,
   id,
   login,
   username,
-}: Partial<User> & { id: string }) => {
+}: EditUser & { id: string }) => {
   const incomingUser = {
     id,
     ...(username?.trim() !== "" && { username }),
