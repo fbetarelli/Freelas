@@ -1,4 +1,5 @@
 import { type SearchObject } from "../../types/search-types.ts";
+import { removeUndefined } from "../../utils/remove-undefined.ts";
 import { ClientDAO } from "./dao.ts";
 import { type Client } from "./types.ts";
 
@@ -12,12 +13,16 @@ export const editClient = async (
   incomingClient: Partial<Client> & { id: string },
 ): Promise<void> => {
   const { id, name, address, contact, userId } = incomingClient;
+  const clientWithoutId = removeUndefined({
+    name: name?.trim() !== "" ? name : undefined,
+    address,
+    contact: contact?.trim() !== "" ? contact : undefined,
+  });
+
   const client = {
+    ...clientWithoutId,
     id,
     userId,
-    ...(name?.trim() !== "" && { name }),
-    ...(address !== undefined && { address }),
-    ...(contact?.trim() !== "" && { contact }),
   };
   return await dao.editClient(client);
 };

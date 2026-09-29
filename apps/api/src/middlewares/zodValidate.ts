@@ -8,7 +8,9 @@ export const validate = (
 ): RequestHandler => {
   return (req, res, next) => {
     const result = schema.safeParse(req[target]);
-    if (!result.success) return next(new BadRequestError(result.error.issues[0].message));
+    if (!result.success)
+      return next(new BadRequestError(result.error.issues[0].message));
+    if (target === "query") return next();
     req[target] = result.data;
     next();
   };

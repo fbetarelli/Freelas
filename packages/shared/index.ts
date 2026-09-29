@@ -10,3 +10,16 @@ export type {
   EditUser,
   LoginUser,
 } from "./schemas/user/schemas.ts";
+export {
+  ClientZodSchema,
+  RegisterClientZodSchema,
+  EditClientZodSchema,
+  GetClientZodSchema,
+  GetClientListZodSchema,
+} from "./schemas/client/schemas.ts";
+export type {
+  Client,
+  RegisterClient,
+  EditClient,
+  GetClient,
+} from "./schemas/client/schemas.ts";

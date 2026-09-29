@@ -22,14 +22,24 @@ describe("Client Controller E2E", () => {
     expect(clientResponse.status).toBe(201);
     expect(clientResponse.body).toMatchObject(testClient);
   });
+  it("should not add a new client without required fields", async () => {
+    const userAgent = await registerAndLogin();
+
+    const clientResponse = await userAgent.post("/clients").send({
+      address: "123 Main St",
+      contact: "555-1234",
+    });
+    expect(clientResponse.status).toBe(400);
+    expect(clientResponse.body).toMatchObject({
+      message: "Client name is required",
+    });
+  });
 
   it("should delete a client successfully", async () => {
     const userAgent = await registerAndLogin();
     const response = await createTestClient(userAgent);
 
-    const deleteResponse = await userAgent.delete(
-      `/clients/${response.id}`,
-    );
+    const deleteResponse = await userAgent.delete(`/clients/${response.id}`);
     expect(deleteResponse.status).toBe(204);
   });
   it("should edit client successfully", async () => {
@@ -70,6 +80,16 @@ describe("Client Controller E2E", () => {
     expect(editResponse.status).toBe(403);
     expect(editResponse.body).toHaveProperty("message");
   });
+  it("should not not edit client without any field", async () => {
+    const userAgent = await registerAndLogin();
+    const response = await createTestClient(userAgent);
+
+    const editResponse = await userAgent.patch(`/clients/${response.id}`);
+    expect(editResponse.status).toBe(400);
+    expect(editResponse.body).toMatchObject({
+      message: "At least one field is required for editing client",
+    });
+  });
   it("should get client by id", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
@@ -77,6 +97,15 @@ describe("Client Controller E2E", () => {
     const getResponse = await userAgent.get(`/clients/${client.id}`);
     expect(getResponse.status).toBe(200);
     expect(getResponse.body).toMatchObject(client);
+  });
+  it("should not get client with non uuid parameter", async () => {
+    const userAgent = await registerAndLogin();
+
+    const getResponse = await userAgent.get(`/clients/${"asdasd"}`);
+    expect(getResponse.status).toBe(400);
+    expect(getResponse.body).toMatchObject({
+      message: "Client ID is required",
+    });
   });
   it("should get client list", async () => {
     const userAgent = await registerAndLogin();
@@ -87,7 +116,7 @@ describe("Client Controller E2E", () => {
     };
 
     const getResponse = await userAgent.get(`/clients`);
-    expect(getResponse.status).toBe(200);
     expect(getResponse.body).toMatchObject(expected);
+    expect(getResponse.status).toBe(200);
   });
 });

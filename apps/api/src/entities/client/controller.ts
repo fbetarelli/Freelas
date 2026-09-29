@@ -1,13 +1,13 @@
+import type { EditClient, RegisterClient } from "@freelancemanager/shared";
 import type { Request } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
-import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import * as ClientServices from "./services.ts";
 import { type Client } from "./types.ts";
 
 export const addClient = asyncHandler(
-  async (req: RequestWithBody<Omit<Client, "id" | "userId">>, res) => {
+  async (req: RequestWithBody<RegisterClient>, res) => {
     const incomingClient = req.body;
 
     const client: Omit<Client, "id"> = {
@@ -20,9 +20,8 @@ export const addClient = asyncHandler(
 );
 
 export const editClient = asyncHandler(
-  async (req: Request<{ id: string }, unknown, Partial<Client>>, res) => {
+  async (req: Request<{ id: string }, unknown, EditClient>, res) => {
     const clientId = req.params.id;
-    assertIsString(clientId, "clientId");
 
     const client = {
       ...req.body,
@@ -38,25 +37,25 @@ export const editClient = asyncHandler(
 export const deleteClient = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     const clientId = req.params.id;
-    assertIsString(clientId, "clientId");
 
     await ClientServices.deleteClient(clientId);
     res.sendStatus(204);
   },
 );
 
-export const getClientById = asyncHandler(async (req, res) => {
-  const clientId = req.params.id;
-  assertIsString(clientId, "clientId");
+export const getClientById = asyncHandler(
+  async (req: Request<{ id: string }>, res) => {
+    const clientId = req.params.id;
 
-  const client = await ClientServices.getClientById(clientId);
+    const client = await ClientServices.getClientById(clientId);
 
-  if (client === null) {
-    throw new NotFoundError("Client not found");
-  }
+    if (client === null) {
+      throw new NotFoundError("Client not found");
+    }
 
-  res.status(200).json(client);
-});
+    res.status(200).json(client);
+  },
+);
 
 export const showClientList = asyncHandler(async (req, res) => {
   const incoming = req.query;
