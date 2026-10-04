@@ -1,6 +1,5 @@
 import express from "express";
 import { authenticate } from "../../entities/user/middleware/authentication.ts";
-import { saveLastPage } from "../../middlewares/saveLastPage.ts";
 import * as DashboardController from "./controller.ts";
 const router = express.Router();
 
@@ -9,9 +8,7 @@ export const dashboardRoutes = (app: express.Application) => {
 
   router.get(
     "/dashboard",
-    saveLastPage,
     authenticate,
     DashboardController.showDashboard,
   );
-
 };
