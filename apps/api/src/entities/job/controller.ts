@@ -1,18 +1,18 @@
+import type {
+  EditJob,
+  GetClient,
+  GetJob,
+  RegisterJob,
+} from "@freelancemanager/shared";
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
-import {
-  formatValueToFloat,
-  formatValueToString,
-} from "../../utils/formatting-helpers.ts";
+import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
 import { BadRequestError, NotFoundError } from "../errors/errors.ts";
-import * as MaterialServices from "../material/services.ts";
-import * as PaymentServices from "../payment/services.ts";
 import * as JobServices from "./services.ts";
-import { type Job } from "./types.ts";
 
 export const addJob = asyncHandler(
-  async (req: Request<{ id: string }, unknown, Omit<Job, "id">>, res) => {
+  async (req: Request<GetClient, unknown, RegisterJob>, res) => {
     const valorTotal = formatValueToFloat(req.body.totalValue?.toString());
 
     assertIsString(req.params.id, "Client Id");
@@ -33,7 +33,7 @@ export const addJob = asyncHandler(
 );
 
 export const editJob = asyncHandler(
-  async (req: Request<{ id: string }, unknown, Partial<Job>>, res) => {
+  async (req: Request<GetJob, unknown, EditJob>, res) => {
     const totalValue = req.body.totalValue
       ? formatValueToFloat(req.body.totalValue.toString())
       : undefined;
@@ -65,38 +65,15 @@ export const deleteJob = asyncHandler(async (req, res) => {
   res.sendStatus(204);
 });
 
-export const getJobPage = asyncHandler(async (req, res) => {
-  const jobId = req.params.id;
-  assertIsString(jobId, "Job Id");
-
-  const jobRes = await JobServices.getJobById(jobId);
-  const materials = await MaterialServices.getMaterialsByJob(jobId);
-  const payments = await PaymentServices.getPaymentsByJob(jobId);
-
-  const profit = formatValueToString(
-    payments.totalValue - materials.totalValue,
-  );
-
-  res.render("jobPage", {
-    job: jobRes,
-    materials: materials.materials,
-    materialsVal: formatValueToString(materials.totalValue),
-    payments: payments.data,
-    paymentsVal: formatValueToString(payments.totalValue),
-    profit,
-  });
-});
 export const getById = asyncHandler(async (req, res) => {
-  const jobId = req.params.id;
-  assertIsString(jobId, "Job Id");
+  const jobId = req.params.id as string;
 
   const job = await JobServices.getJobById(jobId);
   res.status(200).json(job);
 });
 
 export const getByClient = asyncHandler(async (req, res) => {
-  const clientId = req.params.id;
-  assertIsString(clientId, "Client Id");
+  const clientId = req.params.id as string;
 
   const jobs = await JobServices.getJobsByClient(clientId);
   res.status(200).json(jobs);

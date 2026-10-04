@@ -34,6 +34,20 @@ describe("Job E2E Tests", () => {
     expect(response.status).toBe(201);
     expect(response.body).toMatchObject(getExpectedJob(jobData));
   });
+  it("should not add a job with invalid data", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    const jobData = {
+      // descr: "Test Job", missing description
+      jobDate: "2023-06-01",
+      payed: false,
+      totalValue: 100.0,
+    };
+    const response = await userAgent
+      .post(`/clients/${client.id}/jobs`)
+      .send(jobData);
+    expect(response.status).toBe(400);
+  });
   it("should edit a job", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
@@ -58,6 +72,13 @@ describe("Job E2E Tests", () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject(job);
   });
+  it("should not get a job with an invalid id", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    await createTestJob(userAgent, client.id);
+    const response = await userAgent.get(`/jobs/${123}`);
+    expect(response.status).toBe(400);
+  });
   it("should delete a job", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
@@ -73,6 +94,13 @@ describe("Job E2E Tests", () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject([job]);
   });
+  it("should not get jobs by client ID with an invalid client ID", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    await createTestJob(userAgent, client.id);
+    const response = await userAgent.get(`/clients/${123}/jobs`);
+    expect(response.status).toBe(400);
+  });
   it("should get all jobs from page 1", async () => {
     const userAgent = await registerAndLogin();
     const c1 = await createTestClient(userAgent);
@@ -82,5 +110,10 @@ describe("Job E2E Tests", () => {
     const response = await userAgent.get(`/jobs`);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({ jobs: [j1, j2], totalPages: 1 });
+  });
+  it("should not get all jobs from page 1 with invalid query parameters", async () => {
+    const userAgent = await registerAndLogin();
+    const response = await userAgent.get(`/jobs?page=invalid`);
+    expect(response.status).toBe(400);
   });
 });

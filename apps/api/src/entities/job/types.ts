@@ -1,13 +1,7 @@
-export interface Job {
-  id: string;
-  jobDate: string;
-  descr: string;
-  payed: boolean;
-  totalValue: number;
-  clientId: string;
-  userId: string;
-}
+import type { JobZodSchema } from "@freelancemanager/shared";
+import type z from "zod";
 
+export type Job = z.infer<typeof JobZodSchema>;
 
 export interface JobQueryResult extends Omit<
   Job,
