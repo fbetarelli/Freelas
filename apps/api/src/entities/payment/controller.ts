@@ -1,11 +1,11 @@
+import type { EditPayment, RegisterPayment } from "@freelancemanager/shared";
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import * as PaymentServices from "./services.ts";
-import { type Payment } from "./types.ts";
 
 export const addPayment = asyncHandler(
-  async (req: Request<{ id: string }, unknown, Omit<Payment, "id">>, res) => {
+  async (req: Request<{ id: string }, unknown, RegisterPayment>, res) => {
     assertIsString(req.params.id, "Job Id");
 
     const incomingPayment = {
@@ -31,7 +31,7 @@ export const getByJob = asyncHandler(
 );
 
 export const editPayment = asyncHandler(
-  async (req: Request<{ id: string }, unknown, Partial<Payment>>, res) => {
+  async (req: Request<{ id: string }, unknown, EditPayment>, res) => {
     assertIsString(req.params.id, "Payment Id");
 
     const incomingPayment = {

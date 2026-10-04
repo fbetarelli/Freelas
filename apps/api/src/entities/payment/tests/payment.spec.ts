@@ -34,6 +34,15 @@ describe("Payment E2E", () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject(getExpectedPayment(testPayment));
   });
+  it("should not add payment with invalid data", async () => {
+    const { userAgent, jobId } = await setupJob();
+    const response = await userAgent.post(`/jobs/${jobId}/payments`).send({
+      ...testPayment,
+      description: 123, // Invalid type for description
+      value: -100, // Invalid value (negative)
+    });
+    expect(response.status).toBe(400);
+  });
   it("should edit a payment", async () => {
     const { userAgent, jobId } = await setupJob();
     const { id: paymentId } = await createTestPayment(userAgent, jobId);
@@ -73,5 +82,11 @@ describe("Payment E2E", () => {
     expect(response.status).toBe(200);
     expect(body.data).toHaveLength(3);
     expect(body.data[0]).toMatchObject(expected);
+  });
+  it("should not get a job's payments with an invalid job ID", async () => {
+    const { userAgent } = await setupJob();
+    const response = await userAgent.get(`/jobs/${123}/payments`);
+
+    expect(response.status).toBe(400);
   });
 });

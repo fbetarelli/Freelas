@@ -32,10 +32,6 @@ export const EditClientZodSchema = z
 export const GetClientZodSchema = ClientZodSchema.pick({
   id: true,
 });
-export const GetClientListZodSchema = z.object({
-  page: z.number().int().optional(),
-  search: z.string().optional(),
-});
 
 export type Client = z.infer<typeof ClientZodSchema>;
 export type RegisterClient = z.infer<typeof RegisterClientZodSchema>;

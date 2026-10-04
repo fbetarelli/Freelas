@@ -1,14 +1,14 @@
+import {
+  EditClientZodSchema,
+  GetClientZodSchema,
+  PaginatedSearchZodSchema,
+  RegisterClientZodSchema,
+} from "@freelancemanager/shared";
 import express from "express";
+import { validate } from "../../middlewares/zodValidate.ts";
 import { authenticate } from "../user/middleware/authentication.ts";
 import * as ClientController from "./controller.ts";
 import { authorize } from "./middleware/authentication.ts";
-import { validate } from "../../middlewares/zodValidate.ts";
-import {
-  EditClientZodSchema,
-  GetClientListZodSchema,
-  GetClientZodSchema,
-  RegisterClientZodSchema,
-} from "@freelancemanager/shared";
 
 const router = express.Router();
 
@@ -44,7 +44,7 @@ export const clientRoutes = (app: express.Application) => {
 
   router.get(
     "/clients",
-    validate("query", GetClientListZodSchema),
+    validate("query", PaginatedSearchZodSchema),
     authenticate,
     ClientController.showClientList,
   );
