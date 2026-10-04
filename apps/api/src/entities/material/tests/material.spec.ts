@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createTestMaterial,
   setupJob,
-  testMaterial
+  testMaterial,
 } from "../../../../tests/utils/setup-helpers.ts";
 import { formatValueToString } from "../../../utils/formatting-helpers.ts";
 import type { FormattedMaterial } from "../types.ts";
@@ -20,7 +20,6 @@ const getExpectedMaterial = (material: {
   };
 };
 
-
 describe("Material E2E", () => {
   it("should create a material", async () => {
     const { userAgent, jobId } = await setupJob();
@@ -34,10 +33,21 @@ describe("Material E2E", () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject(getExpectedMaterial(testMaterial));
   });
+  it("should not create a material with invalid data", async () => {
+    const { userAgent, jobId } = await setupJob();
+
+    const response = await userAgent.post(`/jobs/${jobId}/materials`).send({
+      // descr: "Test Material", missing description
+      supplier: "Test Supplier",
+      qnt: -10, // invalid quantity
+      unitaryVal: 100.0,
+    });
+    expect(response.status).toBe(400);
+  });
   it("should edit a material", async () => {
     const { userAgent, jobId } = await setupJob();
 
-    const {id: materialId}= await createTestMaterial(userAgent, jobId);
+    const { id: materialId } = await createTestMaterial(userAgent, jobId);
 
     const editResponse = await userAgent
       .patch(`/materials/${materialId}`)
@@ -66,8 +76,7 @@ describe("Material E2E", () => {
       .send(testMaterial);
     const materialId = createResponse.body.id;
 
-    const deleteResponse = await userAgent
-      .delete(`/materials/${materialId}`)
+    const deleteResponse = await userAgent.delete(`/materials/${materialId}`);
 
     expect(deleteResponse.status).toBe(204);
   });
@@ -81,5 +90,11 @@ describe("Material E2E", () => {
     const responseBody = response.body as { materials: FormattedMaterial[] };
     expect(response.status).toBe(200);
     expect(responseBody.materials).toHaveLength(3);
+  });
+  it("should not get materials by an invalid job ID", async () => {
+    const { userAgent } = await setupJob();
+
+    const response = await userAgent.get(`/jobs/${123}/materials`);
+    expect(response.status).toBe(400);
   });
 });

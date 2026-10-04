@@ -1,13 +1,13 @@
+import type { RegisterMaterial } from "@freelancemanager/shared";
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import * as MaterialServices from "./services.ts";
-import { type Material } from "./types.ts";
 
 type RequestWithMaterialBody = Request<
   { id: string },
   unknown,
-  Omit<Material, "id" | "jobId">
+  RegisterMaterial
 >;
 
 export const addMaterial = asyncHandler(
@@ -34,7 +34,6 @@ export const getMaterialsByJob = asyncHandler(
     res.status(200).json({ materials, totalValue });
   },
 );
-// get materials by job
 
 export const editMaterial = asyncHandler(
   async (req: RequestWithMaterialBody, res) => {
@@ -54,9 +53,9 @@ export const editMaterial = asyncHandler(
 );
 
 export const deleteMaterial = asyncHandler(
-  async (req: Request<{ id: string; materialid: string }>, res) => {
+  async (req: Request<{ id: string }>, res) => {
     assertIsString(req.params.id, "Material Id");
-    await MaterialServices.deleteMaterial(req.params.materialid);
+    await MaterialServices.deleteMaterial(req.params.id);
     res.sendStatus(204);
   },
 );
