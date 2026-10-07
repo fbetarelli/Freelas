@@ -29,6 +29,7 @@ export class UserDAO {
     }
   }
 
+
   async findByLogin(login: string): Promise<User | null> {
     try {
       const query = daoQueries.findByLogin;
@@ -52,6 +53,21 @@ export class UserDAO {
       throw error;
     }
   }
+
+  async findById(id: string): Promise<SessionUser | null> {
+    try {
+      const res = await pool.query<Omit<UserQueryResult, "hashpassword">>(
+        daoQueries.findById,
+        [id],
+      );
+
+      return res.rows[0] ?? null;
+    } catch (error) {
+      errorLog("UserDAO", "findById");
+      throw error;
+    }
+  }
+
   async editUser(
     userData: Partial<User> & { id: string },
   ): Promise<SessionUser | null> {
@@ -81,6 +97,7 @@ export class UserDAO {
 const daoQueries = {
   register: `INSERT INTO users(username,login,hashpassword) VALUES($1,$2,$3) RETURNING id, username, login, hashpassword `,
   findByLogin: `SELECT * FROM users WHERE login=$1 LIMIT 1`,
+  findById: `SELECT id, username, login FROM users WHERE id=$1 LIMIT 1`,
   editUser: (fields: string[], index: number) =>
     `UPDATE users SET ${fields.join(", ")} WHERE id=$${index} RETURNING id, username, login `,
 };

@@ -9,8 +9,6 @@ import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import * as UserServices from "./services.ts";
 
-
-
 export const login = asyncHandler(
   async (req: RequestWithBody<LoginUser>, res) => {
     const { login, password } = req.body;
@@ -21,7 +19,7 @@ export const login = asyncHandler(
 
     const token = signToken({ id: user.id });
     sendCookie(res, token);
-    
+
     res.status(200).json({ ...user });
     return;
   },
@@ -34,8 +32,7 @@ export const register = asyncHandler(
     const result = await UserServices.register(username, login, password);
 
     const token = signToken({ id: result.id });
-     sendCookie(res, token);
- 
+    sendCookie(res, token);
 
     return res.status(201).json({ ...result });
   },
@@ -46,10 +43,10 @@ export const logout: RequestHandler = (req, res) => {
   return res.sendStatus(200);
 };
 
-export const getMe = asyncHandler((req, res) => {
-  return res.status(200).json(req.user);
+export const getMe = asyncHandler(async (req, res) => {
+  const user = await UserServices.getUserById(req.user!.id);
+  return res.status(200).json(user);
 });
-
 
 export const editUser = asyncHandler(
   async (req: RequestWithBody<EditUser>, res) => {

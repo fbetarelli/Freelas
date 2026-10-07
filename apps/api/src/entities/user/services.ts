@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { formatValueToString } from "../../utils/formatting-helpers.ts";
-import { BadRequestError, ConflictError } from "../errors/errors.ts";
+import { BadRequestError, ConflictError, NotFoundError } from "../errors/errors.ts";
 import { JobDAO } from "../job/dao.ts";
 import { MaterialDAO } from "../material/dao.ts";
 import { PaymentDAO } from "../payment/dao.ts";
@@ -20,6 +20,14 @@ export const login = async (login: string, password: string) => {
 
   if (!isValid || user === null) {
     throw new BadRequestError("Invalid email or password");
+  }
+  return user;
+};
+
+export const getUserById = async (id: string) => {
+  const user = await userDAO.findById(id);
+  if (!user) {
+    throw new NotFoundError("User not found");
   }
   return user;
 };
