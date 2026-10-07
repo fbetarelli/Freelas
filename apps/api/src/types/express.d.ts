@@ -1,5 +1,5 @@
 import "express";
-import type { AccessTokenPayload } from "../entities/user/types.ts";
+import type { AccessTokenPayload } from "../features/auth/types.ts";
 
 declare global {
   namespace Express {

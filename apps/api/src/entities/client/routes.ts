@@ -6,7 +6,7 @@ import {
 } from "@freelancemanager/shared";
 import express from "express";
 import { validate } from "../../middlewares/zodValidate.ts";
-import { authenticate } from "../user/middleware/authentication.ts";
+import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as ClientController from "./controller.ts";
 import { authorize } from "./middleware/authentication.ts";
 

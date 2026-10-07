@@ -1,6 +1,6 @@
 import express from "express";
 import { authorize } from "../job/middleware/authentication.ts";
-import { authenticate } from "../user/middleware/authentication.ts";
+import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as PaymentController from "../payment/controller.ts";
 import { authorizePaymentOwner } from "../../middlewares/authorizeOwnerViaJob.ts";
 import {

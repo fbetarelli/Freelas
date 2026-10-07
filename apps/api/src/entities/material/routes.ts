@@ -1,7 +1,7 @@
 import express from "express";
 import { authorizeMaterialOwner } from "../../middlewares/authorizeOwnerViaJob.ts";
 import { authorize } from "../job/middleware/authentication.ts";
-import { authenticate } from "../user/middleware/authentication.ts";
+import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as MaterialController from "../material/controller.ts";
 import { validate } from "../../middlewares/zodValidate.ts";
 import {

@@ -3,23 +3,13 @@ import type {
   LoginUser,
   RegisterUser,
 } from "@freelancemanager/shared";
-import { type CookieOptions, type RequestHandler } from "express";
-import * as jwt from "jsonwebtoken";
+import { type RequestHandler } from "express";
+import { sendCookie, signToken } from "../../features/auth/helpers.ts";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import * as UserServices from "./services.ts";
 
-export const logout: RequestHandler = (req, res) => {
-  res.clearCookie("token");
-  return res.sendStatus(200);
-};
 
-const tokenConfig: CookieOptions = {
-  httpOnly: true, // Blocks JavaScript access (XSS protection)
-  secure: process.env.NODE_ENV === "production", // Transmit over HTTPS only in prod
-  sameSite: "lax", // CSRF protection
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-};
 
 export const login = asyncHandler(
   async (req: RequestWithBody<LoginUser>, res) => {
@@ -29,21 +19,13 @@ export const login = asyncHandler(
     //eslint-disable-next-line
     const { hashPassword, ...user } = result;
 
-    const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET!, {
-      expiresIn: "7d",
-    });
-
-    // HttpOnly Cookie
-    res.cookie("token", token, tokenConfig);
-
+    const token = signToken({ id: user.id });
+    sendCookie(res, token);
+    
     res.status(200).json({ ...user });
     return;
   },
 );
-
-export const getMe = asyncHandler((req, res) => {
-  return res.status(200).json(req.user);
-});
 
 export const register = asyncHandler(
   async (req: RequestWithBody<RegisterUser>, res) => {
@@ -51,20 +33,23 @@ export const register = asyncHandler(
 
     const result = await UserServices.register(username, login, password);
 
-    const token = jwt.sign(
-      { id: result.id },
-      process.env.ACCESS_TOKEN_SECRET!,
-      {
-        expiresIn: "7d",
-      },
-    );
-
-    // HttpOnly Cookie
-    res.cookie("token", token, tokenConfig);
+    const token = signToken({ id: result.id });
+     sendCookie(res, token);
+ 
 
     return res.status(201).json({ ...result });
   },
 );
+
+export const logout: RequestHandler = (req, res) => {
+  res.clearCookie("token");
+  return res.sendStatus(200);
+};
+
+export const getMe = asyncHandler((req, res) => {
+  return res.status(200).json(req.user);
+});
+
 
 export const editUser = asyncHandler(
   async (req: RequestWithBody<EditUser>, res) => {

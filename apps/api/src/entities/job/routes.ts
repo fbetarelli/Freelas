@@ -1,6 +1,6 @@
 import express from "express";
 import { authorize as clientAuthorize } from "../client/middleware/authentication.ts";
-import { authenticate } from "../user/middleware/authentication.ts";
+import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as JobController from "./controller.ts";
 import { authorize } from "./middleware/authentication.ts";
 import { validate } from "../../middlewares/zodValidate.ts";

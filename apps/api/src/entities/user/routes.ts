@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { authenticate } from "./middleware/authentication.ts";
+import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as UserController from "./controller.ts";
 import { validate } from "../../middlewares/zodValidate.ts";
 import {
