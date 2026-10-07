@@ -1,128 +1,94 @@
-# Freelas, a freelance job manager
-## 🇧🇷 Português
+# Freelas
 
-Projeto Full-stack criado para prática: Um gereciador multicapacitado criado para trabalhadores freelance controlarem, organizarem e visualizarem seus clientes, serviços, pagamentos e mais.
+Freelas is a full-stack freelance work manager for organizing clients, jobs, materials, payments, and monthly performance.
 
-## 🇺🇸 English
+The application is currently organized as an npm workspace monorepo:
 
-Full-stack practice project: An all-in one manager for freelance workers to track, organize and visualize their clients, jobs, payments and more.
-
-
-## Preview
-
-**Homescreen on desktop**
-
-![Home](./public/assets/screenshots/page.png)
-
-**Desktop Workflow**
-
-![Workflow](./public/assets/demo.gif)
-
-**Mobile Workflow**
-
-![MobileWorkflow](./public/assets/demoMobile.gif)
-
-
-Checkout the website [here!](https://freelas.up.railway.app)
+- [`apps/api`](./apps/api) contains the Express and PostgreSQL API.
+- [`packages/shared`](./packages/shared) contains shared Zod schemas and types.
+- [`packages/legacy-frontend`](./packages/legacy-frontend) contains the legacy EJS frontend and its static assets.
 
 ## Features
 
-* Intuitive and agile client, job, materials and payments registration for autonomous workers
-* Profit calculations by job and for the last 30 days
-* Search through previous clients or jobs with a simple query by name or description
-* Complete responsive design for desktop or mobile users  
+- User registration and login with JWT authentication stored in an HTTP-only cookie.
+- Client management with ownership checks.
+- Job management connected to clients and users.
+- Materials and payments associated with jobs.
+- Search and pagination for clients and jobs.
+- Dashboard data including recent jobs, clients, monthly profit, and job counts.
+- Responsive legacy frontend for desktop and mobile workflows.
 
-## Tech Stack
+## Current architecture
 
-### Backend
-* Node.js
-* Express
-* PostgreSQL
+The API follows a layered structure:
 
-### Frontend
-* EJS
-* TailwindCSS
-
-### Miscellaneous Libraries
-* Helmet
-* bcrypt
-* connect-flash
-
-## Architecture
-### Layers
-* Main data flow: 
-```
-Views -> Controller -> Service -> Repositories (DAO)
-```
-__Views__: The heart of the front-end, contains all EJS pages in the application, gathers every user input and returns their outputs.
-
-__Controller__: Treats data sent through the front-end, sending them to the services layer after the appropriate validations and convertions, and rendering the appropriate pages with the returned information from the services in response. 
-
-__Service__: Mainly responsible for the business logic in the application, and calls to the DAO objects through a custom DAO function, returning Data Transfer Objects to the controller's function.
-
-__Repositories__: A collection of Data Acess Objects that perform the requested function, running direct queries in the specified database instanciated in the database pool class, being able to send objects or arrays resulted from the function back to the service class for processing.
-
-### Database Diagram
-
-![Diagram](./public/assets/dbDiagram.png)
-
-## Getting Started
-Firstly, make sure you have a postgreSQL database up and running and have  configured a .env file complete with the specified required variables in the provided .env.example file, then, open up an integrated terminal in the project's folder from your IDE, where you'll be able to run the following commands.   
-
-The build process for running this software locally on your machine:
-
-* Installing dependencies
-```
-npm i 
+```text
+Routes -> Middleware -> Controllers -> Services -> DAOs -> PostgreSQL
 ```
 
-### There are two separate ways to run the app locally:
-**First Option**: Builds the database and then runs the app *(recommended option for your first time running the program)*: 
-* Start command:
+- **Routes** compose validation, JWT authentication, and resource authorization.
+- **Controllers** translate HTTP requests into service calls and responses.
+- **Services** contain business rules and coordinate data access.
+- **DAOs** execute parameterized PostgreSQL queries.
+- **Shared schemas** provide reusable Zod validation across workspace packages.
+
+JWT authentication is implemented in [`features/auth`](./apps/api/src/features/auth). Authenticated requests expose the validated token claims through `req.user`.
+
+## Preview
+
+### Desktop
+
+![Freelas desktop dashboard](./docs/assets/screenshots/page.png)
+
+![Freelas desktop workflow](./docs/assets/demo.gif)
+
+### Mobile
+
+![Freelas mobile workflow](./docs/assets/demoMobile.gif)
+
+The deployed application is available at [freelas.up.railway.app](https://freelas.up.railway.app).
+
+## Database
+
+The current data model connects users to clients and jobs, with materials and payments belonging to jobs.
+
+![Freelas database diagram](./docs/assets/dbDiagram.png)
+
+## Getting started
+
+### Requirements
+
+- Node.js
+- npm
+- PostgreSQL
+
+Install dependencies from the repository root:
+
+```bash
+npm install
 ```
-npm run start
+
+Copy [`apps/api/.env.example`](./apps/api/.env.example) to `apps/api/.env` and configure the database and JWT variables before starting the API.
+
+Run the API in development mode:
+
+```bash
+npm run dev:api
 ```
-This command will run the necessary migrations for the application and then **run the production command automatically**, when you see the message: ``"Servidor rodando na porta: *PORT variable in the .env file*" `` then you can head on to your browser of choice and lookup ``localhost:`` with the provided port next to it. 
 
----
+Run database migrations:
 
-**Second Option**: Just builds tailwind and runs the server *(recommended option if you already have the database running with all the necessary tables)*: 
-* Production command:
+```bash
+npm run migrate
 ```
-npm run prod
+
+Run the API test suite:
+
+```bash
+npm run test:api
 ```
-This command by itself will **not** run the necessary migrations for the application, but it will build tailwind and run the server on localhost just like the previous command. 
 
-## Technical Decisions
-In the engineering and development stage I came across some interesting questions, here are some of them and how they were answered:
+## Documentation
 
-#### Should I stick to the stack I'm most familiar with, or should I try something new e.g(different frameworks/libraries) with this project?
-
-One of my main concerns with this project was that while this is mostly a portfolio/practice project, I still need it to be functional, secure and for it's behaviors to be predictable enough for me to maintain this without major problems. 
-
-Since this software is also going to be used by a few of my peers for the foreseeable future, my decision to go with my most known technologies like EJS and Postgres, instead of a different stack I'm not familiar with that can provide possible advantages like utilizing React or SQLite, comes from a desire to keep a higher maintainabilty and support for this than to just try out something new and have another project I can put in my portfolio.
-
-#### How is the responsive design a necessary implementation?
-
-For one, I knew this was immediately a must have since the people that have notified me of their intent to use this application have expressed how they would mostly check the website out on their mobile phones.
-
-That feedback is what mainly led me to design the whole UI with a mobile first approach, and then an adaptation for the desktop screens. 
-
-And for two,  i'd never done a little higher scale software UI design like this, so I figured the process would be a very needed and interesting experience.      
-
-## Challenges & Learnings
-
-#### Design faults that led to a lot of refactoring: code repetition and logic
-
-A lack of attention while creating the controllers and services of each class ended up in me writing and copying a bunch of replicated code across multiple controller and service files, there was just a lot of repeated unnecessary try catches, and logic that would've applied in typical .json returning apis, but that just didn't fit with this webservice.
- 
-The code included things like a success status attribute in every service function that returned true or false based on if any errors were catched in the DAO or itself, along with all the unnecessary repeated try catches in every service function, multiple repeated DAO CRUD calls that were identical, just changing the desired table and object passed to the function. 
-
-Only after I was done with the main backend code I started to reread those parts of the system and notice the faults in my logic and code, that led me to a couple days of just refactoring the affected files.
-
-#### The fixing part
-The solution to fixing all the try catches was creating an async handler function that was responsible for handling any exceptions thrown by whatever the previous command was, and automatically rerouting the user to a custom error screen, then I could import that function to all my controllers, and safely remove all the try catches used in both the controllers and services, leading exceptions in any part of the code to be wrapped and centralized, complete with a custom error screen.
-
-What I did to handle all the similar DAO calls was add another helper in the utils folder, that acted as a personalized function that would run the dao calls, given the DAO object, action, and the parameters of the query, complete with a toDTO parameter i could add for all the commands that required a return value, usually in the form of a DTO object or array generated from the query result, that way, i could avoid repetition by calling this function on most of my service DAO calls.    
-
-Overall these errors just make me notice how unconscious decisions that seem small on the surface can lead to a bunch of lost time and efficency, that makes me want to be more cautious and reflect more on the design of my system through these decisions.
+- [Legacy project README](./docs/legacy/README.md)
+- [Shared package](./packages/shared/)
