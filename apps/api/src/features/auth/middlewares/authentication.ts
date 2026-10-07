@@ -1,8 +1,9 @@
 import { type RequestHandler } from "express";
-import { BadRequestError, UnauthorizedError } from "../../errors/errors.ts";
+import { BadRequestError, UnauthorizedError } from "../../../entities/errors/errors.ts";
 import * as jwt from "jsonwebtoken";
 import { z } from "zod";
 import { AccessTokenPayloadSchema } from "../types.ts";
+
 const cookiesSchema = z.object({
   token: z.string().min(1),
 });
@@ -12,8 +13,8 @@ export const authenticate: RequestHandler = (req, res, next) => {
   if (!cookies.success) {
     return next(new UnauthorizedError("Authentication required"));
   }
-  const secret = process.env.ACCESS_TOKEN_SECRET;
 
+  const secret = process.env.ACCESS_TOKEN_SECRET;
   if (!secret) {
     return next(new BadRequestError("ACCESS_TOKEN_SECRET is not configured"));
   }
