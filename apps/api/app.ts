@@ -1,0 +1,14 @@
+import express from "express";
+import { loaders } from "./src/loaders/index.ts";
+import { config } from "dotenv";
+config();
+
+export const app = express();
+loaders(app);
+
+// Middleware genérico pra 404
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Resource not found",
+  });
+});
