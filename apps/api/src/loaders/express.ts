@@ -7,18 +7,6 @@ export const express = (app: Application) => {
   app.use(urlencoded({ extended: true }));
   app.use(json());
 
-  // //Session
-  // app.use(
-  //   session({
-  //     secret: process.env.SESSION_SECRET ?? "stealthy-secret",
-  //     saveUninitialized: true,
-  //     resave: true,
-  //     cookie: {
-  //       maxAge: 1000 * 60 * 60 * 24 * 30, // um ano
-  //     },
-  //   }),
-  // );
-
   app.use(cookieParser());
 
   app.use(
