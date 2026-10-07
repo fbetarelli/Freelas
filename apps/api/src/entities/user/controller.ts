@@ -42,7 +42,7 @@ export const login = asyncHandler(
 );
 
 export const getMe = asyncHandler((req, res) => {
-  return res.status(200).json(req.user ? { ...req.user } : null);
+  return res.status(200).json(req.user);
 });
 
 export const register = asyncHandler(

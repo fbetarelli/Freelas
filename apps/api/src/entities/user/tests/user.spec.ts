@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "../../../../app.ts";
 import { UserDAO } from "../dao.ts";
 import bcrypt from "bcrypt";
+import { registerAndLogin } from "../../../../tests/utils/setup-helpers.ts";
 const dao = new UserDAO();
 
 describe("User Authentication E2E", () => {
@@ -80,6 +81,19 @@ describe("User Authentication E2E", () => {
     expect(response.body as { message: string }).toMatchObject({
       message: "Password is required",
     });
+  });
+  it("should return expected user in /me", async () => {
+    const userAgent = await registerAndLogin();
+    const response = await userAgent.get("/me");
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id");
+  });
+  it("should return 401 in /me if not authenticated", async () => {
+    const userAgent = await registerAndLogin();
+    const logoutResponse = await userAgent.post("/logout");
+    expect(logoutResponse.status).toBe(200);
+    const response = await userAgent.get("/me");
+    expect(response.status).toBe(401);
   });
 
   it("should edit user details successfully", async () => {

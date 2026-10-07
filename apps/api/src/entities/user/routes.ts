@@ -23,6 +23,7 @@ export const userRoutes = (app: express.Application) => {
     validate("body", RegisterUserZodSchema),
     UserController.register,
   );
+  router.get("/me", authenticate, UserController.getMe);
 
   router.post("/logout", UserController.logout);
 
