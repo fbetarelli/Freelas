@@ -34,7 +34,7 @@ Routes -> Middleware -> Controllers -> Services -> DAOs -> PostgreSQL
 
 JWT authentication is implemented in [`features/auth`](./apps/api/src/features/auth). Authenticated requests expose the validated token claims through `req.user`.
 
-## Preview
+## Frontend Preview (Legacy)
 
 ### Desktop
 
@@ -46,7 +46,6 @@ JWT authentication is implemented in [`features/auth`](./apps/api/src/features/a
 
 ![Freelas mobile workflow](./docs/assets/demoMobile.gif)
 
-The deployed application is available at [freelas.up.railway.app](https://freelas.up.railway.app).
 
 ## Database
 
