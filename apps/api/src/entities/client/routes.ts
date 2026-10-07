@@ -24,6 +24,7 @@ export const clientRoutes = (app: express.Application) => {
   router.get(
     "/clients/:id",
     validate("params", GetClientZodSchema),
+    authenticate,
     authorize,
     ClientController.getClientById,
   );
@@ -38,6 +39,7 @@ export const clientRoutes = (app: express.Application) => {
   router.delete(
     "/clients/:id",
     validate("params", GetClientZodSchema),
+    authenticate,
     authorize,
     ClientController.deleteClient,
   );

@@ -1,5 +1,6 @@
 import express from "express";
 import { authorize } from "../job/middleware/authentication.ts";
+import { authenticate } from "../user/middleware/authentication.ts";
 import * as PaymentController from "../payment/controller.ts";
 import { authorizePaymentOwner } from "../../middlewares/authorizeOwnerViaJob.ts";
 import {
@@ -16,7 +17,7 @@ export const paymentRoutes = (app: express.Application) => {
   router.get(
     "/jobs/:id/payments",
     validate("params", GetJobZodSchema),
-
+    authenticate,
     authorize,
     PaymentController.getByJob,
   );
@@ -24,6 +25,7 @@ export const paymentRoutes = (app: express.Application) => {
     "/jobs/:id/payments",
     validate("params", GetJobZodSchema),
     validate("body", RegisterPaymentZodSchema),
+    authenticate,
     authorize,
     PaymentController.addPayment,
   );
@@ -31,12 +33,14 @@ export const paymentRoutes = (app: express.Application) => {
     "/payment/:id",
     validate("params", GetPaymentZodSchema),
     validate("body", EditPaymentZodSchema),
+    authenticate,
     authorizePaymentOwner,
     PaymentController.editPayment,
   );
   router.delete(
     "/payment/:id",
     validate("params", GetPaymentZodSchema),
+    authenticate,
     authorizePaymentOwner,
     PaymentController.deletePayment,
   );

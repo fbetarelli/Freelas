@@ -7,7 +7,7 @@ export const authorize: RequestHandler = async (req, res, next) => {
   const dao = new JobDAO();
   assertIsString(req.params.id, "Job Id");
   const job = await dao.getJobById(req.params.id);
-  if (job && req.session.user && req.session.user.id === job.userid) {
+  if (job && req.user && req.user.id === job.userid) {
     next();
   } else {
     const err = new ForbiddenError(

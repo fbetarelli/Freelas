@@ -16,7 +16,7 @@ function authorizeOwnerViaJob(
       [id],
     );
     const ownerId = result.rows[0]?.userid;
-    if (ownerId && req.session.user?.id === ownerId) return next();
+    if (ownerId && req.user?.id === ownerId) return next();
     return next(
       new ForbiddenError(
         `Access denied: You do not have permission to access this ${entityName}.`,

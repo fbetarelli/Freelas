@@ -9,7 +9,7 @@ export const authorize: RequestHandler = async (req, res, next) => {
 
   const client = await dao.getClientById(req.params.id);
 
-  if (client && req.session.user && req.session.user.id === client.userId) {
+  if (client && req.user && req.user.id === client.userId) {
     return next();
   } else {
     const err = new ForbiddenError(

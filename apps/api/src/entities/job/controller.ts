@@ -24,7 +24,7 @@ export const addJob = asyncHandler(
       payed: req.body.payed,
       totalValue: valorTotal,
       clientId,
-      userId: req.session.user!.id,
+      userId: req.user!.id,
     };
 
     const newJob = await JobServices.addJob(job);
@@ -47,7 +47,7 @@ export const editJob = asyncHandler(
       id,
       jobDate: req.body.jobDate,
       totalValue,
-      userId: req.session.user!.id,
+      userId: req.user!.id,
     };
 
     const updatedJob = await JobServices.editJob(job);
@@ -84,7 +84,7 @@ export const showJobList = asyncHandler(async (req, res) => {
 
   const params = {
     page: Number(incoming.page) ? Number(incoming.page) : 1,
-    userId: req.session.user!.id,
+    userId: req.user!.id,
     search: typeof incoming.search === "string" ? incoming.search : "",
   };
 

@@ -12,7 +12,7 @@ export const addClient = asyncHandler(
 
     const client: Omit<Client, "id"> = {
       ...incomingClient,
-      userId: req.session.user!.id,
+      userId: req.user!.id,
     };
     const clientRes = await ClientServices.addClient(client);
     return res.status(201).json(clientRes);
@@ -26,7 +26,7 @@ export const editClient = asyncHandler(
     const client = {
       ...req.body,
       id: clientId,
-      userId: req.session.user!.id,
+      userId: req.user!.id,
     };
 
     await ClientServices.editClient(client);
@@ -62,7 +62,7 @@ export const showClientList = asyncHandler(async (req, res) => {
 
   const params = {
     page: Number(incoming.page) > 0 ? Number(incoming.page) : 1,
-    userId: req.session.user!.id,
+    userId: req.user!.id,
     search: typeof incoming.search === "string" ? incoming.search : "",
   };
 

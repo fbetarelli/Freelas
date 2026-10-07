@@ -18,6 +18,7 @@ export const jobRoutes = (app: express.Application) => {
   router.get(
     "/clients/:id/jobs",
     validate("params", GetClientZodSchema),
+    authenticate,
     clientAuthorize,
     JobController.getByClient,
   );
@@ -25,6 +26,7 @@ export const jobRoutes = (app: express.Application) => {
     "/clients/:id/jobs",
     validate("params", GetClientZodSchema),
     validate("body", RegisterJobZodSchema),
+    authenticate,
     clientAuthorize,
     JobController.addJob,
   );
@@ -38,6 +40,7 @@ export const jobRoutes = (app: express.Application) => {
   router.get(
     "/jobs/:id",
     validate("params", GetJobZodSchema),
+    authenticate,
     authorize,
     JobController.getById,
   );
@@ -45,12 +48,14 @@ export const jobRoutes = (app: express.Application) => {
     "/jobs/:id",
     validate("params", GetJobZodSchema),
     validate("body", EditJobZodSchema),
+    authenticate,
     authorize,
     JobController.editJob,
   );
   router.delete(
     "/jobs/:id",
     validate("params", GetJobZodSchema),
+    authenticate,
     authorize,
     JobController.deleteJob,
   );
