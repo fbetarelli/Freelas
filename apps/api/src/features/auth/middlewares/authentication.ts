@@ -1,7 +1,8 @@
 import { type RequestHandler } from "express";
-import { BadRequestError, UnauthorizedError } from "../../../entities/errors/errors.ts";
+import { UnauthorizedError } from "../../../entities/errors/errors.ts";
 import * as jwt from "jsonwebtoken";
 import { z } from "zod";
+import { getAuthConfig } from "../config.ts";
 import { AccessTokenPayloadSchema } from "../types.ts";
 
 const cookiesSchema = z.object({
@@ -14,17 +15,26 @@ export const authenticate: RequestHandler = (req, res, next) => {
     return next(new UnauthorizedError("Authentication required"));
   }
 
-  const secret = process.env.ACCESS_TOKEN_SECRET;
-  if (!secret) {
-    return next(new BadRequestError("ACCESS_TOKEN_SECRET is not configured"));
+  let authConfig: ReturnType<typeof getAuthConfig>;
+  try {
+    authConfig = getAuthConfig();
+  } catch (error) {
+    return next(error);
   }
 
   try {
-    const decoded = jwt.verify(cookies.data.token, secret);
+    const decoded = jwt.verify(
+      cookies.data.token,
+      authConfig.ACCESS_TOKEN_SECRET,
+      {
+        issuer: authConfig.JWT_ISSUER,
+        audience: authConfig.JWT_AUDIENCE,
+      },
+    );
     const payload = AccessTokenPayloadSchema.safeParse(decoded);
 
     if (!payload.success) {
-      return next(new BadRequestError("Invalid login token payload"));
+      return next(new UnauthorizedError("Invalid login token payload"));
     }
 
     req.user = payload.data;

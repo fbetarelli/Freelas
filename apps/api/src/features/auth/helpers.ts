@@ -1,6 +1,7 @@
 import type { CookieOptions, Response } from "express";
 import type { AccessTokenPayload } from "./types.ts";
 import * as jwt from "jsonwebtoken";
+import { getAuthConfig } from "./config.ts";
 
 export const UserTokenConfiguration: CookieOptions = {
   httpOnly: true, // Blocks JavaScript access (XSS protection)
@@ -10,10 +11,12 @@ export const UserTokenConfiguration: CookieOptions = {
 };
 
 export const signToken = (payload: AccessTokenPayload) => {
-  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
+  const { ACCESS_TOKEN_SECRET, JWT_ISSUER, JWT_AUDIENCE } = getAuthConfig();
+
+  return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
     expiresIn: "7d",
-    issuer: process.env.JWT_ISSUER,
-    audience: process.env.JWT_AUDIENCE,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
   });
 };
 
