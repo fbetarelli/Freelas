@@ -4,10 +4,23 @@ import { app } from "../../../../app.ts";
 import { UserDAO } from "../dao.ts";
 import bcrypt from "bcrypt";
 import { registerAndLogin } from "../../../../tests/utils/setup-helpers.ts";
+import * as jwt from "jsonwebtoken";
+import { getAuthConfig } from "../../../features/auth/config.ts";
 const dao = new UserDAO();
 
 describe("User Authentication E2E", () => {
   const agent = request.agent(app);
+  const authConfig = getAuthConfig();
+
+  const createToken = (
+    payload: object = { id: "test-user-id" },
+    options: jwt.SignOptions = {},
+  ) =>
+    jwt.sign(payload, authConfig.ACCESS_TOKEN_SECRET, {
+      issuer: authConfig.JWT_ISSUER,
+      audience: authConfig.JWT_AUDIENCE,
+      ...options,
+    });
 
   it("should register a new user successfully", async () => {
     const response = await agent.post("/register").send({
@@ -94,6 +107,112 @@ describe("User Authentication E2E", () => {
     expect(logoutResponse.status).toBe(200);
     const response = await userAgent.get("/me");
     expect(response.status).toBe(401);
+  });
+  it("should return 401 in /me for a token with an invalid signing secret", async () => {
+    const token = jwt.sign(
+      { id: "test-user-id" },
+      "invalid-signing-secret",
+      {
+        issuer: authConfig.JWT_ISSUER,
+        audience: authConfig.JWT_AUDIENCE,
+      },
+    );
+
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", `token=${token}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Invalid or expired login session",
+    });
+  });
+  it("should return 401 in /me when the token cookie is missing", async () => {
+    const response = await request(app).get("/me");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Authentication required",
+    });
+  });
+  it("should return 401 in /me when the token is missing required claims", async () => {
+    const token = createToken({});
+
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", `token=${token}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Invalid login token payload",
+    });
+  });
+  it("should return 401 in /me for an expired token", async () => {
+    const token = createToken({ id: "test-user-id" }, { expiresIn: -1 });
+
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", `token=${token}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Invalid or expired login session",
+    });
+  });
+  it("should return 401 in /me for a token with the wrong issuer", async () => {
+    const token = createToken(
+      { id: "test-user-id" },
+      { issuer: "wrong-issuer" },
+    );
+
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", `token=${token}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Invalid or expired login session",
+    });
+  });
+  it("should return 401 in /me for a token with the wrong audience", async () => {
+    const token = createToken(
+      { id: "test-user-id" },
+      { audience: "wrong-audience" },
+    );
+
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", `token=${token}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Invalid or expired login session",
+    });
+  });
+  it("should return 401 in /me for a garbage token string", async () => {
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", "token=not-a-jwt");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Authentication required",
+    });
+  });
+  it("should return 401 in /me for a token using a non-allowed algorithm", async () => {
+    const token = createToken(
+      { id: "test-user-id" },
+      { algorithm: "HS384" },
+    );
+
+    const response = await request(app)
+      .get("/me")
+      .set("Cookie", `token=${token}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toMatchObject({
+      message: "Invalid or expired login session",
+    });
   });
 
   it("should edit user details successfully", async () => {
