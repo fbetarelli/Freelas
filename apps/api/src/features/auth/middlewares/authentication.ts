@@ -6,7 +6,7 @@ import { getAuthConfig } from "../config.ts";
 import { AccessTokenPayloadSchema } from "../types.ts";
 
 const cookiesSchema = z.object({
-  token: z.string().min(1),
+  token: z.jwt(),
 });
 
 export const authenticate: RequestHandler = (req, res, next) => {
@@ -29,6 +29,7 @@ export const authenticate: RequestHandler = (req, res, next) => {
       {
         issuer: authConfig.JWT_ISSUER,
         audience: authConfig.JWT_AUDIENCE,
+        algorithms: ["HS256"],
       },
     );
     const payload = AccessTokenPayloadSchema.safeParse(decoded);
