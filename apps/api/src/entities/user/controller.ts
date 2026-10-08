@@ -4,7 +4,7 @@ import type {
   RegisterUser,
 } from "@freelancemanager/shared";
 import { type RequestHandler } from "express";
-import { sendCookie, signToken } from "../../features/auth/helpers.ts";
+import { sendCookie, signToken, UserTokenConfiguration } from "../../features/auth/helpers.ts";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import * as UserServices from "./services.ts";
@@ -39,7 +39,9 @@ export const register = asyncHandler(
 );
 
 export const logout: RequestHandler = (req, res) => {
-  res.clearCookie("token");
+      //eslint-disable-next-line
+  const {maxAge: _, ...config} = UserTokenConfiguration
+  res.clearCookie("token",config);
   return res.sendStatus(200);
 };
 
