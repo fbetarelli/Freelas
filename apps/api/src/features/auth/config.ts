@@ -7,6 +7,7 @@ const authEnvironmentSchema = z.object({
   ACCESS_TOKEN_SECRET: z.string().min(1),
   JWT_ISSUER: z.string().min(1),
   JWT_AUDIENCE: z.string().min(1),
+  CLIENT_ORIGIN: z.url(),
 });
 
 export const getAuthConfig = () => {
