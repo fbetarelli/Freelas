@@ -2,13 +2,14 @@ import type {
   EditJob,
   GetClient,
   GetJob,
+  PaginatedSearch,
   RegisterJob,
 } from "@freelancemanager/shared";
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
-import { BadRequestError, NotFoundError } from "../errors/errors.ts";
+import { NotFoundError } from "../errors/errors.ts";
 import * as JobServices from "./services.ts";
 
 export const addJob = asyncHandler(
@@ -79,28 +80,23 @@ export const getByClient = asyncHandler(async (req, res) => {
   res.status(200).json(jobs);
 });
 
-export const showJobList = asyncHandler(async (req, res) => {
-  const incoming = req.query;
+export const showJobList = asyncHandler(
+  async (req: Request<unknown, unknown, unknown, PaginatedSearch>, res) => {
+    const incoming = req.query;
 
-  const params = {
-    page: Number(incoming.page) ? Number(incoming.page) : 1,
-    userId: req.user!.id,
-    search: typeof incoming.search === "string" ? incoming.search : "",
-  };
+    const params = {
+      page: incoming.page ? incoming.page : 1,
+      userId: req.user!.id,
+      search: incoming.search ? incoming.search.trim() : "",
+    };
 
-  if (isNaN(params.page) || params.page < 1) {
-    throw new BadRequestError("Invalid page number");
-  }
+    const totalPages = await JobServices.getJobPages(params);
 
-  const totalPages = await JobServices.getJobPages(params);
-  if (params.page > totalPages) {
-    throw new BadRequestError("Page number higher than total");
-  }
+    const jobs = await JobServices.getJobListByPage(params);
 
-  const jobs = await JobServices.getJobListByPage(params);
-
-  return res.status(200).json({
-    jobs,
-    totalPages,
-  });
-});
+    return res.status(200).json({
+      jobs,
+      totalPages,
+    });
+  },
+);

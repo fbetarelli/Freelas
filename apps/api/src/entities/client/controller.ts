@@ -1,4 +1,8 @@
-import type { EditClient, RegisterClient } from "@freelancemanager/shared";
+import type {
+  EditClient,
+  PaginatedSearch,
+  RegisterClient,
+} from "@freelancemanager/shared";
 import type { Request } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
@@ -57,20 +61,22 @@ export const getClientById = asyncHandler(
   },
 );
 
-export const showClientList = asyncHandler(async (req, res) => {
-  const incoming = req.query;
+export const showClientList = asyncHandler(
+  async (req: Request<unknown, unknown, unknown, PaginatedSearch>, res) => {
+    const incoming = req.query;
 
-  const params = {
-    page: Number(incoming.page) > 0 ? Number(incoming.page) : 1,
-    userId: req.user!.id,
-    search: typeof incoming.search === "string" ? incoming.search : "",
-  };
+    const params = {
+      page: incoming.page ? incoming.page : 1,
+      userId: req.user!.id,
+      search: incoming.search ? incoming.search.trim() : "",
+    };
 
-  const totalPages = await ClientServices.getClientPages(params);
-  const clients = await ClientServices.getClientListByPage(params);
+    const totalPages = await ClientServices.getClientPages(params);
+    const clients = await ClientServices.getClientListByPage(params);
 
-  res.status(200).json({
-    totalPages,
-    clients,
-  });
-});
+    res.status(200).json({
+      totalPages,
+      clients,
+    });
+  },
+);
