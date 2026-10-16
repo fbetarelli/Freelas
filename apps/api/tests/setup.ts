@@ -8,7 +8,7 @@ let client: PoolClient;
 beforeEach(async () => {
   client = await pool.connect(); //make the connection
   await client.query("BEGIN");
-  // redirect all DB calls onto that one connection
+  // Every test runs in one transaction; afterEach rolls it back to isolate data.
   vi.spyOn(pool, "query").mockImplementation(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     client.query.bind(client),

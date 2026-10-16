@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   createTestMaterial,
+  makeMaterial,
   setupJob,
-  testMaterial,
 } from "../../../../tests/utils/setup-helpers.ts";
 import { formatValueToString } from "../../../utils/formatting-helpers.ts";
 import type { FormattedMaterial } from "../types.ts";
@@ -23,15 +23,13 @@ const getExpectedMaterial = (material: {
 describe("Material E2E", () => {
   it("should create a material", async () => {
     const { userAgent, jobId } = await setupJob();
+    const material = makeMaterial();
 
-    const response = await userAgent.post(`/jobs/${jobId}/materials`).send({
-      descr: "Test Material",
-      supplier: "Test Supplier",
-      qnt: 10,
-      unitaryVal: 100.0,
-    });
+    const response = await userAgent
+      .post(`/jobs/${jobId}/materials`)
+      .send(material);
     expect(response.status).toBe(200);
-    expect(response.body).toMatchObject(getExpectedMaterial(testMaterial));
+    expect(response.body).toMatchObject(getExpectedMaterial(material));
   });
   it("should not create a material with invalid data", async () => {
     const { userAgent, jobId } = await setupJob();
@@ -70,10 +68,11 @@ describe("Material E2E", () => {
   });
   it("should delete a material", async () => {
     const { userAgent, jobId } = await setupJob();
+    const material = makeMaterial();
 
     const createResponse: { body: { id: string } } = await userAgent
       .post(`/jobs/${jobId}/materials`)
-      .send(testMaterial);
+      .send(material);
     const materialId = createResponse.body.id;
 
     const deleteResponse = await userAgent.delete(`/materials/${materialId}`);
@@ -82,9 +81,11 @@ describe("Material E2E", () => {
   });
   it("should get materials by job", async () => {
     const { userAgent, jobId } = await setupJob();
-    await createTestMaterial(userAgent, jobId);
-    await createTestMaterial(userAgent, jobId);
-    await createTestMaterial(userAgent, jobId);
+    const materials = [makeMaterial(), makeMaterial(), makeMaterial()];
+
+    for (const material of materials) {
+      await userAgent.post(`/jobs/${jobId}/materials`).send(material);
+    }
 
     const response = await userAgent.get(`/jobs/${jobId}/materials`);
     const responseBody = response.body as { materials: FormattedMaterial[] };
