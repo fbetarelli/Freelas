@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   createTestPayment,
+  makePayment,
   setupJob,
-  testPayment,
 } from "../../../../tests/utils/setup-helpers.ts";
 import { formatValueToString } from "../../../utils/formatting-helpers.ts";
 
@@ -28,16 +28,17 @@ const getExpectedPayment = (payment: {
 describe("Payment E2E", () => {
   it("should add a payment", async () => {
     const { userAgent, jobId } = await setupJob();
+    const payment = makePayment();
     const response = await userAgent
       .post(`/jobs/${jobId}/payments`)
-      .send(testPayment);
+      .send(payment);
     expect(response.status).toBe(200);
-    expect(response.body).toMatchObject(getExpectedPayment(testPayment));
+    expect(response.body).toMatchObject(getExpectedPayment(payment));
   });
   it("should not add payment with invalid data", async () => {
     const { userAgent, jobId } = await setupJob();
     const response = await userAgent.post(`/jobs/${jobId}/payments`).send({
-      ...testPayment,
+      ...makePayment(),
       description: 123, // Invalid type for description
       value: -100, // Invalid value (negative)
     });
@@ -70,14 +71,15 @@ describe("Payment E2E", () => {
   });
   it("should get a job's payments", async () => {
     const { userAgent, jobId } = await setupJob();
-    await createTestPayment(userAgent, jobId);
+    const payment = makePayment();
+    await createTestPayment(userAgent, jobId, payment);
     await createTestPayment(userAgent, jobId);
     await createTestPayment(userAgent, jobId);
 
     const response = await userAgent.get(`/jobs/${jobId}/payments`);
     const body = response.body as { data: unknown[]; totalValue: number };
 
-    const expected = getExpectedPayment(testPayment);
+    const expected = getExpectedPayment(payment);
 
     expect(response.status).toBe(200);
     expect(body.data).toHaveLength(3);

@@ -3,24 +3,25 @@ import { describe, expect, it } from "vitest";
 import { app } from "../../../../app.ts";
 import {
   createTestClient,
+  makeClient,
   registerAndLogin,
-  testClient,
 } from "../../../../tests/utils/setup-helpers.ts";
 
 const agent = request.agent(app);
 
 describe("Client Controller E2E", () => {
   it("should fail adding a new client without login", async () => {
-    const clientResponse = await agent.post("/clients").send(testClient);
+    const clientResponse = await agent.post("/clients").send(makeClient());
     expect(clientResponse.status).toBe(401);
   });
 
   it("should add a new client successfully", async () => {
     const userAgent = await registerAndLogin();
 
-    const clientResponse = await userAgent.post("/clients").send(testClient);
+    const client = makeClient();
+    const clientResponse = await userAgent.post("/clients").send(client);
     expect(clientResponse.status).toBe(201);
-    expect(clientResponse.body).toMatchObject(testClient);
+    expect(clientResponse.body).toMatchObject(client);
   });
   it("should not add a new client without required fields", async () => {
     const userAgent = await registerAndLogin();
