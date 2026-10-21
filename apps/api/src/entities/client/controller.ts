@@ -6,6 +6,7 @@ import type {
 import type { Request } from "express";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { requireUser } from "../../features/auth/require-user.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import * as ClientServices from "./services.ts";
 import { type Client } from "./types.ts";
@@ -16,7 +17,7 @@ export const addClient = asyncHandler(
 
     const client: Omit<Client, "id"> = {
       ...incomingClient,
-      userId: req.user!.id,
+      userId: requireUser(req).id,
     };
     const clientRes = await ClientServices.addClient(client);
     return res.status(201).json(clientRes);
@@ -30,7 +31,7 @@ export const editClient = asyncHandler(
     const client = {
       ...req.body,
       id: clientId,
-      userId: req.user!.id,
+      userId: requireUser(req).id,
     };
 
     await ClientServices.editClient(client);
@@ -67,7 +68,7 @@ export const showClientList = asyncHandler(
 
     const params = {
       page: incoming.page ? incoming.page : 1,
-      userId: req.user!.id,
+      userId: requireUser(req).id,
       search: incoming.search ? incoming.search.trim() : "",
     };
 

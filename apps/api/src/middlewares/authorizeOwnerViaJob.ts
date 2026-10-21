@@ -2,6 +2,7 @@ import type { RequestHandler } from "express";
 import { assertIsString } from "../utils/assert-is-string.ts";
 import { pool } from "../database/database.ts";
 import { ForbiddenError } from "../entities/errors/errors.ts";
+import { requireUser } from "../features/auth/require-user.ts";
 
 function authorizeOwnerViaJob(
   table: "materials" | "payments",
@@ -16,7 +17,7 @@ function authorizeOwnerViaJob(
       [id],
     );
     const ownerId = result.rows[0]?.userid;
-    if (ownerId && req.user?.id === ownerId) return next();
+    if (ownerId && requireUser(req).id === ownerId) return next();
     return next(
       new ForbiddenError(
         `Access denied: You do not have permission to access this ${entityName}.`,

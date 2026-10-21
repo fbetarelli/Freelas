@@ -7,6 +7,7 @@ import { type RequestHandler } from "express";
 import { sendCookie, signToken, UserTokenConfiguration } from "../../features/auth/helpers.ts";
 import { type RequestWithBody } from "../../types/express-types.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { requireUser } from "../../features/auth/require-user.ts";
 import * as UserServices from "./services.ts";
 
 export const login = asyncHandler(
@@ -46,7 +47,7 @@ export const logout: RequestHandler = (req, res) => {
 };
 
 export const getMe = asyncHandler(async (req, res) => {
-  const user = await UserServices.getUserById(req.user!.id);
+  const user = await UserServices.getUserById(requireUser(req).id);
   return res.status(200).json(user);
 });
 
@@ -54,7 +55,7 @@ export const editUser = asyncHandler(
   async (req: RequestWithBody<EditUser>, res) => {
     const result = await UserServices.editUser({
       ...req.body,
-      id: req.user!.id,
+      id: requireUser(req).id,
     });
 
     return res.status(200).json({ ...result });

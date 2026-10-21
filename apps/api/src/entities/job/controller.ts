@@ -8,6 +8,7 @@ import type {
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { requireUser } from "../../features/auth/require-user.ts";
 import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import * as JobServices from "./services.ts";
@@ -25,7 +26,7 @@ export const addJob = asyncHandler(
       payed: req.body.payed,
       totalValue: valorTotal,
       clientId,
-      userId: req.user!.id,
+      userId: requireUser(req).id,
     };
 
     const newJob = await JobServices.addJob(job);
@@ -48,7 +49,7 @@ export const editJob = asyncHandler(
       id,
       jobDate: req.body.jobDate,
       totalValue,
-      userId: req.user!.id,
+      userId: requireUser(req).id,
     };
 
     const updatedJob = await JobServices.editJob(job);
@@ -86,7 +87,7 @@ export const showJobList = asyncHandler(
 
     const params = {
       page: incoming.page ? incoming.page : 1,
-      userId: req.user!.id,
+      userId: requireUser(req).id,
       search: incoming.search ? incoming.search.trim() : "",
     };
 
