@@ -2,11 +2,10 @@ import request from "supertest";
 import { describe, expect, it } from "vitest";
 import { app } from "../../../../app.ts";
 import {
-  collectRoutes,
-  hasRouterStack,
+  collectAppRoutes,
   routeKey,
   type RouteRow as CollectedRouteRow,
-} from "./protected-routes-helper.ts";
+} from "./route-helpers.ts";
 
 // This table proves no route serves a request without a cookie; it does not prove every route has authenticate in its chain, because requireUser also returns 401.
 
@@ -40,6 +39,7 @@ const validUserEdit = {
 };
 
 type Method = "GET" | "POST" | "PATCH" | "DELETE";
+type RequestMethod = "get" | "post" | "patch" | "delete";
 type RouteRow = {
   method: Method;
   path: string;
@@ -82,7 +82,7 @@ function concretePath(path: string) {
 }
 
 function makeRequest(method: Method, path: string, body?: object) {
-  const requestMethods = {
+  const requestMethods: Record<Method, RequestMethod> = {
     GET: "get",
     POST: "post",
     PATCH: "patch",
@@ -102,19 +102,14 @@ describe("protected routes", () => {
     },
   );
 
-  it.each(publicRoutes)(
-    "$method $path is not protected",
-    async (route) => {
-      const response = await makeRequest(route.method, route.path);
+  it.each(publicRoutes)("$method $path is not protected", async (route) => {
+    const response = await makeRequest(route.method, route.path);
 
-      expect(response.status).not.toBe(401);
-    },
-  );
+    expect(response.status).not.toBe(401);
+  });
 
   it("classifies every registered route exactly once", () => {
-    const registeredRoutes: CollectedRouteRow[] = app.router.stack.flatMap(
-      (layer) => (hasRouterStack(layer.handle) ? collectRoutes(layer.handle) : []),
-    );
+    const registeredRoutes: CollectedRouteRow[] = collectAppRoutes(app);
     const classifiedRoutes = [...protectedRoutes, ...publicRoutes];
     const registeredKeys = new Set(registeredRoutes.map(routeKey));
     const classifiedKeys = new Set(classifiedRoutes.map(routeKey));

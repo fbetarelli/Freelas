@@ -1,4 +1,9 @@
-import type { ILayer, IRouter, IRoute } from "express-serve-static-core";
+import type {
+  Application,
+  ILayer,
+  IRouter,
+  IRoute,
+} from "express-serve-static-core";
 
 /** A method and path pair used to compare registered and classified routes. */
 export type RouteRow = {
@@ -15,9 +20,7 @@ type RouteWithMethods = IRoute & {
  * Identifies mounted routers so collectRoutes can reject nesting rather than
  * losing the mount prefix while inspecting the router stack.
  */
-export function hasRouterStack(
-  handle: ILayer["handle"],
-): handle is IRouter {
+export function hasRouterStack(handle: ILayer["handle"]): handle is IRouter {
   return typeof handle === "function" && "stack" in handle;
 }
 
@@ -30,6 +33,19 @@ export function hasRouteMethods(
   return route !== undefined && "methods" in route;
 }
 
+function collectRouteRows(layer: ILayer): RouteRow[] {
+  if (!hasRouteMethods(layer.route)) {
+    return [];
+  }
+
+  return Object.keys(layer.route.methods)
+    .filter((method) => method !== "_all")
+    .map((method) => ({
+      method: method.toUpperCase(),
+      path: String(layer.route?.path ?? ""),
+    }));
+}
+
 export function collectRoutes(router: IRouter): RouteRow[] {
   return router.stack.flatMap((layer) => {
     if (hasRouterStack(layer.handle)) {
@@ -38,16 +54,18 @@ export function collectRoutes(router: IRouter): RouteRow[] {
       );
     }
 
-    if (!hasRouteMethods(layer.route)) {
-      return [];
+    return collectRouteRows(layer);
+  });
+}
+
+export function collectAppRoutes(app: Application): RouteRow[] {
+  return app.router.stack.flatMap((layer) => {
+    if (hasRouterStack(layer.handle)) {
+      // Top-level routers are mounted at "/" in this application.
+      return collectRoutes(layer.handle);
     }
 
-    return Object.keys(layer.route.methods)
-      .filter((method) => method !== "_all")
-      .map((method) => ({
-        method: method.toUpperCase(),
-        path: String(layer.route?.path ?? ""),
-      }));
+    return collectRouteRows(layer);
   });
 }
 
