@@ -49,10 +49,9 @@ export const editJob = asyncHandler(
       id,
       jobDate: req.body.jobDate,
       totalValue,
-      userId: requireUser(req).id,
     };
 
-    const updatedJob = await JobServices.editJob(job);
+    const updatedJob = await JobServices.editJob(job, requireUser(req).id);
     if (!updatedJob) {
       throw new NotFoundError("Job not found");
     }
@@ -63,21 +62,24 @@ export const editJob = asyncHandler(
 export const deleteJob = asyncHandler(async (req, res) => {
   const id = req.params.id;
   assertIsString(id, "Job Id");
-  await JobServices.deleteJob(id);
+  await JobServices.deleteJob(id, requireUser(req).id);
   res.sendStatus(204);
 });
 
 export const getById = asyncHandler(async (req, res) => {
   const jobId = req.params.id as string;
 
-  const job = await JobServices.getJobById(jobId);
+  const job = await JobServices.getJobById(jobId, requireUser(req).id);
   res.status(200).json(job);
 });
 
 export const getByClient = asyncHandler(async (req, res) => {
   const clientId = req.params.id as string;
 
-  const jobs = await JobServices.getJobsByClient(clientId);
+  const jobs = await JobServices.getJobsByClient(
+    clientId,
+    requireUser(req).id,
+  );
   res.status(200).json(jobs);
 });
 

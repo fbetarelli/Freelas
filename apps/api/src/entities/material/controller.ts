@@ -2,6 +2,7 @@ import type { RegisterMaterial } from "@freelancemanager/shared";
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { requireUser } from "../../features/auth/require-user.ts";
 import * as MaterialServices from "./services.ts";
 
 type RequestWithMaterialBody = Request<
@@ -20,7 +21,10 @@ export const addMaterial = asyncHandler(
       jobId,
     };
 
-    const materialAdded = await MaterialServices.addMaterial(material);
+    const materialAdded = await MaterialServices.addMaterial(
+      material,
+      requireUser(req).id,
+    );
     res.status(200).json(materialAdded);
   },
 );
@@ -30,7 +34,7 @@ export const getMaterialsByJob = asyncHandler(
     const jobId = req.params.id;
     assertIsString(jobId, "Job Id");
     const { materials, totalValue } =
-      await MaterialServices.getMaterialsByJob(jobId);
+      await MaterialServices.getMaterialsByJob(jobId, requireUser(req).id);
     res.status(200).json({ materials, totalValue });
   },
 );
@@ -47,7 +51,10 @@ export const editMaterial = asyncHandler(
       unitaryVal: req.body.unitaryVal,
     };
 
-    const updatedMaterial = await MaterialServices.editMaterial(material);
+    const updatedMaterial = await MaterialServices.editMaterial(
+      material,
+      requireUser(req).id,
+    );
     res.status(200).json(updatedMaterial);
   },
 );
@@ -55,7 +62,10 @@ export const editMaterial = asyncHandler(
 export const deleteMaterial = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     assertIsString(req.params.id, "Material Id");
-    await MaterialServices.deleteMaterial(req.params.id);
+    await MaterialServices.deleteMaterial(
+      req.params.id,
+      requireUser(req).id,
+    );
     res.sendStatus(204);
   },
 );

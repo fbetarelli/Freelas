@@ -1,20 +1,24 @@
 import { removeUndefined } from "../../utils/remove-undefined.ts";
-import { ApiError } from "../errors/errors.ts";
+import { NotFoundError } from "../errors/errors.ts";
 import { MaterialDAO } from "./dao.ts";
 import { type Material } from "./types.ts";
 import { toFormattedMaterial } from "./utils/mapper.ts";
 
 const dao = new MaterialDAO();
 
-export const addMaterial = async (material: Omit<Material, "id">) => {
-  const dbMaterial = await dao.addMaterial(material);
+export const addMaterial = async (
+  material: Omit<Material, "id">,
+  userId: string,
+) => {
+  const dbMaterial = await dao.addMaterial(material, userId);
   if (dbMaterial === null) {
-    throw new ApiError(500, "Failed to add material");
+    throw new NotFoundError("Job not found");
   }
   return toFormattedMaterial(dbMaterial);
 };
 export const editMaterial = async (
   incomingMaterial: Partial<Material> & { id: string },
+  userId: string,
 ) => {
   const { id, descr, supplier, qnt, unitaryVal } = incomingMaterial;
 
@@ -30,23 +34,25 @@ export const editMaterial = async (
     ...materialWithoutId,
   };
 
-  const dbMaterial = await dao.editMaterial(material);
+  const dbMaterial = await dao.editMaterial(material, userId);
   if (dbMaterial === null) {
-    throw new ApiError(500, "Failed to edit material");
+    throw new NotFoundError("Material not found");
   }
   return toFormattedMaterial(dbMaterial);
 };
 
-export const deleteMaterial = async (materialId: string) => {
-  return await dao.deleteMaterial(materialId);
+export const deleteMaterial = async (materialId: string, userId: string) => {
+  const deleted = await dao.deleteMaterial(materialId, userId);
+  if (!deleted) throw new NotFoundError("Material not found");
 };
 
 export const getTotalFromLastMonth = async (userId: string) => {
   return await dao.getTotalFromLastMonth(userId);
 };
 
-export const getMaterialsByJob = async (jobId: string) => {
-  const res = await dao.getMaterialsByJob(jobId);
+export const getMaterialsByJob = async (jobId: string, userId: string) => {
+  const res = await dao.getMaterialsByJob(jobId, userId);
+  if (res === null) throw new NotFoundError("Job not found");
 
   const totalValue = res.reduce((acc, material) => {
     return acc + Number(material.qnt) * Number(material.unitaryval);

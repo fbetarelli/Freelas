@@ -1,5 +1,6 @@
 import { type SearchObject } from "../../types/search-types.ts";
 import { removeUndefined } from "../../utils/remove-undefined.ts";
+import { NotFoundError } from "../errors/errors.ts";
 import { ClientDAO } from "./dao.ts";
 import { type Client } from "./types.ts";
 
@@ -11,23 +12,25 @@ export const addClient = async (client: Omit<Client, "id">) => {
 
 export const editClient = async (
   incomingClient: Partial<Client> & { id: string },
-): Promise<void> => {
-  const { id, name, address, contact, userId } = incomingClient;
+  userId: string,
+) => {
+  const { id, name, address, contact } = incomingClient;
   const clientWithoutId = removeUndefined({
     name: name?.trim() !== "" ? name : undefined,
     address,
     contact: contact?.trim() !== "" ? contact : undefined,
   });
 
-  const client = {
-    ...clientWithoutId,
-    id,
+  const updatedClient = await dao.editClient(
+    { ...clientWithoutId, id },
     userId,
-  };
-  return await dao.editClient(client);
+  );
+  if (!updatedClient) throw new NotFoundError("Client not found");
+  return updatedClient;
 };
-export const deleteClient = async (clientId: string) => {
-  return await dao.deleteClient(clientId);
+export const deleteClient = async (clientId: string, userId: string) => {
+  const deleted = await dao.deleteClient(clientId, userId);
+  if (!deleted) throw new NotFoundError("Client not found");
 };
 
 export const getLatestClients = async (userId: string) => {
@@ -35,8 +38,8 @@ export const getLatestClients = async (userId: string) => {
   return latestClients;
 };
 
-export const getClientById = async (id: string) => {
-  return await dao.getClientById(id);
+export const getClientById = async (id: string, userId: string) => {
+  return await dao.getClientById(id, userId);
 };
 
 export const getClientListByPage = async (query: SearchObject) => {

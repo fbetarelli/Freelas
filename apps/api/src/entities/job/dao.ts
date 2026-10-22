@@ -20,10 +20,11 @@ export class JobDAO {
       throw error;
     }
   }
-  async editJob(job: Partial<Job> & { id: string }) {
+  async editJob(job: Partial<Job> & { id: string }, userId: string) {
     try {
-      const { fields, index, values } = dynamicFieldsBuilder(job);
-      values.push(job.id);
+      const { id, ...editableJob } = job;
+      const { fields, index, values } = dynamicFieldsBuilder(editableJob);
+      values.push(id, userId);
 
       const query = daoQueries.editJob(fields, index);
 
@@ -34,20 +35,21 @@ export class JobDAO {
       throw error;
     }
   }
-  async deleteJob(jobid: string) {
+  async deleteJob(jobid: string, userId: string) {
     const query = daoQueries.deleteJob;
-    const params = [jobid];
+    const params = [jobid, userId];
 
     try {
-      await pool.query(query, params);
+      const result = await pool.query(query, params);
+      return result.rowCount === 1;
     } catch (error) {
       errorLog("JobDAO", "deleteJob");
       throw error;
     }
   }
-  async getJobById(id: string): Promise<JobQueryResult | null> {
+  async getJobById(id: string, userId: string): Promise<JobQueryResult | null> {
     const query = daoQueries.getJobById;
-    const params = [id];
+    const params = [id, userId];
 
     try {
       const res = await pool.query<JobQueryResult>(query, params);
@@ -58,13 +60,15 @@ export class JobDAO {
       throw error;
     }
   }
-  async getJobsByClient(clientId: string) {
-    const query = `SELECT * FROM jobs WHERE clientId=$1 ORDER BY jobDate DESC`;
-    const params = [clientId];
+  async getJobsByClient(clientId: string, userId: string) {
+    const query = daoQueries.getJobsByClient;
+    const params = [clientId, userId];
 
     try {
+      const client = await pool.query(daoQueries.clientExists, params);
+      if (client.rows.length === 0) return null;
       const res = await pool.query<JobQueryResult>(query, params);
-      return res.rows.length > 0 ? res.rows : [];
+      return res.rows;
     } catch (error) {
       errorLog("JobDAO", "getJobsByClient");
       throw error;
@@ -76,7 +80,7 @@ export class JobDAO {
 
     try {
       const res = await pool.query<JobQueryResult>(query, params);
-        return res.rows.length > 0 ? res.rows : [];
+      return res.rows.length > 0 ? res.rows : [];
     } catch (error) {
       errorLog("JobDAO", "getLastJobsByUser");
       throw error;
@@ -127,12 +131,15 @@ export class JobDAO {
 }
 
 const daoQueries = {
-  addJob: `INSERT INTO jobs(descr,jobDate,totalValue,clientId,userId,payed) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+  addJob: `INSERT INTO jobs(descr,jobDate,totalValue,clientId,userId,payed)
+    SELECT $1,$2,$3,$4,$5,$6 FROM clients
+    WHERE clients.id=$4 AND clients.userId=$5 RETURNING *`,
   editJob: (fields: string[], index: number) =>
-    `UPDATE jobs SET ${fields.join(", ")} WHERE id=$${index} RETURNING *`,
-  deleteJob: `DELETE FROM jobs WHERE id=$1`,
-  getJobById: `SELECT * FROM jobs WHERE id=$1`,
-  getJobsByClient: `SELECT * FROM jobs WHERE clientId=$1 ORDER BY jobDate DESC`,
+    `UPDATE jobs SET ${fields.join(", ")} WHERE id=$${index} AND userId=$${index + 1} RETURNING *`,
+  deleteJob: `DELETE FROM jobs WHERE id=$1 AND userId=$2`,
+  getJobById: `SELECT * FROM jobs WHERE id=$1 AND userId=$2`,
+  clientExists: `SELECT 1 FROM clients WHERE id=$1 AND userId=$2`,
+  getJobsByClient: `SELECT * FROM jobs WHERE clientId=$1 AND userId=$2 ORDER BY jobDate DESC`,
   getLastJobsByUser: `SELECT * FROM jobs WHERE userId=$1 ORDER BY jobDate DESC LIMIT 5`,
   getJobCount: `SELECT COUNT(*) FROM jobs AS count
                         WHERE userId = $1 AND jobDate >= CURRENT_DATE - INTERVAL '1 month'`,

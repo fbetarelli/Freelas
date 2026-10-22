@@ -31,11 +31,13 @@ export const editClient = asyncHandler(
     const client = {
       ...req.body,
       id: clientId,
-      userId: requireUser(req).id,
     };
 
-    await ClientServices.editClient(client);
-    res.status(200).json(client);
+    const updatedClient = await ClientServices.editClient(
+      client,
+      requireUser(req).id,
+    );
+    res.status(200).json(updatedClient);
   },
 );
 
@@ -43,7 +45,7 @@ export const deleteClient = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     const clientId = req.params.id;
 
-    await ClientServices.deleteClient(clientId);
+    await ClientServices.deleteClient(clientId, requireUser(req).id);
     res.sendStatus(204);
   },
 );
@@ -52,7 +54,10 @@ export const getClientById = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     const clientId = req.params.id;
 
-    const client = await ClientServices.getClientById(clientId);
+    const client = await ClientServices.getClientById(
+      clientId,
+      requireUser(req).id,
+    );
 
     if (client === null) {
       throw new NotFoundError("Client not found");

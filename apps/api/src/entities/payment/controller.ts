@@ -2,6 +2,7 @@ import type { EditPayment, RegisterPayment } from "@freelancemanager/shared";
 import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
+import { requireUser } from "../../features/auth/require-user.ts";
 import * as PaymentServices from "./services.ts";
 
 export const addPayment = asyncHandler(
@@ -16,7 +17,10 @@ export const addPayment = asyncHandler(
       jobId: req.params.id,
     };
 
-    const payment = await PaymentServices.addPayment(incomingPayment);
+    const payment = await PaymentServices.addPayment(
+      incomingPayment,
+      requireUser(req).id,
+    );
     res.status(200).json(payment);
   },
 );
@@ -25,7 +29,10 @@ export const getByJob = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     assertIsString(req.params.id, "Job Id");
 
-    const payments = await PaymentServices.getPaymentsByJob(req.params.id);
+    const payments = await PaymentServices.getPaymentsByJob(
+      req.params.id,
+      requireUser(req).id,
+    );
     res.status(200).json(payments);
   },
 );
@@ -42,7 +49,10 @@ export const editPayment = asyncHandler(
       value: req.body.value,
     };
 
-    const payment = await PaymentServices.editPayment(incomingPayment);
+    const payment = await PaymentServices.editPayment(
+      incomingPayment,
+      requireUser(req).id,
+    );
     res.status(200).json(payment);
   },
 );
@@ -50,7 +60,10 @@ export const editPayment = asyncHandler(
 export const deletePayment = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     assertIsString(req.params.id, "Payment Id");
-    await PaymentServices.deletePayment(req.params.id);
+    await PaymentServices.deletePayment(
+      req.params.id,
+      requireUser(req).id,
+    );
     res.sendStatus(204);
   },
 );

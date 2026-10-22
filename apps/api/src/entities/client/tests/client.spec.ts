@@ -59,7 +59,7 @@ describe("Client Controller E2E", () => {
     expect(editResponse.status).toBe(200);
     expect(editResponse.body).toMatchObject(updatedClient);
   });
-  it("should not edit client without proper authentication", async () => {
+  it("should not edit another user's client", async () => {
     const userAgent = await registerAndLogin();
     const response = await createTestClient(userAgent);
 
@@ -78,7 +78,7 @@ describe("Client Controller E2E", () => {
     const editResponse = await userAgent
       .patch(`/clients/${response.id}`)
       .send(updatedClient);
-    expect(editResponse.status).toBe(403);
+    expect(editResponse.status).toBe(404);
     expect(editResponse.body).toHaveProperty("message");
   });
   it("should not not edit client without any field", async () => {

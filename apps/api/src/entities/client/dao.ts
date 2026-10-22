@@ -27,24 +27,32 @@ export class ClientDAO {
       throw error;
     }
   }
-  async deleteClient(clientId: string) {
+  async deleteClient(clientId: string, userId: string) {
     const query = daoQueries.deleteClient;
-    const params = [clientId];
+    const params = [clientId, userId];
 
     try {
-      await pool.query(query, params);
+      const result = await pool.query(query, params);
+      return result.rowCount === 1;
     } catch (error) {
       errorLog("ClientDAO", "deleteClient");
       throw error;
     }
   }
-  async editClient(client: Partial<Client> & { id: string }) {
-    const { fields, values, index } = dynamicFieldsBuilder(client);
-    values.push(client.id);
+  async editClient(
+    client: Partial<Client> & { id: string },
+    userId: string,
+  ) {
+    const { id, ...editableClient } = client;
+    const { fields, values, index } = dynamicFieldsBuilder(editableClient);
+    values.push(id, userId);
     const query = daoQueries.editClient(fields, index);
 
     try {
-      await pool.query(query, values);
+      const result = await pool.query<ClientQueryResult>(query, values);
+      if (result.rows.length === 0) return null;
+      const { userid: userId, ...rest } = result.rows[0];
+      return { ...rest, userId };
     } catch (error) {
       errorLog("ClientDAO", "editClient");
       throw error;
@@ -122,9 +130,9 @@ export class ClientDAO {
       throw error;
     }
   }
-  async getClientById(clientId: string): Promise<Client | null> {
+  async getClientById(clientId: string, userId: string): Promise<Client | null> {
     const query = daoQueries.getClientById;
-    const params = [clientId];
+    const params = [clientId, userId];
 
     try {
       const res = await pool.query<ClientQueryResult>(query, params);
@@ -148,9 +156,9 @@ export class ClientDAO {
 
 const daoQueries = {
   addClient: `INSERT INTO clients(name,address,contact,userID) VALUES ($1,$2,$3,$4) RETURNING *`,
-  deleteClient: `DELETE FROM clients WHERE id=$1`,
+  deleteClient: `DELETE FROM clients WHERE id=$1 AND userId=$2`,
   editClient: (fields: string[], index: number) =>
-    `UPDATE clients SET ${fields.join(", ")} WHERE id=$${index}`,
+    `UPDATE clients SET ${fields.join(", ")} WHERE id=$${index} AND userId=$${index + 1} RETURNING *`,
   getLatestClients: `
                         SELECT * FROM clients LEFT JOIN (SELECT clientId, MAX(jobDate) AS lastJobDate
                         FROM jobs
@@ -164,5 +172,5 @@ const daoQueries = {
   getClientCount: `
                        SELECT COUNT(*) AS count_cols FROM clients WHERE userId = $1 AND (unaccent(name) ILIKE unaccent($2) OR $2 IS NULL)    
              `,
-  getClientById: `SELECT * FROM clients WHERE id=$1`,
+  getClientById: `SELECT * FROM clients WHERE id=$1 AND userId=$2`,
 };
