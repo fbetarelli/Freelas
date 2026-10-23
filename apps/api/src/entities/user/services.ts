@@ -53,19 +53,22 @@ export const editUser = async ({
   login,
   username,
 }: EditUser & { id: string }) => {
-  const incomingUser = {
-    id,
-    ...(username?.trim() !== "" && { username }),
-    ...(login?.trim() !== "" && { login }),
-  };
+  if (login !== undefined) {
+    const existingUser = await userDAO.findByLogin(login);
+    if (existingUser !== null && existingUser.id !== id) {
+      throw new ConflictError("Login already exists");
+    }
+  }
 
-  let hash = undefined;
-  if (password) {
+  let hash: string | undefined;
+  if (password !== undefined) {
     hash = await bcrypt.hash(password, saltRounds);
   }
 
   return await userDAO.editUser({
-    ...incomingUser,
+    id,
+    username,
+    login,
     hashPassword: hash,
   });
 };

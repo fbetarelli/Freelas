@@ -57,6 +57,60 @@ describe("User Authentication E2E", () => {
     });
     expect(response.status).toBe(409);
   });
+  it("enforces unique login at the DAO boundary", async () => {
+    await dao.register({
+      hashPassword: await bcrypt.hash("123", 10),
+      login: "indexed@a.com",
+      username: "Indexed User",
+    });
+
+    await expect(
+      dao.register({
+        hashPassword: await bcrypt.hash("123", 10),
+        login: "indexed@a.com",
+        username: "Second User",
+      }),
+    ).rejects.toMatchObject({ code: "23505" });
+  });
+  it("rejects duplicate login updates", async () => {
+    const first = await agent.post("/register").send({
+      login: "first@a.com",
+      username: "First User",
+      password: "123",
+    });
+    await agent.post("/logout");
+    await agent.post("/register").send({
+      login: "second@a.com",
+      username: "Second User",
+      password: "123",
+    });
+
+    const response = await agent.patch("/edit-user").send({
+      login: "first@a.com",
+    });
+
+    expect(first.status).toBe(201);
+    expect(response.status).toBe(409);
+  });
+  it("trims identity fields but preserves password whitespace", async () => {
+    const response = await agent.post("/register").send({
+      login: "  spaced@a.com  ",
+      username: "  Spaced User  ",
+      password: " 123 ",
+    });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject({
+      login: "spaced@a.com",
+      username: "Spaced User",
+    });
+
+    const loginResponse = await agent.post("/login").send({
+      login: "spaced@a.com",
+      password: " 123 ",
+    });
+    expect(loginResponse.status).toBe(200);
+  });
 
   it("should logout successfully", async () => {
     const response = await agent.post("/logout");
@@ -245,5 +299,19 @@ describe("User Authentication E2E", () => {
     expect(response.body).toMatchObject({
       message: "At least one field is required for editing user",
     });
+  });
+  it("rejects unknown user fields", async () => {
+    await agent.post("/register").send({
+      login: "unknown-field@a.com",
+      username: "Test User",
+      password: "123",
+    });
+
+    const response = await agent.patch("/edit-user").send({
+      username: "Changed User",
+      unexpected: true,
+    });
+
+    expect(response.status).toBe(400);
   });
 });

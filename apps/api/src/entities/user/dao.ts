@@ -72,8 +72,9 @@ export class UserDAO {
     userData: Partial<User> & { id: string },
   ): Promise<SessionUser | null> {
     try {
-      const { fields, values, index } = dynamicFieldsBuilder(userData);
-      values.push(userData.id);
+      const { id, ...editableUser } = userData;
+      const { fields, values, index } = dynamicFieldsBuilder(editableUser);
+      values.push(id);
 
       const query = daoQueries.editUser(fields, index);
       const res = await pool.query<Omit<UserQueryResult, "hashpassword">>(

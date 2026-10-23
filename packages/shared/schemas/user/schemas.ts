@@ -2,22 +2,30 @@ import z from "zod";
 
 export const UserZodSchema = z.object({
   id: z.uuid(),
-  username: z.string().min(3, "Username must be at least 3 characters long"),
-  login: z.email().min(1, "Login is required"),
+  username: z
+    .string()
+    .trim()
+    .min(3, "Username must be at least 3 characters long"),
+  login: z.string().trim().email().min(1, "Login is required"),
   hashPassword: z
     .string()
     .min(3, "Password must be at least 3 characters long"),
-});
+}).strict();
 
 export const RegisterUserZodSchema = z.object({
   username: z
     .string({ error: "Username is required" })
+    .trim()
     .min(3, "Username must be at least 3 characters long"),
-  login: z.email({ error: "Login is required" }).min(1, "Login is required"),
+  login: z
+    .string({ error: "Login is required" })
+    .trim()
+    .email({ error: "Login is required" })
+    .min(1, "Login is required"),
   password: z
     .string({ error: "Password is required" })
     .min(3, "Password must be at least 3 characters long"),
-});
+}).strict();
 
 export const LoginUserZodSchema = RegisterUserZodSchema.pick({
   login: true,
@@ -32,7 +40,11 @@ export const EditUserZodSchema = z
       return undefined; // Use Zod's default message otherwise
     },
   })
-  .partial();
+  .partial()
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "At least one field is required for editing user",
+  });
 
 export type User = z.infer<typeof UserZodSchema>;
 export type RegisterUser = z.infer<typeof RegisterUserZodSchema>;
