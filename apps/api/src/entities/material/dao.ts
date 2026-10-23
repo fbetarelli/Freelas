@@ -9,6 +9,8 @@ export interface MaterialQueryResult extends Omit<
 > {
   unitaryval: string;
   jobid: string;
+  totalval: string;
+  aggregatetotal: string;
 }
 
 export class MaterialDAO {
@@ -90,15 +92,19 @@ export class MaterialDAO {
 const daoQueries = {
   addMaterial: `INSERT INTO materials(descr,supplier,qnt, unitaryVal,jobId)
     SELECT $1,$2,$3,$4,$5 FROM jobs
-    WHERE jobs.id=$5 AND jobs.userId=$6 RETURNING *`,
+    WHERE jobs.id=$5 AND jobs.userId=$6
+    RETURNING materials.*, materials.unitaryVal * materials.qnt AS totalval`,
   editMaterial: (fields: string[], index: number) =>
     `UPDATE materials SET ${fields.join(", ")} WHERE id = $${index} AND EXISTS (
       SELECT 1 FROM jobs WHERE jobs.id = materials.jobId AND jobs.userId = $${index + 1}
-    ) RETURNING *`,
+    ) RETURNING materials.*, materials.unitaryVal * materials.qnt AS totalval`,
   deleteMaterial: `DELETE FROM materials WHERE id = $1 AND EXISTS (
     SELECT 1 FROM jobs WHERE jobs.id = materials.jobId AND jobs.userId = $2
   )`,
   jobExists: `SELECT 1 FROM jobs WHERE id = $1 AND userId = $2`,
-  getMaterialsByJob: `SELECT materials.* FROM materials JOIN jobs ON materials.jobId = jobs.id WHERE materials.jobId = $1 AND jobs.userId = $2`,
+  getMaterialsByJob: `SELECT materials.*, materials.unitaryVal * materials.qnt AS totalval,
+    SUM(materials.unitaryVal * materials.qnt) OVER () AS aggregatetotal
+    FROM materials JOIN jobs ON materials.jobId = jobs.id
+    WHERE materials.jobId = $1 AND jobs.userId = $2`,
   getTotalFromLastMonth: `SELECT SUM(materials.unitaryVal*qnt) FROM materials JOIN jobs ON materials.jobId = jobs.id WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`,
 };

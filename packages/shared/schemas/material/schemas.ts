@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { moneySchema } from "../misc/schemas.ts";
 export const MaterialZodSchema = z.object({
   id: z.uuid({ error: "ID is required" }).min(1, "ID is required"),
   descr: z
@@ -14,9 +15,7 @@ export const MaterialZodSchema = z.object({
   qnt: z
     .number({ error: "Quantity is required" })
     .positive("Quantity must be a positive number"),
-  unitaryVal: z
-    .number({ error: "Unitary value is required" })
-    .positive("Unitary value must be a positive number"),
+  unitaryVal: moneySchema,
   jobId: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
 }).strict();
 

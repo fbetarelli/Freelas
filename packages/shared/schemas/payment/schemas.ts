@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { dateSchema, moneySchema } from "../misc/schemas.ts";
 export const PaymentZodSchema = z.object({
   id: z
     .uuid({ error: "Payment ID is required" })
@@ -7,13 +8,8 @@ export const PaymentZodSchema = z.object({
     .string({ error: "Payment method is required" })
     .trim()
     .min(1, "Payment method is required"),
-  paymentDate: z
-    .string({ error: "Payment date is required" })
-    .trim()
-    .min(1, "Payment date is required"),
-  value: z
-    .number({ error: "Payment value is required" })
-    .positive("Payment value must be a positive number"),
+  paymentDate: dateSchema,
+  value: moneySchema,
   installment: z
     .number({ error: "Installment is required" })
     .positive("Installment must be a positive number"),

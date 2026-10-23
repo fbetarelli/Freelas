@@ -5,11 +5,13 @@ import type { FormattedMaterial } from "../types.ts";
 export const toFormattedMaterial = (
   material: MaterialQueryResult,
 ): FormattedMaterial => {
-  const { unitaryval, jobid, ...rest } = material;
   return {
-    ...rest,
-    jobId: jobid,
-    unitaryVal: formatValueToString(Number(unitaryval)),
-    totalVal: formatValueToString(Number(unitaryval) * material.qnt),
+    id: material.id,
+    descr: material.descr,
+    supplier: material.supplier,
+    qnt: material.qnt,
+    jobId: material.jobid,
+    unitaryVal: formatValueToString(Number(material.unitaryval)),
+    totalVal: formatValueToString(Number(material.totalval)),
   };
 };

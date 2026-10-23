@@ -6,6 +6,7 @@ import { type Payment } from "./types.ts";
 export type PaymentQueryResult = Omit<Payment, "paymentDate" | "jobId"> & {
   paymentdate: string;
   jobid: string;
+  aggregatetotal: string;
 };
 
 export class PaymentDAO {
@@ -92,7 +93,9 @@ const daoQueries = {
     SELECT 1 FROM jobs WHERE jobs.id = payments.jobId AND jobs.userId = $2
   )`,
   jobExists: `SELECT 1 FROM jobs WHERE id=$1 AND userId=$2`,
-  getPaymentsByJob: `SELECT payments.* FROM payments JOIN jobs ON payments.jobId = jobs.id WHERE payments.jobId=$1 AND jobs.userId=$2 ORDER BY paymentDate`,
+  getPaymentsByJob: `SELECT payments.*, SUM(payments.value) OVER () AS aggregatetotal
+    FROM payments JOIN jobs ON payments.jobId = jobs.id
+    WHERE payments.jobId=$1 AND jobs.userId=$2 ORDER BY paymentDate`,
   getTotalFromLastMonth: `SELECT SUM(payments.value) FROM payments
                         JOIN jobs ON payments.jobId = jobs.id
                         WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'`,

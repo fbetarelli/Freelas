@@ -1,19 +1,15 @@
 import { z } from "zod";
+import { dateSchema, moneySchema } from "../misc/schemas.ts";
 
 export const JobZodSchema = z.object({
   id: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
-  jobDate: z
-    .string({ error: "Job date is required" })
-    .trim()
-    .min(1, "Job date is required"),
+  jobDate: dateSchema,
   descr: z
     .string({ error: "Job description is required" })
     .trim()
     .min(1, "Job description is required"),
   payed: z.boolean({ error: "Job payed status is required" }),
-  totalValue: z
-    .number({ error: "Job total value is required" })
-    .min(1, "Job total value is required"),
+  totalValue: moneySchema,
   clientId: z
     .uuid({ error: "Client ID is required" })
     .min(1, "Client ID is required"),

@@ -48,9 +48,7 @@ export const getMaterialsByJob = async (jobId: string, userId: string) => {
   const res = await dao.getMaterialsByJob(jobId, userId);
   if (res === null) throw new NotFoundError("Job not found");
 
-  const totalValue = res.reduce((acc, material) => {
-    return acc + Number(material.qnt) * Number(material.unitaryval);
-  }, 0);
+  const totalValue = res.length > 0 ? Number(res[0].aggregatetotal) : 0;
 
   const materials = res.map(toFormattedMaterial);
 

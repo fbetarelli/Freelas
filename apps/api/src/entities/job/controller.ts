@@ -9,14 +9,11 @@ import { type Request } from "express";
 import { assertIsString } from "../../utils/assert-is-string.ts";
 import { asyncHandler } from "../../utils/asyncHandler.ts";
 import { requireUser } from "../../features/auth/require-user.ts";
-import { formatValueToFloat } from "../../utils/formatting-helpers.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import * as JobServices from "./services.ts";
 
 export const addJob = asyncHandler(
   async (req: Request<GetClient, unknown, RegisterJob>, res) => {
-    const valorTotal = formatValueToFloat(req.body.totalValue?.toString());
-
     assertIsString(req.params.id, "Client Id");
     const clientId = req.params.id;
 
@@ -24,7 +21,7 @@ export const addJob = asyncHandler(
       descr: req.body.descr,
       jobDate: req.body.jobDate,
       payed: req.body.payed,
-      totalValue: valorTotal,
+      totalValue: req.body.totalValue,
       clientId,
       userId: requireUser(req).id,
     };
@@ -36,10 +33,6 @@ export const addJob = asyncHandler(
 
 export const editJob = asyncHandler(
   async (req: Request<GetJob, unknown, EditJob>, res) => {
-    const totalValue = req.body.totalValue
-      ? formatValueToFloat(req.body.totalValue.toString())
-      : undefined;
-
     const id = req.params.id;
     assertIsString(id, "Job Id");
 
@@ -48,7 +41,7 @@ export const editJob = asyncHandler(
       payed: req.body.payed,
       id,
       jobDate: req.body.jobDate,
-      totalValue,
+      totalValue: req.body.totalValue,
     };
 
     const updatedJob = await JobServices.editJob(job, requireUser(req).id);

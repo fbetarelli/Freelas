@@ -50,9 +50,8 @@ export const getPaymentsByJob = async (jobId: string, userId: string) => {
   const dbPayments = await dao.getPaymentsByJob(jobId, userId);
   if (dbPayments === null) throw new NotFoundError("Job not found");
 
-  const totalValue = dbPayments.reduce((acc, payment) => {
-    return acc + payment.value;
-  }, 0);
+  const totalValue =
+    dbPayments.length > 0 ? Number(dbPayments[0].aggregatetotal) : 0;
 
   const payments = dbPayments.map(toFormattedPayment);
 

@@ -93,6 +93,31 @@ export class UserDAO {
       throw error;
     }
   }
+
+  async getProfitFromLastMonth(userId: string): Promise<number> {
+    const query = `
+        WITH payment_total AS (
+          SELECT COALESCE(SUM(payments.value), 0) AS total
+          FROM payments
+          JOIN jobs ON payments.jobId = jobs.id
+          WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'
+        ), material_total AS (
+          SELECT COALESCE(SUM(materials.unitaryVal * materials.qnt), 0) AS total
+          FROM materials
+          JOIN jobs ON materials.jobId = jobs.id
+          WHERE jobs.userId = $1 AND jobs.jobDate >= CURRENT_DATE - INTERVAL '1 month'
+        )
+        SELECT payment_total.total - material_total.total AS profit
+        FROM payment_total, material_total`;
+
+    try {
+      const result = await pool.query<{ profit: string }>(query, [userId]);
+      return Number(result.rows[0].profit);
+    } catch (error) {
+      errorLog("UserDAO", "getProfitFromLastMonth");
+      throw error;
+    }
+  }
 }
 
 const daoQueries = {

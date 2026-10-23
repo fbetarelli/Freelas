@@ -2,8 +2,6 @@ import bcrypt from "bcrypt";
 import { formatValueToString } from "../../utils/formatting-helpers.ts";
 import { BadRequestError, ConflictError, NotFoundError } from "../errors/errors.ts";
 import { JobDAO } from "../job/dao.ts";
-import { MaterialDAO } from "../material/dao.ts";
-import { PaymentDAO } from "../payment/dao.ts";
 import { UserDAO } from "./dao.ts";
 import { type User } from "./types.ts";
 import type { EditUser } from "@freelancemanager/shared";
@@ -74,11 +72,8 @@ export const editUser = async ({
 };
 
 export const getProfitFromLastMonth = async (userid: string) => {
-  const paymentTotal = await new PaymentDAO().getTotalFromLastMonth(userid);
-  const materialTotal = await new MaterialDAO().getTotalFromLastMonth(userid);
-
-  const final = paymentTotal - materialTotal;
-  return formatValueToString(final);
+  const profit = await userDAO.getProfitFromLastMonth(userid);
+  return formatValueToString(profit);
 };
 
 export const getJobCount = async (userid: string) => {
