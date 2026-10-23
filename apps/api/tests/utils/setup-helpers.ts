@@ -85,10 +85,16 @@ export const createTestJob = async (
 export const createTestMaterial = async (
   agent: ReturnType<typeof request.agent>,
   jobId: string,
+  material: {
+    descr: string;
+    supplier: string | null;
+    qnt: number;
+    unitaryVal: number;
+  } = makeMaterial(),
 ) => {
   const materialResponse = await agent
     .post(`/jobs/${jobId}/materials`)
-    .send(makeMaterial());
+    .send(material);
   const body: unknown = materialResponse.body;
 
   assertSetupResponse<FormattedMaterial>(

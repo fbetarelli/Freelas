@@ -29,6 +29,24 @@ describe("Job E2E Tests", () => {
     expect(response.status).toBe(201);
     expect(response.body).toMatchObject(getExpectedJob(jobData));
   });
+  it("preserves decimal money values on create and edit", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    const response = await userAgent
+      .post(`/clients/${client.id}/jobs`)
+      .send({ ...makeJob(), totalValue: 123.45 });
+
+    expect(response.status).toBe(201);
+    const created = response.body as { id: string; totalValue: string };
+    expect(created.totalValue).toBe("123,45");
+
+    const editResponse = await userAgent
+      .patch(`/jobs/${created.id}`)
+      .send({ totalValue: 234.56 });
+
+    expect(editResponse.status).toBe(200);
+    expect((editResponse.body as { totalValue: string }).totalValue).toBe("234,56");
+  });
   it("should not add a job with invalid data", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
@@ -152,5 +170,28 @@ describe("Job E2E Tests", () => {
     const userAgent = await registerAndLogin();
     const response = await userAgent.get(`/jobs?page=invalid`);
     expect(response.status).toBe(400);
+  });
+  it.each([
+    ["ordinary", "Ordinary Search Job"],
+    ["%", "literal%job"],
+    ["_", "literal_job"],
+    ["\\", "literal\\job"],
+  ])("searches %s literally and consistently", async (search, descr) => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    await userAgent
+      .post(`/clients/${client.id}/jobs`)
+      .send({ ...makeJob(), descr });
+
+    const response = await userAgent.get("/jobs").query({ search });
+
+    expect(response.status).toBe(200);
+    const body = response.body as {
+      totalPages: number;
+      jobs: Array<{ descr: string }>;
+    };
+    expect(body.totalPages).toBe(1);
+    expect(body.jobs).toHaveLength(1);
+    expect(body.jobs[0].descr).toBe(descr);
   });
 });

@@ -191,4 +191,24 @@ describe("Client Controller E2E", () => {
     expect(getResponse.body).toMatchObject(expected);
     expect(getResponse.status).toBe(200);
   });
+  it.each([
+    ["ordinary", "Ordinary Search Client"],
+    ["%", "literal%client"],
+    ["_", "literal_client"],
+    ["\\", "literal\\client"],
+  ])("searches %s literally and consistently", async (search, name) => {
+    const userAgent = await registerAndLogin();
+    await userAgent.post("/clients").send({ ...makeClient(), name });
+
+    const response = await userAgent.get("/clients").query({ search });
+
+    expect(response.status).toBe(200);
+    const body = response.body as {
+      totalPages: number;
+      clients: Array<{ name: string }>;
+    };
+    expect(body.totalPages).toBe(1);
+    expect(body.clients).toHaveLength(1);
+    expect(body.clients[0].name).toBe(name);
+  });
 });

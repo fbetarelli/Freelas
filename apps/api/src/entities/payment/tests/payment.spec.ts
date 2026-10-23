@@ -133,6 +133,16 @@ describe("Payment E2E", () => {
     expect(body.data).toHaveLength(3);
     expect(body.data[0]).toMatchObject(expected);
   });
+  it("calculates payment totals in SQL without floating-point drift", async () => {
+    const { userAgent, jobId } = await setupJob();
+    await createTestPayment(userAgent, jobId, { ...makePayment(), value: 0.1 });
+    await createTestPayment(userAgent, jobId, { ...makePayment(), value: 0.2 });
+
+    const response = await userAgent.get(`/jobs/${jobId}/payments`);
+
+    expect(response.status).toBe(200);
+    expect((response.body as { totalValue: number }).totalValue).toBe(0.3);
+  });
   it("should not get a job's payments with an invalid job ID", async () => {
     const { userAgent } = await setupJob();
     const response = await userAgent.get(`/jobs/${123}/payments`);

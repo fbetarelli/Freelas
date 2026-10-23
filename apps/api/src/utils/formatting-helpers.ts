@@ -1,11 +1,6 @@
-export function formatDate(data: Date | string): string {
-  const dateFromDB = new Date(data);
-  // Formatar para PT-BR (12/03/2026)
-  return dateFromDB.toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+export function formatDate(data: string): string {
+  const [year, month, day] = data.split("-");
+  return `${day}/${month}/${year}`;
 }
 
 export function formatValueToString(val: number): string {

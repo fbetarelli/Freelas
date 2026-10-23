@@ -9,7 +9,8 @@
     "migrate": "node-pg-migrate up",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest",
+    "test:dates": "set TZ=UTC&& npm run test -- --run src/entities/job/tests/job.spec.ts src/entities/payment/tests/payment.spec.ts && set TZ=America/Sao_Paulo&& npm run test -- --run src/entities/job/tests/job.spec.ts src/entities/payment/tests/payment.spec.ts"
   },
   "dependencies": {
     "@freelancemanager/shared": "*",

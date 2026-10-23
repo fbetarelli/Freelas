@@ -157,6 +157,16 @@ describe("Material E2E", () => {
     expect(response.status).toBe(200);
     expect(responseBody.materials).toHaveLength(3);
   });
+  it("calculates material totals in SQL without floating-point drift", async () => {
+    const { userAgent, jobId } = await setupJob();
+    await createTestMaterial(userAgent, jobId, { ...makeMaterial(), qnt: 1, unitaryVal: 0.1 });
+    await createTestMaterial(userAgent, jobId, { ...makeMaterial(), qnt: 1, unitaryVal: 0.2 });
+
+    const response = await userAgent.get(`/jobs/${jobId}/materials`);
+
+    expect(response.status).toBe(200);
+    expect((response.body as { totalValue: number }).totalValue).toBe(0.3);
+  });
   it("should not get materials by an invalid job ID", async () => {
     const { userAgent } = await setupJob();
 

@@ -1,6 +1,8 @@
 import { config } from "dotenv";
-import { Pool } from "pg";
+import { Pool, types } from "pg";
 config();
+
+types.setTypeParser(1082, (value) => value);
 
 const PORT = process.env.DB_PORT ? Number(process.env.DB_PORT) : undefined;
 

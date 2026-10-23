@@ -54,16 +54,16 @@ export const errorHandler = (app: Application) => {
     }
     if (isPgError(err)) {
       if (err.code === "23505") {
-        return res
-          .status(409)
-          .json({ message: err.detail ?? "Duplicate entry" });
+        console.error(err);
+        return res.status(409).json({ message: "Duplicate entry" });
       }
       if (err.code === "23503") {
-        return res
-          .status(400)
-          .json({
-            message: err.detail ?? "Referenced resource does not exist",
-          });
+        console.error(err);
+        return res.status(400).json({ message: "Referenced resource does not exist" });
+      }
+      if (err.code === "22003" || err.code === "22007") {
+        console.error(err);
+        return res.status(400).json({ message: "Invalid database value" });
       }
     }
     console.error(err);
