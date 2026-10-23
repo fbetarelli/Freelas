@@ -1,3 +1,10 @@
+# plans 
+docs/plans
+
+# Agents
+docs/ai
+.github/agents
+
 # Logs
 logs
 *.log
