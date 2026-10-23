@@ -4,6 +4,7 @@ docs/plans
 # Agents
 docs/ai
 .github/agents
+.github/skills
 
 # Logs
 logs
