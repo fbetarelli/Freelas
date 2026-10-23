@@ -5,9 +5,11 @@ export const PaymentZodSchema = z.object({
     .min(1, "Payment ID is required"),
   method: z
     .string({ error: "Payment method is required" })
+    .trim()
     .min(1, "Payment method is required"),
   paymentDate: z
     .string({ error: "Payment date is required" })
+    .trim()
     .min(1, "Payment date is required"),
   value: z
     .number({ error: "Payment value is required" })
@@ -16,7 +18,7 @@ export const PaymentZodSchema = z.object({
     .number({ error: "Installment is required" })
     .positive("Installment must be a positive number"),
   jobId: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
-});
+}).strict();
 
 export const RegisterPaymentZodSchema = PaymentZodSchema.omit({
   id: true,
@@ -32,7 +34,11 @@ export const EditPaymentZodSchema = z
       return undefined; // Use Zod's default message otherwise
     },
   })
-  .partial();
+  .partial()
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "At least one field is required for editing payment",
+  });
 
 export const GetPaymentZodSchema = PaymentZodSchema.pick({
   id: true,

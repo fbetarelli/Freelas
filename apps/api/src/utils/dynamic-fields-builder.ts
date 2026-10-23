@@ -9,7 +9,7 @@ export const dynamicFieldsBuilder = <T extends { [K in keyof T]: T[K] }>(
   for (const key of Object.keys(object) as Array<keyof T>) {
     const value = object[key];
 
-    if (value !== undefined && value !== null) {
+    if (value !== undefined) {
       //cria fields dinamicamente, EX: key=name, index=1, field gerado: name = $1;
       fields.push(`${String(key)} = $${index++}`);
       values.push(value);

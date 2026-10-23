@@ -25,7 +25,7 @@ export const addMaterial = asyncHandler(
       material,
       requireUser(req).id,
     );
-    res.status(200).json(materialAdded);
+    res.status(201).json(materialAdded);
   },
 );
 

@@ -21,7 +21,7 @@ export const addPayment = asyncHandler(
       incomingPayment,
       requireUser(req).id,
     );
-    res.status(200).json(payment);
+    res.status(201).json(payment);
   },
 );
 

@@ -1,34 +1,36 @@
 import { z } from "zod";
+
+const clientName = z
+  .string({ error: "Client name is required" })
+  .trim()
+  .min(1, "Client name is required");
+const clientAddress = z.string().trim().min(1, "Client address is required");
+const clientContact = z
+  .string({ error: "Client contact is required" })
+  .trim()
+  .min(1, "Client contact is required");
+
 export const ClientZodSchema = z.object({
   id: z
     .uuid({ error: "Client ID is required" })
     .min(1, "Client ID is required"),
-  name: z
-    .string({ error: "Client name is required" })
-    .min(1, "Client name is required"),
-  address: z.string().nullable().optional(),
-  contact: z
-    .string({ error: "Client contact is required" })
-    .min(1, "Client contact is required"),
+  name: clientName,
+  address: clientAddress.nullable().optional(),
+  contact: clientContact,
   userId: z
     .uuid({ error: "User ID is required" })
     .min(1, "User ID is required"),
-});
+}).strict();
 
 export const RegisterClientZodSchema = ClientZodSchema.omit({
   id: true,
   userId: true,
 });
-export const EditClientZodSchema = z
-  .object(RegisterClientZodSchema.shape, {
-    error: (issue) => {
-      if (issue.input === undefined) {
-        return "At least one field is required for editing client";
-      }
-      return undefined; // Use Zod's default message otherwise
-    },
-  })
-  .partial();
+export const EditClientZodSchema = RegisterClientZodSchema.partial()
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "At least one field is required for editing client",
+  });
 export const GetClientZodSchema = ClientZodSchema.pick({
   id: true,
 });

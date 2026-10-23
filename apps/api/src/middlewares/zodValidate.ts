@@ -7,6 +7,9 @@ export const validate = (
   schema: ZodType<unknown>,
 ): RequestHandler => {
   return (req, res, next) => {
+    if (target === "body" && req.body === undefined) {
+      req.body = {};
+    }
     const result = schema.safeParse(req[target]);
     if (!result.success)
       return next(new BadRequestError(result.error.issues[0].message));

@@ -1,4 +1,3 @@
-import { removeUndefined } from "../../utils/remove-undefined.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import { PaymentDAO } from "./dao.ts";
 import { type Payment } from "./types.ts";
@@ -23,16 +22,13 @@ export const editPayment = async (
   const { id, installment, jobId, method, paymentDate, value } =
     incomingPayment;
 
-  const paymentWithoutId = removeUndefined({
+  const paymentWithoutId = {
     jobId,
-    installment: installment !== undefined ? installment : undefined,
-    method: method !== undefined ? method : undefined,
-    paymentDate:
-      paymentDate !== undefined && paymentDate.trim() !== ""
-        ? paymentDate
-        : undefined,
-    value: value !== undefined ? value : undefined,
-  });
+    installment,
+    method,
+    paymentDate,
+    value,
+  };
 
   const payment = {
     ...paymentWithoutId,

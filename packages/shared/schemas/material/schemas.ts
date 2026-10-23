@@ -3,10 +3,14 @@ export const MaterialZodSchema = z.object({
   id: z.uuid({ error: "ID is required" }).min(1, "ID is required"),
   descr: z
     .string({ error: "Description is required" })
+    .trim()
     .min(1, "Description is required"),
   supplier: z
     .string({ error: "Supplier is required" })
-    .min(1, "Supplier is required"),
+    .trim()
+    .min(1, "Supplier is required")
+    .nullable()
+    .optional(),
   qnt: z
     .number({ error: "Quantity is required" })
     .positive("Quantity must be a positive number"),
@@ -14,7 +18,7 @@ export const MaterialZodSchema = z.object({
     .number({ error: "Unitary value is required" })
     .positive("Unitary value must be a positive number"),
   jobId: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
-});
+}).strict();
 
 export const RegisterMaterialZodSchema = MaterialZodSchema.omit({
   id: true,
@@ -34,7 +38,11 @@ export const EditMaterialZodSchema = z
       return undefined; // Use Zod's default message otherwise
     },
   })
-  .partial();
+  .partial()
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "At least one field is required for editing material",
+  });
 
 
   export type RegisterMaterial = z.infer<typeof RegisterMaterialZodSchema>;

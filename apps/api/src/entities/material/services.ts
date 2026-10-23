@@ -1,4 +1,3 @@
-import { removeUndefined } from "../../utils/remove-undefined.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import { MaterialDAO } from "./dao.ts";
 import { type Material } from "./types.ts";
@@ -22,12 +21,7 @@ export const editMaterial = async (
 ) => {
   const { id, descr, supplier, qnt, unitaryVal } = incomingMaterial;
 
-  const materialWithoutId = removeUndefined({
-    descr: descr?.trim() !== "" ? descr?.trim() : undefined,
-    supplier: supplier?.trim() !== "" ? supplier?.trim() : undefined,
-    qnt: qnt !== undefined ? qnt : undefined,
-    unitaryVal: unitaryVal !== undefined ? unitaryVal : undefined,
-  });
+  const materialWithoutId = { descr, supplier, qnt, unitaryVal };
 
   const material = {
     id,

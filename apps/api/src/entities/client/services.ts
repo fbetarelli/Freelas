@@ -1,5 +1,4 @@
 import { type SearchObject } from "../../types/search-types.ts";
-import { removeUndefined } from "../../utils/remove-undefined.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import { ClientDAO } from "./dao.ts";
 import { type Client } from "./types.ts";
@@ -14,15 +13,10 @@ export const editClient = async (
   incomingClient: Partial<Client> & { id: string },
   userId: string,
 ) => {
-  const { id, name, address, contact } = incomingClient;
-  const clientWithoutId = removeUndefined({
-    name: name?.trim() !== "" ? name : undefined,
-    address,
-    contact: contact?.trim() !== "" ? contact : undefined,
-  });
+  const { id, name, address, contact } = incomingClient
 
   const updatedClient = await dao.editClient(
-    { ...clientWithoutId, id },
+    { name, address, contact, id },
     userId,
   );
   if (!updatedClient) throw new NotFoundError("Client not found");

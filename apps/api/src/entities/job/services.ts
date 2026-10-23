@@ -1,5 +1,4 @@
 import { type SearchObject } from "../../types/search-types.ts";
-import { removeUndefined } from "../../utils/remove-undefined.ts";
 import { NotFoundError } from "../errors/errors.ts";
 import { JobDAO } from "./dao.ts";
 import { type Job } from "./types.ts";
@@ -19,12 +18,7 @@ export const editJob = async (
   userId: string,
 ) => {
   const { descr, jobDate, payed: incomingPayed, totalValue } = incomingJob;
-  const jobWithoutId = removeUndefined({
-    descr: descr?.trim() !== "" ? descr : undefined,
-    jobDate: jobDate?.trim() !== "" ? jobDate : undefined,
-    payed: incomingPayed !== undefined ? incomingPayed : undefined,
-    totalValue: totalValue !== undefined ? totalValue : undefined,
-  });
+  const jobWithoutId = { descr, jobDate, payed: incomingPayed, totalValue };
 
   const dbJob = await dao.editJob(
     { ...jobWithoutId, id: incomingJob.id },

@@ -9,7 +9,7 @@ import type { FormattedMaterial } from "../types.ts";
 
 const getExpectedMaterial = (material: {
   descr: string;
-  supplier: string;
+  supplier: string | null;
   qnt: number;
   unitaryVal: number;
 }) => {
@@ -28,7 +28,7 @@ describe("Material E2E", () => {
     const response = await userAgent
       .post(`/jobs/${jobId}/materials`)
       .send(material);
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toMatchObject(getExpectedMaterial(material));
   });
   it("should not create a material with invalid data", async () => {
@@ -40,6 +40,71 @@ describe("Material E2E", () => {
       qnt: -10, // invalid quantity
       unitaryVal: 100.0,
     });
+    expect(response.status).toBe(400);
+  });
+  it("persists a null supplier on create and edit", async () => {
+    const { userAgent, jobId } = await setupJob();
+    const createResponse = await userAgent
+      .post(`/jobs/${jobId}/materials`)
+      .send({ ...makeMaterial(), supplier: null });
+    const created = createResponse.body as { id: string; supplier: string | null };
+
+    expect(createResponse.status).toBe(201);
+    expect(created.supplier).toBeNull();
+
+    const editResponse = await userAgent
+      .patch(`/materials/${created.id}`)
+      .send({ supplier: "Updated Supplier" });
+    expect(editResponse.status).toBe(200);
+    expect((editResponse.body as { supplier: string | null }).supplier).toBe(
+      "Updated Supplier",
+    );
+    const clearResponse = await userAgent
+      .patch(`/materials/${created.id}`)
+      .send({ supplier: null });
+    expect(clearResponse.status).toBe(200);
+    expect((clearResponse.body as { supplier: string | null }).supplier).toBeNull();
+    const getResponse = await userAgent.get(`/jobs/${jobId}/materials`);
+    const materials = getResponse.body as {
+      materials: Array<{ supplier: string | null }>;
+    };
+    expect(materials.materials[0].supplier).toBeNull();
+  });
+  it.each(["descr", "qnt", "unitaryVal"])(
+    "rejects null required material field: %s",
+    async (field) => {
+      const { userAgent, jobId } = await setupJob();
+      const material = await createTestMaterial(userAgent, jobId);
+      const response = await userAgent
+        .patch(`/materials/${material.id}`)
+        .send({ [field]: null });
+
+      expect(response.status).toBe(400);
+      const getResponse = await userAgent.get(`/jobs/${jobId}/materials`);
+      const materials = getResponse.body as {
+        materials: unknown[];
+      };
+      expect(materials.materials[0]).toMatchObject(material);
+    },
+  );
+  it("rejects an unknown material field", async () => {
+    const { userAgent, jobId } = await setupJob();
+    const material = await createTestMaterial(userAgent, jobId);
+
+    const response = await userAgent
+      .patch(`/materials/${material.id}`)
+      .send({ descr: "Changed", unexpected: true });
+
+    expect(response.status).toBe(400);
+  });
+  it("rejects an empty material patch", async () => {
+    const { userAgent, jobId } = await setupJob();
+    const material = await createTestMaterial(userAgent, jobId);
+
+    const response = await userAgent
+      .patch(`/materials/${material.id}`)
+      .send({});
+
     expect(response.status).toBe(400);
   });
   it("should edit a material", async () => {

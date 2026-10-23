@@ -35,6 +35,25 @@ describe("Client Controller E2E", () => {
       message: "Client name is required",
     });
   });
+  it("persists a null client address", async () => {
+    const userAgent = await registerAndLogin();
+    const response = await userAgent.post("/clients").send({
+      ...makeClient(),
+      address: null,
+    });
+
+    expect(response.status).toBe(201);
+    expect((response.body as { address: string | null }).address).toBeNull();
+  });
+  it.each(["contact"])("rejects null required client field: %s", async (field) => {
+    const userAgent = await registerAndLogin();
+    const response = await userAgent.post("/clients").send({
+      ...makeClient(),
+      [field]: null,
+    });
+
+    expect(response.status).toBe(400);
+  });
 
   it("should delete a client successfully", async () => {
     const userAgent = await registerAndLogin();
@@ -58,6 +77,58 @@ describe("Client Controller E2E", () => {
       .send(updatedClient);
     expect(editResponse.status).toBe(200);
     expect(editResponse.body).toMatchObject(updatedClient);
+  });
+  it("rejects unknown fields and preserves the client", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+
+    const editResponse = await userAgent
+      .patch(`/clients/${client.id}`)
+      .send({ name: "Changed", id: client.id });
+
+    expect(editResponse.status).toBe(400);
+    const getResponse = await userAgent.get(`/clients/${client.id}`);
+    expect(getResponse.body).toMatchObject(client);
+  });
+  it("clears an optional address and returns the persisted client", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+
+    const editResponse = await userAgent
+      .patch(`/clients/${client.id}`)
+      .send({ address: null });
+    const getResponse = await userAgent.get(`/clients/${client.id}`);
+
+    expect(editResponse.status).toBe(200);
+    expect(editResponse.body).toEqual(getResponse.body);
+    expect((editResponse.body as { address: string | null }).address).toBeNull();
+  });
+  it("leaves omitted client fields unchanged", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+
+    const editResponse = await userAgent
+      .patch(`/clients/${client.id}`)
+      .send({ name: "Only Name Changed" });
+
+    expect(editResponse.status).toBe(200);
+    expect(editResponse.body).toMatchObject({
+      name: "Only Name Changed",
+      address: client.address,
+      contact: client.contact,
+    });
+  });
+  it("rejects clearing required client contact", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+
+    const response = await userAgent
+      .patch(`/clients/${client.id}`)
+      .send({ contact: null });
+
+    expect(response.status).toBe(400);
+    const getResponse = await userAgent.get(`/clients/${client.id}`);
+    expect(getResponse.body).toMatchObject(client);
   });
   it("should not edit another user's client", async () => {
     const userAgent = await registerAndLogin();

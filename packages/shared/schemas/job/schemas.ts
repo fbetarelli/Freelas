@@ -4,9 +4,11 @@ export const JobZodSchema = z.object({
   id: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
   jobDate: z
     .string({ error: "Job date is required" })
+    .trim()
     .min(1, "Job date is required"),
   descr: z
     .string({ error: "Job description is required" })
+    .trim()
     .min(1, "Job description is required"),
   payed: z.boolean({ error: "Job payed status is required" }),
   totalValue: z
@@ -18,7 +20,7 @@ export const JobZodSchema = z.object({
   userId: z
     .uuid({ error: "User ID is required" })
     .min(1, "User ID is required"),
-});
+}).strict();
 
 export const RegisterJobZodSchema = JobZodSchema.omit({
   id: true,
@@ -26,16 +28,11 @@ export const RegisterJobZodSchema = JobZodSchema.omit({
   userId: true,
 });
 
-export const EditJobZodSchema = z
-  .object(RegisterJobZodSchema.shape, {
-    error: (issue) => {
-      if (issue.input === undefined) {
-        return "At least one field is required for editing client";
-      }
-      return undefined; // Use Zod's default message otherwise
-    },
-  })
-  .partial();
+export const EditJobZodSchema = RegisterJobZodSchema.partial()
+  .strict()
+  .refine((value) => Object.keys(value).length > 0, {
+    message: "At least one field is required for editing job",
+  });
 
 export const GetJobZodSchema = JobZodSchema.pick({
   id: true,

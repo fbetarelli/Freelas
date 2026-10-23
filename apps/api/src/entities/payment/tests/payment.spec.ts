@@ -32,7 +32,7 @@ describe("Payment E2E", () => {
     const response = await userAgent
       .post(`/jobs/${jobId}/payments`)
       .send(payment);
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toMatchObject(getExpectedPayment(payment));
   });
   it("should not add payment with invalid data", async () => {
@@ -42,6 +42,37 @@ describe("Payment E2E", () => {
       description: 123, // Invalid type for description
       value: -100, // Invalid value (negative)
     });
+    expect(response.status).toBe(400);
+  });
+  it.each(["paymentDate", "method", "value", "installment"])(
+    "rejects null required payment field: %s",
+    async (field) => {
+      const { userAgent, jobId } = await setupJob();
+      const response = await userAgent
+        .post(`/jobs/${jobId}/payments`)
+        .send({ ...makePayment(), [field]: null });
+
+      expect(response.status).toBe(400);
+    },
+  );
+  it("rejects an unknown payment field", async () => {
+    const { userAgent, jobId } = await setupJob();
+    const payment = await createTestPayment(userAgent, jobId);
+
+    const response = await userAgent
+      .patch(`/payment/${payment.id}`)
+      .send({ method: "Changed", unexpected: true });
+
+    expect(response.status).toBe(400);
+  });
+  it("rejects an empty payment patch", async () => {
+    const { userAgent, jobId } = await setupJob();
+    const payment = await createTestPayment(userAgent, jobId);
+
+    const response = await userAgent
+      .patch(`/payment/${payment.id}`)
+      .send({});
+
     expect(response.status).toBe(400);
   });
   it("should edit a payment", async () => {
@@ -61,6 +92,23 @@ describe("Payment E2E", () => {
     expect(response.body).toMatchObject(getExpectedPayment(expected));
     expect(response.status).toBe(200);
   });
+  it.each(["paymentDate", "method", "value", "installment"])(
+    "rejects clearing required payment field: %s",
+    async (field) => {
+      const { userAgent, jobId } = await setupJob();
+      const payment = await createTestPayment(userAgent, jobId);
+      const response = await userAgent
+        .patch(`/payment/${payment.id}`)
+        .send({ [field]: null });
+
+      expect(response.status).toBe(400);
+      const getResponse = await userAgent.get(`/jobs/${jobId}/payments`);
+      const payments = getResponse.body as {
+        data: unknown[];
+      };
+      expect(payments.data[0]).toMatchObject(payment);
+    },
+  );
   it("should delete a payment", async () => {
     const { userAgent, jobId } = await setupJob();
     const { id: paymentId } = await createTestPayment(userAgent, jobId);

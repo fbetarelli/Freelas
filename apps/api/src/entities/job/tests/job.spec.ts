@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createTestClient,
   createTestJob,
+  makeJob,
   registerAndLogin,
 } from "../../../../tests/utils/setup-helpers.ts";
 import { formatValueToString } from "../../../utils/formatting-helpers.ts";
@@ -17,17 +18,11 @@ const getExpectedJob = (job: {
   jobDate: job.jobDate.split("-").reverse().join("/"),
   totalValue: formatValueToString(job.totalValue),
 });
-
 describe("Job E2E Tests", () => {
   it("should add a job", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
-    const jobData = {
-      descr: "Test Job",
-      jobDate: "2023-06-01",
-      payed: false,
-      totalValue: 100.0,
-    };
+    const jobData = makeJob();
     const response = await userAgent
       .post(`/clients/${client.id}/jobs`)
       .send(jobData);
@@ -37,17 +32,24 @@ describe("Job E2E Tests", () => {
   it("should not add a job with invalid data", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
-    const jobData = {
-      // descr: "Test Job", missing description
-      jobDate: "2023-06-01",
-      payed: false,
-      totalValue: 100.0,
-    };
+    const jobData = { ...makeJob(), descr: undefined };
     const response = await userAgent
       .post(`/clients/${client.id}/jobs`)
       .send(jobData);
     expect(response.status).toBe(400);
   });
+  it.each(["jobDate", "descr", "payed", "totalValue"])(
+    "rejects null required job field: %s",
+    async (field) => {
+      const userAgent = await registerAndLogin();
+      const client = await createTestClient(userAgent);
+      const response = await userAgent
+        .post(`/clients/${client.id}/jobs`)
+        .send({ ...makeJob(), [field]: null });
+
+      expect(response.status).toBe(400);
+    },
+  );
   it("should edit a job", async () => {
     const userAgent = await registerAndLogin();
     const client = await createTestClient(userAgent);
@@ -63,6 +65,41 @@ describe("Job E2E Tests", () => {
       .send(updatedJobData);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject(getExpectedJob(updatedJobData));
+  });
+  it.each(["jobDate", "descr", "payed", "totalValue"])(
+    "rejects clearing required job field: %s",
+    async (field) => {
+      const userAgent = await registerAndLogin();
+      const client = await createTestClient(userAgent);
+      const job = await createTestJob(userAgent, client.id);
+      const response = await userAgent
+        .patch(`/jobs/${job.id}`)
+        .send({ [field]: null });
+
+      expect(response.status).toBe(400);
+      const getResponse = await userAgent.get(`/jobs/${job.id}`);
+      expect(getResponse.body).toMatchObject(job);
+    },
+  );
+  it("rejects an unknown job field", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    const job = await createTestJob(userAgent, client.id);
+
+    const response = await userAgent
+      .patch(`/jobs/${job.id}`)
+      .send({ descr: "Changed", unexpected: true });
+
+    expect(response.status).toBe(400);
+  });
+  it("rejects an empty job patch", async () => {
+    const userAgent = await registerAndLogin();
+    const client = await createTestClient(userAgent);
+    const job = await createTestJob(userAgent, client.id);
+
+    const response = await userAgent.patch(`/jobs/${job.id}`).send({});
+
+    expect(response.status).toBe(400);
   });
   it("should get a job by its id", async () => {
     const userAgent = await registerAndLogin();
