@@ -8,7 +8,6 @@ import express from "express";
 import { validate } from "../../middlewares/zodValidate.ts";
 import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as ClientController from "./controller.ts";
-import { authorize } from "./middleware/authentication.ts";
 
 const router = express.Router();
 
@@ -25,7 +24,6 @@ export const clientRoutes = (app: express.Application) => {
     "/clients/:id",
     validate("params", GetClientZodSchema),
     authenticate,
-    authorize,
     ClientController.getClientById,
   );
   router.patch(
@@ -33,14 +31,12 @@ export const clientRoutes = (app: express.Application) => {
     validate("params", GetClientZodSchema),
     validate("body", EditClientZodSchema),
     authenticate,
-    authorize,
     ClientController.editClient,
   );
   router.delete(
     "/clients/:id",
     validate("params", GetClientZodSchema),
     authenticate,
-    authorize,
     ClientController.deleteClient,
   );
 

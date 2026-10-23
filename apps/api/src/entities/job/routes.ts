@@ -1,8 +1,6 @@
 import express from "express";
-import { authorize as clientAuthorize } from "../client/middleware/authentication.ts";
 import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as JobController from "./controller.ts";
-import { authorize } from "./middleware/authentication.ts";
 import { validate } from "../../middlewares/zodValidate.ts";
 import {
   EditJobZodSchema,
@@ -19,7 +17,6 @@ export const jobRoutes = (app: express.Application) => {
     "/clients/:id/jobs",
     validate("params", GetClientZodSchema),
     authenticate,
-    clientAuthorize,
     JobController.getByClient,
   );
   router.post(
@@ -27,7 +24,6 @@ export const jobRoutes = (app: express.Application) => {
     validate("params", GetClientZodSchema),
     validate("body", RegisterJobZodSchema),
     authenticate,
-    clientAuthorize,
     JobController.addJob,
   );
 
@@ -41,7 +37,6 @@ export const jobRoutes = (app: express.Application) => {
     "/jobs/:id",
     validate("params", GetJobZodSchema),
     authenticate,
-    authorize,
     JobController.getById,
   );
   router.patch(
@@ -49,14 +44,12 @@ export const jobRoutes = (app: express.Application) => {
     validate("params", GetJobZodSchema),
     validate("body", EditJobZodSchema),
     authenticate,
-    authorize,
     JobController.editJob,
   );
   router.delete(
     "/jobs/:id",
     validate("params", GetJobZodSchema),
     authenticate,
-    authorize,
     JobController.deleteJob,
   );
 };

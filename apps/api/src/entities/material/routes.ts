@@ -1,6 +1,4 @@
 import express from "express";
-import { authorizeMaterialOwner } from "../../middlewares/authorizeOwnerViaJob.ts";
-import { authorize } from "../job/middleware/authentication.ts";
 import { authenticate } from "../../features/auth/middlewares/authentication.ts";
 import * as MaterialController from "../material/controller.ts";
 import { validate } from "../../middlewares/zodValidate.ts";
@@ -19,14 +17,12 @@ export const materialRoutes = (app: express.Application) => {
     validate("params", GetJobZodSchema),
     validate("body", RegisterMaterialZodSchema),
     authenticate,
-    authorize,
     MaterialController.addMaterial,
   );
   router.get(
     "/jobs/:id/materials",
     validate("params", GetJobZodSchema),
     authenticate,
-    authorize,
     MaterialController.getMaterialsByJob,
   );
   router.patch(
@@ -34,14 +30,12 @@ export const materialRoutes = (app: express.Application) => {
     validate("params", GetMaterialZodSchema),
     validate("body", EditMaterialZodSchema),
     authenticate,
-    authorizeMaterialOwner,
     MaterialController.editMaterial,
   );
   router.delete(
     "/materials/:id",
     validate("params", GetMaterialZodSchema),
     authenticate,
-    authorizeMaterialOwner,
     MaterialController.deleteMaterial,
   );
 };
