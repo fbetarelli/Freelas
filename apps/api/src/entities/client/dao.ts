@@ -167,10 +167,10 @@ const daoQueries = {
   getClientListByPage: `
                         SELECT * FROM clients LEFT JOIN (SELECT clientId, MAX(jobDate) AS lastJobDate
                         FROM jobs
-                        GROUP BY clientId) AS latest_jobs ON clients.id = latest_jobs.clientid WHERE clients.userId = $1 AND (unaccent(name) ILIKE unaccent($2) OR $2 IS NULL) ORDER BY  latest_jobs.lastJobDate DESC NULLS FIRST LIMIT 10 OFFSET $3
+                        GROUP BY clientId) AS latest_jobs ON clients.id = latest_jobs.clientid WHERE clients.userId = $1 AND (unaccent(name) ILIKE unaccent($2) ESCAPE E'\\\\' OR $2 IS NULL) ORDER BY  latest_jobs.lastJobDate DESC NULLS FIRST LIMIT 10 OFFSET $3
                         `,
   getClientCount: `
-                       SELECT COUNT(*) AS count_cols FROM clients WHERE userId = $1 AND (unaccent(name) ILIKE unaccent($2) OR $2 IS NULL)    
+                       SELECT COUNT(*) AS count_cols FROM clients WHERE userId = $1 AND (unaccent(name) ILIKE unaccent($2) ESCAPE E'\\\\' OR $2 IS NULL)
              `,
   getClientById: `SELECT * FROM clients WHERE id=$1 AND userId=$2`,
 };

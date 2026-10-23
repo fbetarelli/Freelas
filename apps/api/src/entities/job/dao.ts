@@ -144,8 +144,8 @@ const daoQueries = {
   getJobCount: `SELECT COUNT(*) FROM jobs AS count
                         WHERE userId = $1 AND jobDate >= CURRENT_DATE - INTERVAL '1 month'`,
   getJobListCount: `SELECT COUNT(*) AS count_cols FROM jobs AS count
-                        WHERE userId = $1 AND (unaccent(descr) ILIKE unaccent($2) OR $2 IS NULL)`,
+                        WHERE userId = $1 AND (unaccent(descr) ILIKE unaccent($2) ESCAPE E'\\\\' OR $2 IS NULL)`,
   getJobListByPage: `
-                        SELECT * FROM jobs  WHERE userId = $1 AND (unaccent(descr) ILIKE unaccent($2) OR $2 IS NULL) ORDER BY  jobDate DESC NULLS FIRST LIMIT 10 OFFSET $3
+                        SELECT * FROM jobs  WHERE userId = $1 AND (unaccent(descr) ILIKE unaccent($2) ESCAPE E'\\\\' OR $2 IS NULL) ORDER BY  jobDate DESC NULLS FIRST LIMIT 10 OFFSET $3
                         `,
 };
