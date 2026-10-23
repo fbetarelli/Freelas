@@ -5,6 +5,7 @@
     "target": "es2023",
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    "incremental": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
