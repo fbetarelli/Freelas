@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { app } from "../../../../app.ts";
+import { app } from "../../../../../app.ts";
 import {
   createTestClient,
   createTestJob,
@@ -9,7 +9,7 @@ import {
   makeMaterial,
   makePayment,
   registerAndLogin,
-} from "../../../../tests/utils/setup-helpers.ts";
+} from "../../../../../tests/utils/setup-helpers.ts";
 import {
   buildPaths,
   malformedId,
@@ -17,7 +17,7 @@ import {
   ownershipRoutes,
   sendRequest,
 } from "./ownership-routes.ts";
-import { collectAppRoutes, routeKey } from "./route-helpers.ts";
+import { collectAppRoutes, routeKey } from "../support/route-helpers.ts";
 
 describe("cross-user authorization", () => {
   it("hides another user's client and preserves owner access", async () => {
@@ -27,12 +27,16 @@ describe("cross-user authorization", () => {
     const client = await createTestClient(owner);
 
     // Act and assert: user B sees the same not-found contract as a missing client.
-    await otherUser.patch(`/clients/${client.id}`).send({ name: "Changed" });
+    const foreignPatch = await otherUser
+      .patch(`/clients/${client.id}`)
+      .send({ name: "Changed" });
+    expect(foreignPatch.status).toBe(404);
     expect((await owner.get(`/clients/${client.id}`)).body).toMatchObject(
       client,
     );
 
-    await otherUser.delete(`/clients/${client.id}`);
+    const foreignDelete = await otherUser.delete(`/clients/${client.id}`);
+    expect(foreignDelete.status).toBe(404);
     expect((await owner.get(`/clients/${client.id}`)).body).toMatchObject(
       client,
     );
@@ -49,11 +53,20 @@ describe("cross-user authorization", () => {
     const job = await createTestJob(owner, client.id);
 
     // Act and assert: user B cannot read, mutate, delete, list, or create under it.
-    await otherUser
+    const foreignPatch = await otherUser
       .patch(`/jobs/${job.id}`)
       .send({ ...makeJob(), descr: "Changed" });
+    expect(foreignPatch.status).toBe(404);
     expect((await owner.get(`/jobs/${job.id}`)).body).toMatchObject(job);
     expect((await owner.get(`/jobs/${job.id}`)).status).toBe(200);
+
+    const foreignCreate = await otherUser
+      .post(`/clients/${client.id}/jobs`)
+      .send(makeJob());
+    expect(foreignCreate.status).toBe(404);
+    const ownerJobs = await owner.get(`/clients/${client.id}/jobs`);
+    expect(ownerJobs.status).toBe(200);
+    expect(ownerJobs.body).toMatchObject([job]);
   });
 
   it("hides another user's materials and nested material creation", async () => {
@@ -65,10 +78,22 @@ describe("cross-user authorization", () => {
     const material = await createTestMaterial(owner, job.id);
 
     // Act and assert: material access and creation remain scoped to the job owner.
-    await otherUser
+    const foreignPatch = await otherUser
       .patch(`/materials/${material.id}`)
       .send({ ...makeMaterial(), descr: "Changed" });
-    await otherUser.delete(`/materials/${material.id}`);
+    expect(foreignPatch.status).toBe(404);
+    const materialsAfterPatch = await owner.get(`/jobs/${job.id}/materials`);
+    expect(materialsAfterPatch).toMatchObject({ body: { materials: [material] } });
+
+    const foreignDelete = await otherUser.delete(`/materials/${material.id}`);
+    expect(foreignDelete.status).toBe(404);
+    const materialsAfterDelete = await owner.get(`/jobs/${job.id}/materials`);
+    expect(materialsAfterDelete).toMatchObject({ body: { materials: [material] } });
+
+    const foreignCreate = await otherUser
+      .post(`/jobs/${job.id}/materials`)
+      .send(makeMaterial());
+    expect(foreignCreate.status).toBe(404);
     const ownerMaterials = await owner.get(`/jobs/${job.id}/materials`);
     expect(ownerMaterials.status).toBe(200);
     expect(ownerMaterials).toMatchObject({
@@ -89,8 +114,22 @@ describe("cross-user authorization", () => {
     const payment = await createTestPayment(owner, job.id);
 
     // Act and assert: payment access and creation remain scoped to the job owner.
-    await otherUser.patch(`/payment/${payment.id}`).send(makePayment());
-    await otherUser.delete(`/payment/${payment.id}`);
+    const foreignPatch = await otherUser
+      .patch(`/payment/${payment.id}`)
+      .send(makePayment());
+    expect(foreignPatch.status).toBe(404);
+    const paymentsAfterPatch = await owner.get(`/jobs/${job.id}/payments`);
+    expect(paymentsAfterPatch).toMatchObject({ body: { data: [payment] } });
+
+    const foreignDelete = await otherUser.delete(`/payment/${payment.id}`);
+    expect(foreignDelete.status).toBe(404);
+    const paymentsAfterDelete = await owner.get(`/jobs/${job.id}/payments`);
+    expect(paymentsAfterDelete).toMatchObject({ body: { data: [payment] } });
+
+    const foreignCreate = await otherUser
+      .post(`/jobs/${job.id}/payments`)
+      .send(makePayment());
+    expect(foreignCreate.status).toBe(404);
     const ownerPayments = await owner.get(`/jobs/${job.id}/payments`);
     expect(ownerPayments.status).toBe(200);
     expect(ownerPayments).toMatchObject({

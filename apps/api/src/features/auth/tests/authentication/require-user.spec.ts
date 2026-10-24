@@ -1,9 +1,9 @@
 import express, { type Request } from "express";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import { errorHandler, UnauthorizedError } from "../../../entities/errors/errors.ts";
-import type { AccessTokenPayload } from "../types.ts";
-import { requireUser } from "../require-user.ts";
+import { errorHandler, UnauthorizedError } from "../../../../entities/errors/errors.ts";
+import type { AccessTokenPayload } from "../../types.ts";
+import { requireUser } from "../../require-user.ts";
 
 const payload: AccessTokenPayload = {
   id: "00000000-0000-0000-0000-000000000001",

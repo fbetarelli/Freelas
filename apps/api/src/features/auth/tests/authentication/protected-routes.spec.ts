@@ -1,11 +1,11 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import { app } from "../../../../app.ts";
+import { app } from "../../../../../app.ts";
 import {
   collectAppRoutes,
   routeKey,
   type RouteRow as CollectedRouteRow,
-} from "./route-helpers.ts";
+} from "../support/route-helpers.ts";
 
 // This table proves no route serves a request without a cookie; it does not prove every route has authenticate in its chain, because requireUser also returns 401.
 
