@@ -3,7 +3,7 @@ import {
   makeMaterial,
   makePayment,
   registerAndLogin,
-} from "../../../../tests/utils/setup-helpers.ts";
+} from "../../../../../tests/utils/setup-helpers.ts";
 
 export const nonexistentId = "123e4567-e89b-42d3-a456-426614174000";
 export const malformedId = "not-a-uuid";

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { ClientDAO } from "../../../entities/client/dao.ts";
-import { JobDAO } from "../../../entities/job/dao.ts";
-import { MaterialDAO } from "../../../entities/material/dao.ts";
-import { PaymentDAO } from "../../../entities/payment/dao.ts";
+import { ClientDAO } from "../../../../entities/client/dao.ts";
+import { JobDAO } from "../../../../entities/job/dao.ts";
+import { MaterialDAO } from "../../../../entities/material/dao.ts";
+import { PaymentDAO } from "../../../../entities/payment/dao.ts";
 import {
   createTestClient,
   createTestJob,
   createTestMaterial,
   createTestPayment,
   registerAndLogin,
-} from "../../../../tests/utils/setup-helpers.ts";
+} from "../../../../../tests/utils/setup-helpers.ts";
 
 const getUserId = async (
   agent: Awaited<ReturnType<typeof registerAndLogin>>,
@@ -43,7 +43,8 @@ describe("ownership-aware DAOs", () => {
     ).toBeNull();
     expect(await dao.deleteClient(client.id, otherUserId)).toBe(false);
     // Assert: the owner can still read the client.
-    expect((await dao.getClientById(client.id, ownerId))?.id).toBe(client.id);
+    const ownerClient = await dao.getClientById(client.id, ownerId);
+    expect(ownerClient).toMatchObject({ id: client.id, name: client.name });
   });
 
   it("scopes job reads, edits, and deletes to the owner", async () => {
@@ -62,7 +63,10 @@ describe("ownership-aware DAOs", () => {
       await dao.editJob({ id: job.id, descr: "Other" }, otherUserId),
     ).toBeNull();
     expect(await dao.deleteJob(job.id, otherUserId)).toBe(false);
-    expect((await dao.getJobById(job.id, ownerId))?.id).toBe(job.id);
+    expect(await dao.getJobById(job.id, ownerId)).toMatchObject({
+      id: job.id,
+      descr: job.descr,
+    });
     expect(await dao.getJobsByClient(client.id, ownerId)).not.toBeNull();
     expect(await dao.getJobsByClient(client.id, otherUserId)).toBeNull();
   });
@@ -84,12 +88,16 @@ describe("ownership-aware DAOs", () => {
         userId,
       }),
     ).toBeNull();
+    expect(await dao.getJobsByClient(client.id, await getUserId(owner))).toEqual(
+      [],
+    );
   });
 
   it("scopes material reads, edits, deletes, and creation to the job owner", async () => {
     // Arrange: create a material under user A's job.
     const owner = await registerAndLogin();
     const otherUser = await registerAndLogin();
+    const ownerId = await getUserId(owner);
     const otherUserId = await getUserId(otherUser);
     const client = await createTestClient(owner);
     const job = await createTestJob(owner, client.id);
@@ -114,12 +122,17 @@ describe("ownership-aware DAOs", () => {
         otherUserId,
       ),
     ).toBeNull();
+    const ownerMaterials = await dao.getMaterialsByJob(job.id, ownerId);
+    expect(ownerMaterials).toMatchObject([
+      { id: material.id, descr: material.descr },
+    ]);
   });
 
   it("scopes payment reads, edits, deletes, and creation to the job owner", async () => {
     // Arrange: create a payment under user A's job.
     const owner = await registerAndLogin();
     const otherUser = await registerAndLogin();
+    const ownerId = await getUserId(owner);
     const otherUserId = await getUserId(otherUser);
     const client = await createTestClient(owner);
     const job = await createTestJob(owner, client.id);
@@ -144,5 +157,9 @@ describe("ownership-aware DAOs", () => {
         otherUserId,
       ),
     ).toBeNull();
+    const ownerPayments = await dao.getPaymentsByJob(job.id, ownerId);
+    expect(ownerPayments).toMatchObject([
+      { id: payment.id, method: payment.method },
+    ]);
   });
 });
