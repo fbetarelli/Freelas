@@ -1,10 +1,5 @@
-# plans 
-docs/plans
-
 # Agents
-docs/ai
-.github/agents
-.github/skills
+.agents/plans
 
 # Logs
 logs
