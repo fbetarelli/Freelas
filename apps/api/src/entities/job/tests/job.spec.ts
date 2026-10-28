@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  JobArrayResponseZodSchema,
+  JobListResponseZodSchema,
+  JobResponseZodSchema,
+} from "@freelancemanager/shared";
+import {
   createTestClient,
   createTestJob,
   makeJob,
@@ -27,6 +32,7 @@ describe("Job E2E Tests", () => {
       .post(`/clients/${client.id}/jobs`)
       .send(jobData);
     expect(response.status).toBe(201);
+    JobResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject(getExpectedJob(jobData));
   });
   it("preserves decimal money values on create and edit", async () => {
@@ -82,6 +88,7 @@ describe("Job E2E Tests", () => {
       .patch(`/jobs/${job.id}`)
       .send(updatedJobData);
     expect(response.status).toBe(200);
+    JobResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject(getExpectedJob(updatedJobData));
   });
   it.each(["jobDate", "descr", "payed", "totalValue"])(
@@ -125,6 +132,7 @@ describe("Job E2E Tests", () => {
     const job = await createTestJob(userAgent, client.id);
     const response = await userAgent.get(`/jobs/${job.id}`);
     expect(response.status).toBe(200);
+    JobResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject(job);
   });
   it("should not get a job with an invalid id", async () => {
@@ -147,6 +155,7 @@ describe("Job E2E Tests", () => {
     const job = await createTestJob(userAgent, client.id);
     const response = await userAgent.get(`/clients/${client.id}/jobs`);
     expect(response.status).toBe(200);
+    JobArrayResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject([job]);
   });
   it("should not get jobs by client ID with an invalid client ID", async () => {
@@ -164,6 +173,7 @@ describe("Job E2E Tests", () => {
     const j2 = await createTestJob(userAgent, c2.id);
     const response = await userAgent.get(`/jobs`);
     expect(response.status).toBe(200);
+    JobListResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject({ jobs: [j1, j2], totalPages: 1 });
   });
   it("should not get all jobs from page 1 with invalid query parameters", async () => {

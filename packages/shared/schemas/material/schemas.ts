@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { moneySchema } from "../misc/schemas.ts";
+import { formattedMoneySchema, moneySchema } from "../misc/schemas.ts";
 export const MaterialZodSchema = z.object({
   id: z.uuid({ error: "ID is required" }).min(1, "ID is required"),
   descr: z
@@ -18,6 +18,26 @@ export const MaterialZodSchema = z.object({
   unitaryVal: moneySchema,
   jobId: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
 }).strict();
+
+export const MaterialResponseZodSchema = z
+  .object({
+    id: z.uuid(),
+    descr: z.string(),
+    supplier: z.string().nullable(),
+    qnt: z.number().positive(),
+    unitaryVal: formattedMoneySchema,
+    totalVal: formattedMoneySchema,
+    jobId: z.uuid(),
+  })
+  .strict()
+  .meta({ id: "MaterialResponse" });
+
+export const MaterialListResponseZodSchema = z.object({
+  materials: z.array(MaterialResponseZodSchema),
+  totalValue: z.number().nonnegative(),
+})
+  .strict()
+  .meta({ id: "MaterialListResponse" });
 
 export const RegisterMaterialZodSchema = MaterialZodSchema.omit({
   id: true,
@@ -44,6 +64,8 @@ export const EditMaterialZodSchema = z
   });
 
 
-  export type RegisterMaterial = z.infer<typeof RegisterMaterialZodSchema>;
+export type RegisterMaterial = z.infer<typeof RegisterMaterialZodSchema>;
+export type MaterialResponse = z.infer<typeof MaterialResponseZodSchema>;
+export type MaterialListResponse = z.infer<typeof MaterialListResponseZodSchema>;
 export type EditMaterial = z.infer<typeof EditMaterialZodSchema>;
 export type GetMaterial = z.infer<typeof GetMaterialZodSchema>;

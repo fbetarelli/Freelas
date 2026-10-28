@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  MaterialListResponseZodSchema,
+  MaterialResponseZodSchema,
+} from "@freelancemanager/shared";
+import {
   createTestMaterial,
   makeMaterial,
   setupJob,
@@ -29,6 +33,7 @@ describe("Material E2E", () => {
       .post(`/jobs/${jobId}/materials`)
       .send(material);
     expect(response.status).toBe(201);
+    MaterialResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject(getExpectedMaterial(material));
   });
   it("should not create a material with invalid data", async () => {
@@ -56,6 +61,7 @@ describe("Material E2E", () => {
       .patch(`/materials/${created.id}`)
       .send({ supplier: "Updated Supplier" });
     expect(editResponse.status).toBe(200);
+    MaterialResponseZodSchema.parse(editResponse.body);
     expect((editResponse.body as { supplier: string | null }).supplier).toBe(
       "Updated Supplier",
     );
@@ -155,6 +161,7 @@ describe("Material E2E", () => {
     const response = await userAgent.get(`/jobs/${jobId}/materials`);
     const responseBody = response.body as { materials: FormattedMaterial[] };
     expect(response.status).toBe(200);
+    MaterialListResponseZodSchema.parse(response.body);
     expect(responseBody.materials).toHaveLength(3);
   });
   it("calculates material totals in SQL without floating-point drift", async () => {

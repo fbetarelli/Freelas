@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  PaymentListResponseZodSchema,
+  PaymentResponseZodSchema,
+} from "@freelancemanager/shared";
+import {
   createTestPayment,
   makePayment,
   setupJob,
@@ -33,6 +37,7 @@ describe("Payment E2E", () => {
       .post(`/jobs/${jobId}/payments`)
       .send(payment);
     expect(response.status).toBe(201);
+    PaymentResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject(getExpectedPayment(payment));
   });
   it("should not add payment with invalid data", async () => {
@@ -91,6 +96,7 @@ describe("Payment E2E", () => {
       .send(expected);
     expect(response.body).toMatchObject(getExpectedPayment(expected));
     expect(response.status).toBe(200);
+    PaymentResponseZodSchema.parse(response.body);
   });
   it.each(["paymentDate", "method", "value", "installment"])(
     "rejects clearing required payment field: %s",
@@ -130,6 +136,7 @@ describe("Payment E2E", () => {
     const expected = getExpectedPayment(payment);
 
     expect(response.status).toBe(200);
+    PaymentListResponseZodSchema.parse(response.body);
     expect(body.data).toHaveLength(3);
     expect(body.data[0]).toMatchObject(expected);
   });

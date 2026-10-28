@@ -52,7 +52,8 @@ Shell on the dev machine is Windows PowerShell: chain commands with `;`, not `&&
 - User logins are case-sensitive and unique, with both a service pre-check and a database unique index.
 - Money columns use `numeric(12,2)` and are converted from PostgreSQL strings at DAO mapper boundaries.
 - Money inputs are finite, positive, at most `99999.99`, and limited to two decimal places.
-- Job and payment dates are strict `YYYY-MM-DD` calendar-date strings. PostgreSQL date columns use the raw string parser.
+- Job and payment request dates are strict `YYYY-MM-DD` calendar-date strings. PostgreSQL date columns use the raw string parser.
+- Job, material and payment responses format money as `pt-BR` strings; job and payment responses format dates as `DD/MM/YYYY`. Dashboard profit is a signed `pt-BR` money string. Response schemas describe these serialized values, not their request or database representations.
 - Search patterns escape `\`, `%`, and `_`, and the query uses `ILIKE ... ESCAPE` with a single backslash character (details in `.agents/docs/api/database.md`).
 - `clients.address` and `materials.supplier` may be `null`; other required entity fields may not be
   `null`. Omitted optional edit fields remain unchanged, while explicit `null` clears only nullable

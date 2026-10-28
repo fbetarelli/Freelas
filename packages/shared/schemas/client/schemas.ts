@@ -22,6 +22,22 @@ export const ClientZodSchema = z.object({
     .min(1, "User ID is required"),
 }).strict();
 
+export const ClientResponseZodSchema = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    address: z.string().nullable(),
+    contact: z.string(),
+    userId: z.uuid(),
+  })
+  .strict()
+  .meta({ id: "ClientResponse" });
+
+export const ClientListResponseZodSchema = z.object({
+  totalPages: z.number().int().positive(),
+  clients: z.array(ClientResponseZodSchema),
+}).strict().meta({ id: "ClientListResponse" });
+
 export const RegisterClientZodSchema = ClientZodSchema.omit({
   id: true,
   userId: true,
@@ -36,6 +52,8 @@ export const GetClientZodSchema = ClientZodSchema.pick({
 });
 
 export type Client = z.infer<typeof ClientZodSchema>;
+export type ClientResponse = z.infer<typeof ClientResponseZodSchema>;
+export type ClientListResponse = z.infer<typeof ClientListResponseZodSchema>;
 export type RegisterClient = z.infer<typeof RegisterClientZodSchema>;
 export type EditClient = z.infer<typeof EditClientZodSchema>;
 export type GetClient = z.infer<typeof GetClientZodSchema>;

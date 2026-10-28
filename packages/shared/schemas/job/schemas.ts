@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { dateSchema, moneySchema } from "../misc/schemas.ts";
+import {
+  dateSchema,
+  formattedDateSchema,
+  formattedMoneySchema,
+  moneySchema,
+} from "../misc/schemas.ts";
 
 export const JobZodSchema = z.object({
   id: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
@@ -17,6 +22,30 @@ export const JobZodSchema = z.object({
     .uuid({ error: "User ID is required" })
     .min(1, "User ID is required"),
 }).strict();
+
+export const JobResponseZodSchema = z
+  .object({
+    id: z.uuid(),
+    jobDate: formattedDateSchema,
+    descr: z.string(),
+    payed: z.enum(["Pagamento Realizado", "Aguardando Pagamento"]),
+    totalValue: formattedMoneySchema,
+    clientId: z.uuid(),
+    userId: z.uuid(),
+  })
+  .strict()
+  .meta({ id: "JobResponse" });
+
+export const JobArrayResponseZodSchema = z
+  .array(JobResponseZodSchema)
+  .meta({ id: "JobArrayResponse" });
+
+export const JobListResponseZodSchema = z.object({
+  totalPages: z.number().int().positive(),
+  jobs: z.array(JobResponseZodSchema),
+})
+  .strict()
+  .meta({ id: "JobListResponse" });
 
 export const RegisterJobZodSchema = JobZodSchema.omit({
   id: true,
@@ -36,5 +65,8 @@ export const GetJobZodSchema = JobZodSchema.pick({
 
 
 export type RegisterJob = z.infer<typeof RegisterJobZodSchema>;
+export type JobResponse = z.infer<typeof JobResponseZodSchema>;
+export type JobArrayResponse = z.infer<typeof JobArrayResponseZodSchema>;
+export type JobListResponse = z.infer<typeof JobListResponseZodSchema>;
 export type EditJob = z.infer<typeof EditJobZodSchema>;
 export type GetJob = z.infer<typeof GetJobZodSchema>;
