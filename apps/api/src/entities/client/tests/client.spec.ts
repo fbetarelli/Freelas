@@ -1,5 +1,9 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
+import {
+  ClientListResponseZodSchema,
+  ClientResponseZodSchema,
+} from "@freelancemanager/shared";
 import { app } from "../../../../app.ts";
 import {
   createTestClient,
@@ -21,6 +25,7 @@ describe("Client Controller E2E", () => {
     const client = makeClient();
     const clientResponse = await userAgent.post("/clients").send(client);
     expect(clientResponse.status).toBe(201);
+    ClientResponseZodSchema.parse(clientResponse.body);
     expect(clientResponse.body).toMatchObject(client);
   });
   it("should not add a new client without required fields", async () => {
@@ -76,6 +81,7 @@ describe("Client Controller E2E", () => {
       .patch(`/clients/${response.id}`)
       .send(updatedClient);
     expect(editResponse.status).toBe(200);
+    ClientResponseZodSchema.parse(editResponse.body);
     expect(editResponse.body).toMatchObject(updatedClient);
   });
   it("rejects unknown fields and preserves the client", async () => {
@@ -168,6 +174,7 @@ describe("Client Controller E2E", () => {
 
     const getResponse = await userAgent.get(`/clients/${client.id}`);
     expect(getResponse.status).toBe(200);
+    ClientResponseZodSchema.parse(getResponse.body);
     expect(getResponse.body).toMatchObject(client);
   });
   it("should not get client with non uuid parameter", async () => {
@@ -188,8 +195,8 @@ describe("Client Controller E2E", () => {
     };
 
     const getResponse = await userAgent.get(`/clients`);
-    expect(getResponse.body).toMatchObject(expected);
     expect(getResponse.status).toBe(200);
+    expect(ClientListResponseZodSchema.parse(getResponse.body)).toEqual(expected);
   });
   it.each([
     ["ordinary", "Ordinary Search Client"],

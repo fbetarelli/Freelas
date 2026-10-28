@@ -1,129 +1,177 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 import { app } from "../../../../../app.ts";
+import { generateOpenApiDocument } from "../../../../../docs/openapi/index.ts";
 import {
   collectAppRoutes,
   routeKey,
-  type RouteRow as CollectedRouteRow,
+  type RouteRow,
 } from "../support/route-helpers.ts";
 
-// This table proves no route serves a request without a cookie; it does not prove every route has authenticate in its chain, because requireUser also returns 401.
+// This proves no route serves a request without a cookie; it does not prove every route has authenticate in its chain, because requireUser also returns 401.
 
 const id = "123e4567-e89b-42d3-a456-426614174000";
-
-const validClient = {
-  name: "valid name",
-  address: "valid address",
-  contact: "valid contact",
-};
-const validJob = {
-  jobDate: "2026-01-01",
-  descr: "valid description",
-  payed: false,
-  totalValue: 100,
-};
-const validMaterial = {
-  descr: "valid description",
-  supplier: "valid supplier",
-  qnt: 1,
-  unitaryVal: 10,
-};
-const validPayment = {
-  method: "cash",
-  paymentDate: "2026-01-01",
-  value: 10,
-  installment: 1,
-};
-const validUserEdit = {
-  username: "valid username",
-};
-
-type Method = "GET" | "POST" | "PATCH" | "DELETE";
-type RequestMethod = "get" | "post" | "patch" | "delete";
-type RouteRow = {
+const methods = ["get", "post", "patch", "delete"] as const;
+type Method = (typeof methods)[number];
+type Operation = NonNullable<
+  ReturnType<typeof generateOpenApiDocument>["paths"]
+>[string][Method];
+type OperationCase = {
   method: Method;
   path: string;
-  body?: object;
+  operation: NonNullable<Operation>;
 };
 
-const protectedRoutes: RouteRow[] = [
-  { method: "GET", path: "/me" },
-  { method: "PATCH", path: "/edit-user", body: validUserEdit },
-  { method: "POST", path: "/clients", body: validClient },
-  { method: "GET", path: "/clients/:id" },
-  { method: "PATCH", path: "/clients/:id", body: validClient },
-  { method: "DELETE", path: "/clients/:id" },
-  { method: "GET", path: "/clients" },
-  { method: "GET", path: "/clients/:id/jobs" },
-  { method: "POST", path: "/clients/:id/jobs", body: validJob },
-  { method: "GET", path: "/jobs" },
-  { method: "GET", path: "/jobs/:id" },
-  { method: "PATCH", path: "/jobs/:id", body: validJob },
-  { method: "DELETE", path: "/jobs/:id" },
-  { method: "POST", path: "/jobs/:id/materials", body: validMaterial },
-  { method: "GET", path: "/jobs/:id/materials" },
-  { method: "PATCH", path: "/materials/:id", body: validMaterial },
-  { method: "DELETE", path: "/materials/:id" },
-  { method: "GET", path: "/jobs/:id/payments" },
-  { method: "POST", path: "/jobs/:id/payments", body: validPayment },
-  { method: "PATCH", path: "/payment/:id", body: validPayment },
-  { method: "DELETE", path: "/payment/:id" },
-  { method: "GET", path: "/dashboard" },
-];
+const document = generateOpenApiDocument();
 
-const publicRoutes: RouteRow[] = [
-  { method: "POST", path: "/login" },
-  { method: "POST", path: "/register" },
-  { method: "POST", path: "/logout" },
-];
+const requestMethods = {
+  get: (path: string) => request(app).get(path),
+  post: (path: string) => request(app).post(path),
+  patch: (path: string) => request(app).patch(path),
+  delete: (path: string) => request(app).delete(path),
+};
+
+function collectDocumentOperations(): OperationCase[] {
+  return Object.entries(document.paths ?? {}).flatMap(([path, pathItem]) =>
+    methods.flatMap((method) => {
+      const operation = pathItem?.[method];
+      return operation ? [{ method, path, operation }] : [];
+    }),
+  );
+}
+
+function operationRequestBody(operation: NonNullable<Operation>) {
+  const requestBody: unknown = operation.requestBody;
+  if (!isRecord(requestBody) || !isRecord(requestBody.content)) return undefined;
+
+  const jsonContent = requestBody.content["application/json"];
+  if (!isRecord(jsonContent) || !isRecord(jsonContent.example)) return undefined;
+
+  return jsonContent.example;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
 
 function concretePath(path: string) {
-  return path.replace(/:[^/]+/g, id);
+  return path.replace(/\{[^}]+\}/g, id);
 }
 
-function makeRequest(method: Method, path: string, body?: object) {
-  const requestMethods: Record<Method, RequestMethod> = {
-    GET: "get",
-    POST: "post",
-    PATCH: "patch",
-    DELETE: "delete",
-  } as const;
-
-  return request(app)[requestMethods[method]](concretePath(path)).send(body);
+function normalizePath(path: string) {
+  return path.replace(/:([^/]+)/g, "{$1}");
 }
+
+function normalizedRouteKey(route: RouteRow) {
+  return routeKey({ ...route, path: normalizePath(route.path) });
+}
+
+function routeCoverageIssues(
+  registeredRoutes: RouteRow[],
+  documentedRoutes: RouteRow[],
+) {
+  const registeredKeys = registeredRoutes.map(normalizedRouteKey);
+  const documentedKeys = documentedRoutes.map(normalizedRouteKey);
+  const issues: string[] = [];
+
+  for (const key of new Set(registeredKeys)) {
+    if (registeredKeys.filter((candidate) => candidate === key).length > 1) {
+      issues.push(`duplicate Express route: ${key}`);
+    }
+  }
+  for (const key of new Set(documentedKeys)) {
+    if (documentedKeys.filter((candidate) => candidate === key).length > 1) {
+      issues.push(`duplicate OpenAPI operation: ${key}`);
+    }
+  }
+
+  for (const key of registeredKeys) {
+    if (!documentedKeys.includes(key)) {
+      issues.push(`missing from OpenAPI: ${key}`);
+    }
+  }
+  for (const key of documentedKeys) {
+    if (!registeredKeys.includes(key)) {
+      issues.push(`missing from Express app: ${key}`);
+    }
+  }
+
+  return issues;
+}
+
+function expectCompleteRouteCoverage(
+  registeredRoutes: RouteRow[],
+  documentedRoutes: RouteRow[],
+) {
+  const issues = routeCoverageIssues(registeredRoutes, documentedRoutes);
+  if (issues.length > 0) {
+    throw new Error(issues.join("\n"));
+  }
+}
+
+const operations = collectDocumentOperations();
+const protectedOperations = operations.filter(({ operation }) => {
+  const security = operation.security ?? document.security;
+  return Boolean(security?.length);
+});
+const publicOperations = operations.filter(
+  ({ operation }) => operation.security?.length === 0,
+);
 
 describe("protected routes", () => {
-  it.each(protectedRoutes)(
+  it.each(protectedOperations)(
     "$method $path returns 401 without a cookie",
-    async (route) => {
-      const response = await makeRequest(route.method, route.path, route.body);
+    async ({ method, path, operation }) => {
+      const body = operationRequestBody(operation);
+      const apiRequest = requestMethods[method](concretePath(path));
+      const response = body === undefined ? await apiRequest : await apiRequest.send(body);
 
       expect(response.status).toBe(401);
     },
   );
 
-  it.each(publicRoutes)("$method $path is not protected", async (route) => {
-    const response = await makeRequest(route.method, route.path);
+  it.each(publicOperations)(
+    "$method $path is not protected",
+    async ({ method, path }) => {
+      const response = await requestMethods[method](concretePath(path));
 
-    expect(response.status).not.toBe(401);
+      expect(response.status).not.toBe(401);
+    },
+  );
+
+  it("documents every registered route exactly once", () => {
+    const registeredRoutes = collectAppRoutes(app);
+    const documentedRoutes = operations.map(({ method, path }) => ({
+      method: method.toUpperCase(),
+      path,
+    }));
+
+    expectCompleteRouteCoverage(registeredRoutes, documentedRoutes);
   });
 
-  it("classifies every registered route exactly once", () => {
-    const registeredRoutes: CollectedRouteRow[] = collectAppRoutes(app);
-    const classifiedRoutes = [...protectedRoutes, ...publicRoutes];
-    const registeredKeys = new Set(registeredRoutes.map(routeKey));
-    const classifiedKeys = new Set(classifiedRoutes.map(routeKey));
+  it("names a route removed from the OpenAPI registry", () => {
+    const route = { method: "GET", path: "/me" };
+    const documentedRoutes = operations
+      .filter(({ method, path }) => !(method === "get" && path === route.path))
+      .map(({ method, path }) => ({ method: method.toUpperCase(), path }));
 
-    expect(
-      registeredRoutes
-        .filter((route) => !classifiedKeys.has(routeKey(route)))
-        .map(routeKey),
-    ).toEqual([]);
-    expect(
-      classifiedRoutes
-        .filter((route) => !registeredKeys.has(routeKey(route)))
-        .map(routeKey),
-    ).toEqual([]);
-    expect(classifiedKeys.size).toBe(classifiedRoutes.length);
+    expect(routeCoverageIssues(collectAppRoutes(app), documentedRoutes)).toContain(
+      `missing from OpenAPI: ${routeKey(route)}`,
+    );
+  });
+
+  it("names an Express route missing from the app", () => {
+    const route = { method: "GET", path: "/me" };
+    const registeredRoutes = collectAppRoutes(app).filter(
+      (candidate) => normalizedRouteKey(candidate) !== normalizedRouteKey(route),
+    );
+    const documentedRoutes = operations.map(({ method, path }) => ({
+      method: method.toUpperCase(),
+      path,
+    }));
+
+    expect(routeCoverageIssues(registeredRoutes, documentedRoutes)).toContain(
+      `missing from Express app: ${routeKey(route)}`,
+    );
   });
 });

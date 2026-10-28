@@ -6,6 +6,10 @@ import bcrypt from "bcrypt";
 import { registerAndLogin } from "../../../../tests/utils/setup-helpers.ts";
 import * as jwt from "jsonwebtoken";
 import { getAuthConfig } from "../../../features/auth/config.ts";
+import {
+  LogoutResponseZodSchema,
+  UserResponseZodSchema,
+} from "@freelancemanager/shared";
 const dao = new UserDAO();
 
 describe("User Authentication E2E", () => {
@@ -29,6 +33,7 @@ describe("User Authentication E2E", () => {
       password: "123",
     });
     expect(response.status).toBe(201);
+    UserResponseZodSchema.parse(response.body);
     expect(response.body).toHaveProperty("login");
   });
 
@@ -114,6 +119,7 @@ describe("User Authentication E2E", () => {
 
   it("should logout successfully", async () => {
     const response = await agent.post("/logout");
+    LogoutResponseZodSchema.parse(response.text);
     expect(response.status).toBe(200);
   });
 
@@ -128,6 +134,7 @@ describe("User Authentication E2E", () => {
       login: "a@a.com",
       password: "123",
     });
+    UserResponseZodSchema.parse(response.body);
     expect(response.body).toHaveProperty("login");
     expect(response.status).toBe(200);
   });
@@ -153,6 +160,7 @@ describe("User Authentication E2E", () => {
     const userAgent = await registerAndLogin();
     const response = await userAgent.get("/me");
     expect(response.status).toBe(200);
+    UserResponseZodSchema.parse(response.body);
     expect(response.body).toHaveProperty("id");
   });
   it("should return 401 in /me if not authenticated", async () => {
@@ -282,6 +290,7 @@ describe("User Authentication E2E", () => {
       password: "456",
     });
     expect(response.status).toBe(200);
+    UserResponseZodSchema.parse(response.body);
     expect(response.body).toMatchObject({
       login: "b@b.com",
       username: "Updated User",
