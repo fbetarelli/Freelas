@@ -12,6 +12,12 @@ export const UserZodSchema = z.object({
     .min(3, "Password must be at least 3 characters long"),
 }).strict();
 
+export const UserResponseZodSchema = UserZodSchema
+  .omit({ hashPassword: true })
+  .meta({ id: "UserResponse" });
+
+export const LogoutResponseZodSchema = z.literal("OK").meta({ id: "LogoutResponse" });
+
 export const RegisterUserZodSchema = z.object({
   username: z
     .string({ error: "Username is required" })
@@ -47,6 +53,7 @@ export const EditUserZodSchema = z
   });
 
 export type User = z.infer<typeof UserZodSchema>;
+export type UserResponse = z.infer<typeof UserResponseZodSchema>;
 export type RegisterUser = z.infer<typeof RegisterUserZodSchema>;
 export type EditUser = z.infer<typeof EditUserZodSchema>;
 export type LoginUser = z.infer<typeof LoginUserZodSchema>;

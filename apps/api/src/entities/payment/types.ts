@@ -1,3 +1,5 @@
+import type { PaymentResponse } from "@freelancemanager/shared";
+
 export interface Payment {
   id: string;
   method: string;
@@ -7,6 +9,4 @@ export interface Payment {
   jobId: string;
 }
 
-export interface FormattedPayment extends Omit<Payment, "value"> {
-  value: string;
-}
+export type FormattedPayment = PaymentResponse;

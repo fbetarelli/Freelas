@@ -30,6 +30,10 @@ export const dateSchema = z
     );
   }, "Date must be a valid calendar date");
 
+export const formattedDateSchema = z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/);
+
+export const formattedMoneySchema = z.string().regex(/^-?\d{1,3}(?:\.\d{3})*,\d{2}$/);
+
 export const PaginatedSearchZodSchema = z.object({
   page: z.number().int().positive().optional(),
   search: z.string().optional(),

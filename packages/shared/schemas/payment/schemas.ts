@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { dateSchema, moneySchema } from "../misc/schemas.ts";
+import {
+  dateSchema,
+  formattedDateSchema,
+  formattedMoneySchema,
+  moneySchema,
+} from "../misc/schemas.ts";
 export const PaymentZodSchema = z.object({
   id: z
     .uuid({ error: "Payment ID is required" })
@@ -15,6 +20,25 @@ export const PaymentZodSchema = z.object({
     .positive("Installment must be a positive number"),
   jobId: z.uuid({ error: "Job ID is required" }).min(1, "Job ID is required"),
 }).strict();
+
+export const PaymentResponseZodSchema = z
+  .object({
+    id: z.uuid(),
+    method: z.string(),
+    paymentDate: formattedDateSchema,
+    value: formattedMoneySchema,
+    installment: z.number().positive(),
+    jobId: z.uuid(),
+  })
+  .strict()
+  .meta({ id: "PaymentResponse" });
+
+export const PaymentListResponseZodSchema = z.object({
+  data: z.array(PaymentResponseZodSchema),
+  totalValue: z.number().nonnegative(),
+})
+  .strict()
+  .meta({ id: "PaymentListResponse" });
 
 export const RegisterPaymentZodSchema = PaymentZodSchema.omit({
   id: true,
@@ -41,5 +65,7 @@ export const GetPaymentZodSchema = PaymentZodSchema.pick({
 });
 
 export type RegisterPayment = z.infer<typeof RegisterPaymentZodSchema>;
+export type PaymentResponse = z.infer<typeof PaymentResponseZodSchema>;
+export type PaymentListResponse = z.infer<typeof PaymentListResponseZodSchema>;
 export type EditPayment = z.infer<typeof EditPaymentZodSchema>;
 export type GetPayment = z.infer<typeof GetPaymentZodSchema>;

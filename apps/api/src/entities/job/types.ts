@@ -1,4 +1,4 @@
-import type { JobZodSchema } from "@freelancemanager/shared";
+import type { JobResponse, JobZodSchema } from "@freelancemanager/shared";
 import type z from "zod";
 
 export type Job = z.infer<typeof JobZodSchema>;
@@ -13,7 +13,4 @@ export interface JobQueryResult extends Omit<
   userid: string;
 }
 
-export type FormattedJob = Omit<Job, "payed" | "totalValue"> & {
-  payed: string;
-  totalValue: string;
-};
+export type FormattedJob = JobResponse;

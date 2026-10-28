@@ -5,8 +5,9 @@ import { type Material } from "./types.ts";
 
 export interface MaterialQueryResult extends Omit<
   Material,
-  "unitaryVal" | "jobId"
+  "unitaryVal" | "jobId" | "supplier"
 > {
+  supplier: string | null;
   unitaryval: string;
   jobid: string;
   totalval: string;
