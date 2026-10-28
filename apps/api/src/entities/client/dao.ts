@@ -9,6 +9,16 @@ interface ClientQueryResult extends Omit<Client, "userId"> {
   userid: string;
 }
 
+function mapClientQueryResult(row: ClientQueryResult): Client {
+  return {
+    id: row.id,
+    name: row.name,
+    address: row.address,
+    contact: row.contact,
+    userId: row.userid,
+  };
+}
+
 export class ClientDAO {
   async addClient(client: Omit<Client, "id">) {
     const query = daoQueries.addClient;
@@ -64,20 +74,7 @@ export class ClientDAO {
 
     try {
       const res = await pool.query<ClientQueryResult>(query, params);
-      const clientsArray: Client[] = [];
-
-      if (res.rows.length > 0) {
-        res.rows.forEach((obj) => {
-          const { userid: userId, ...rest } = obj;
-
-          const client = {
-            ...rest,
-            userId,
-          };
-          clientsArray.push(client);
-        });
-      }
-      return clientsArray;
+      return res.rows.map(mapClientQueryResult);
     } catch (error) {
       errorLog("ClientDAO", "getLatestClients");
       throw error;
@@ -94,19 +91,7 @@ export class ClientDAO {
 
     try {
       const res = await pool.query<ClientQueryResult>(query, params);
-      const clientsArray: Client[] = [];
-
-      if (res.rows.length > 0) {
-        res.rows.forEach((obj) => {
-          const { userid: userId, ...rest } = obj;
-          const client = {
-            ...rest,
-            userId,
-          };
-          clientsArray.push(client);
-        });
-      }
-      return clientsArray;
+      return res.rows.map(mapClientQueryResult);
     } catch (error) {
       errorLog("ClientDAO", "getClientListByPage");
       throw error;
