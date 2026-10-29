@@ -11,7 +11,7 @@ export type ApiRouteOptions = {
   params?: NonNullable<RouteConfig["request"]>["params"];
   query?: typeof openApiSchemas.pagination;
   body?: { schema: ZodType; example: object };
-  response?: { schema: ZodType; contentType?: string };
+  response?: { schema: ZodType; contentType?: string; example?: unknown };
   public?: boolean;
   errors: ApiErrorName[];
 };
@@ -89,6 +89,9 @@ export function registerApiRoute(
           content: {
             [options.response.contentType ?? "application/json"]: {
               schema: options.response.schema,
+              ...(options.response.example === undefined
+                ? {}
+                : { example: options.response.example }),
             },
           },
         }

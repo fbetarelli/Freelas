@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { openApiRequestExamples } from "./examples.ts";
-import { generateOpenApiDocument } from "./index.ts";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { openApiRequestExamples, openApiResponseExamples } from "../src/examples.ts";
+import { generateOpenApiDocument } from "../src/index.ts";
+import { renderApiReadme } from "../scripts/readme.ts";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -69,6 +72,34 @@ describe("OpenAPI registry", () => {
     for (const [schema, example] of openApiRequestExamples) {
       expect(() => schema.parse(example)).not.toThrow();
     }
+  });
+
+  it("uses success examples accepted by their response schemas", () => {
+    for (const [schema, example] of openApiResponseExamples) {
+      expect(() => schema.parse(example)).not.toThrow();
+    }
+  });
+
+  it("keeps the JSON artifact and README route index aligned with the registry", () => {
+    const document = generateOpenApiDocument();
+    const json = readFileSync(new URL("../openapi.json", import.meta.url), "utf8");
+    const readme = readFileSync(new URL("../../README.md", import.meta.url), "utf8");
+
+    expect(JSON.parse(json)).toEqual(document);
+    expect(readme).toBe(renderApiReadme(document));
+  });
+
+  it("keeps the offline reference self-contained", () => {
+    const html = readFileSync(new URL("../reference.html", import.meta.url), "utf8");
+    const json = readFileSync(new URL("../openapi.json", import.meta.url), "utf8");
+    const hash = createHash("sha256").update(json).digest("hex");
+
+    expect(html).toContain(`<!-- openapi-sha256:${hash} -->`);
+    expect(html).toContain("FreelanceManager API");
+    expect(html).toContain("/login");
+    expect(html).toContain("/clients");
+    expect(html).toContain("<script>");
+    expect(html).not.toMatch(/<(?:script|link|img)[^>]+(?:src|href)=["']https?:\/\//i);
   });
 
   it("references a shared response schema for every success body", () => {

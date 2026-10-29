@@ -1,7 +1,7 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 import { app } from "../../../../../app.ts";
-import { generateOpenApiDocument } from "../../../../../docs/openapi/index.ts";
+import { generateOpenApiDocument } from "../../../../../docs/openapi/src/index.ts";
 import {
   collectAppRoutes,
   routeKey,

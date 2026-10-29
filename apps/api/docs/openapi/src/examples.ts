@@ -10,6 +10,9 @@ import {
   RegisterMaterialZodSchema,
   RegisterPaymentZodSchema,
   RegisterUserZodSchema,
+  UserResponseZodSchema,
+  ClientResponseZodSchema,
+  JobResponseZodSchema,
 } from "@freelancemanager/shared";
 
 // Request examples are kept here so route declarations and example tests use the same values.
@@ -58,4 +61,33 @@ export const openApiRequestExamples = [
   [RegisterUserZodSchema, requestExamples.user],
   [LoginUserZodSchema, requestExamples.login],
   [EditUserZodSchema, requestExamples.userEdit],
+] as const;
+
+const userId = "11111111-1111-4111-8111-111111111111";
+const clientId = "22222222-2222-4222-8222-222222222222";
+
+export const responseExamples = {
+  user: { id: userId, username: "Ada Lovelace", login: "ada@example.com" },
+  client: {
+    id: clientId,
+    name: "Acme",
+    address: "123 Main Street",
+    contact: "555-0100",
+    userId,
+  },
+  job: {
+    id: "33333333-3333-4333-8333-333333333333",
+    jobDate: "15/01/2026",
+    descr: "Website design",
+    payed: "Aguardando Pagamento",
+    totalValue: "250,00",
+    clientId,
+    userId,
+  },
+} as const;
+
+export const openApiResponseExamples = [
+  [UserResponseZodSchema, responseExamples.user],
+  [ClientResponseZodSchema, responseExamples.client],
+  [JobResponseZodSchema, responseExamples.job],
 ] as const;

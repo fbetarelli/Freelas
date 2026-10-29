@@ -32,6 +32,7 @@ Shell on the dev machine is Windows PowerShell: chain commands with `;`, not `&&
 |---|---|
 | One entity (schema, DAO, service, controller) | That entity's spec. Every new behavior is reached by a test. |
 | Shared Zod schema | The specs of every entity that uses it. |
+| OpenAPI registry, examples, or documentation generator | `docs/openapi/tests/openapi.spec.ts`, then `npm run docs:build -w apps/api` and `npm run docs:check -w apps/api`. |
 | Dates | `test:dates`. |
 | SQL or migration | The entity spec, plus the checks in `.agents/docs/api/database.md`. |
 | Test helpers or setup, middleware, error handler, shared code other than entity schemas | Full suite. |
@@ -45,6 +46,7 @@ Shell on the dev machine is Windows PowerShell: chain commands with `;`, not `&&
 - Page beyond the last: 200 with an empty list and pagination metadata (`totalPages`). Invalid page values: 400.
 - Error messages are not part of the contract unless a test says so.
 - Request body schemas are strict: unknown fields are rejected with 400.
+- A route, status, or response-shape change updates the OpenAPI registry and shared schemas in the same change. Route declarations are in `apps/api/docs/openapi/src/routes/`; response examples are validated in `apps/api/docs/openapi/tests/openapi.spec.ts`.
 - PATCH bodies must contain at least one defined field. Optional fields use `undefined` to leave
   a value unchanged and `null` to clear it; empty strings are rejected after trimming.
 - Strings are trimmed at schema validation time, except passwords, which preserve whitespace.
@@ -89,6 +91,7 @@ Moved to `.agents/docs/api/database.md` (section 2), together with the migration
 - One behavior per test, Arrange/Act/Assert, named by behavior.
 - Assert the specific expected value (status 404), never only that two responses match. Use valid bodies so a 400 or 404 cannot come from validation by accident. Add a positive control where a test claims something is hidden. After a rejected write, check the owner's data is unchanged.
 - Table tests (`it.each`) use explicit rows and no branching in the test function. Route lists have a completeness guard that fails when a registered route is missing from the table.
+- The protected-route table and completeness guard live in `features/auth/tests/authentication/protected-routes.spec.ts`; the OpenAPI registry lists the documented routes and statuses. Keep both in sync with changed routes. The generated JSON and API README are checked against the registry by `docs/openapi/tests/openapi.spec.ts`.
 - Change an existing test only when its expectation belonged to behavior your change intentionally replaced, and say so in the report. Never weaken, skip or delete a test to make it pass.
 
 ## 8. Review focus (API)
@@ -97,7 +100,8 @@ In addition to the general review, check:
 
 - Every query on owned data has the `userId` predicate, and nested resources resolve ownership through the parent. A forgotten predicate is must-fix.
 - A foreign resource behaves exactly like a nonexistent one. A request cannot set `id` or `userId`.
-- A new or changed route: authentication present, a row in the route-list tests, and the completeness guard still meaningful.
+- A new or changed route: authentication present, a row in the route-list tests, a matching OpenAPI registry entry, and the completeness guard still meaningful. Check that a public route's explicit empty `security` is justified.
+- Parse each changed response against its shared response schema in its entity spec, and check that the registry advertises the same shape and actual error statuses.
 - SQL, migrations, database state, and how money and dates cross the driver boundary: apply the review focus in `.agents/docs/api/database.md`.
 - Error responses do not leak database detail.
 - Test isolation: rollback still covers new queries, no new shared state, no collisions between files running in parallel.
@@ -105,5 +109,6 @@ In addition to the general review, check:
 
 ## 9. Workflow
 
+- Build the offline API reference with `npm run docs:build -w apps/api` from the repository root. Open `apps/api/docs/openapi/reference.html` directly in a browser; it needs no API server. `apps/api/docs/README.md` is the route index and links to the HTML and JSON. Run `npm run docs:check -w apps/api` to detect stale JSON or README output.
 - Plans, backlogs and notes live in `.agents/plans/`, which is git-ignored (local only). Everything else under `.agents/` is not ignored.
 - Git actions (branch, commit, push, merge) happen only when the request asks, through the `git-workflow` skill (`.agents/skills/git-workflow/SKILL.md`).
