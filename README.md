@@ -26,10 +26,10 @@ The API follows a layered structure:
 Routes -> Middleware -> Controllers -> Services -> DAOs -> PostgreSQL
 ```
 
-- **Routes** compose validation, JWT authentication, and resource authorization.
+- **Routes** compose validation and JWT authentication.
 - **Controllers** translate HTTP requests into service calls and responses.
 - **Services** contain business rules and coordinate data access.
-- **DAOs** execute parameterized PostgreSQL queries.
+- **DAOs** execute parameterized PostgreSQL queries and enforce resource ownership.
 - **Shared schemas** provide reusable Zod validation across workspace packages.
 
 JWT authentication is implemented in [`features/auth`](./apps/api/src/features/auth). Authenticated requests expose the validated token claims through `req.user`.
@@ -89,5 +89,6 @@ npm run test:api
 
 ## Documentation
 
+- [API reference, route tables, and offline explorer](./apps/api/docs/README.md)
 - [Legacy project README](./docs/legacy/README.md)
 - [Shared package](./packages/shared/)
