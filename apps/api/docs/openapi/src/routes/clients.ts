@@ -1,4 +1,4 @@
-import { requestExamples } from "../examples.ts";
+import { requestExamples, responseExamples } from "../examples.ts";
 import { openApiSchemas } from "../schemas.ts";
 import { registerApiRoute } from "../registry.ts";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
@@ -6,7 +6,7 @@ import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 export function registerClientRoutes(registry: OpenAPIRegistry) {
   registerApiRoute(registry, "post", "/clients", "clients", "Create a client", 201, {
     body: { schema: openApiSchemas.clientCreate, example: requestExamples.client },
-    response: { schema: openApiSchemas.clientResponse },
+    response: { schema: openApiSchemas.clientResponse, example: responseExamples.client },
     errors: ["BadRequest", "Unauthorized"],
   });
   registerApiRoute(registry, "get", "/clients/{id}", "clients", "Get a client", 200, {

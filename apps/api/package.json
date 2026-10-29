@@ -8,6 +8,8 @@
     "start": "node server.ts",
     "migrate": "node-pg-migrate up",
     "typecheck": "tsc --noEmit",
+    "docs:build": "node docs/openapi/scripts/build.ts && redocly build-docs docs/openapi/openapi.json --output docs/openapi/reference.tmp.html --inlineBundle --openapi.hideDownloadButtons && node docs/openapi/scripts/finalize.ts",
+    "docs:check": "node docs/openapi/scripts/build.ts --check",
     "lint": "eslint .",
     "test": "vitest",
     "test:run": "vitest run",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@redocly/cli": "^2.72.0",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",

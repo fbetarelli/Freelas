@@ -219,7 +219,6 @@
         "properties": {
           "id": {
             "type": "string",
-            "minLength": 1,
             "format": "uuid"
           },
           "name": {
@@ -236,7 +235,6 @@
           },
           "userId": {
             "type": "string",
-            "minLength": 1,
             "format": "uuid"
           }
         },
@@ -727,6 +725,11 @@
             "description": "Successful response.",
             "content": {
               "application/json": {
+                "example": {
+                  "id": "11111111-1111-4111-8111-111111111111",
+                  "username": "Ada Lovelace",
+                  "login": "ada@example.com"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/UserResponse"
                 }
@@ -765,6 +768,11 @@
             "description": "Successful response.",
             "content": {
               "application/json": {
+                "example": {
+                  "id": "11111111-1111-4111-8111-111111111111",
+                  "username": "Ada Lovelace",
+                  "login": "ada@example.com"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/UserResponse"
                 }
@@ -812,6 +820,11 @@
             "description": "Successful response.",
             "content": {
               "application/json": {
+                "example": {
+                  "id": "11111111-1111-4111-8111-111111111111",
+                  "username": "Ada Lovelace",
+                  "login": "ada@example.com"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/UserResponse"
                 }
@@ -890,6 +903,13 @@
             "description": "Successful response.",
             "content": {
               "application/json": {
+                "example": {
+                  "id": "22222222-2222-4222-8222-222222222222",
+                  "name": "Acme",
+                  "address": "123 Main Street",
+                  "contact": "555-0100",
+                  "userId": "11111111-1111-4111-8111-111111111111"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/ClientResponse"
                 }
@@ -1149,6 +1169,15 @@
             "description": "Successful response.",
             "content": {
               "application/json": {
+                "example": {
+                  "id": "33333333-3333-4333-8333-333333333333",
+                  "jobDate": "15/01/2026",
+                  "descr": "Website design",
+                  "payed": "Aguardando Pagamento",
+                  "totalValue": "250,00",
+                  "clientId": "22222222-2222-4222-8222-222222222222",
+                  "userId": "11111111-1111-4111-8111-111111111111"
+                },
                 "schema": {
                   "$ref": "#/components/schemas/JobResponse"
                 }

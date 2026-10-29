@@ -1,4 +1,4 @@
-import { requestExamples } from "../examples.ts";
+import { requestExamples, responseExamples } from "../examples.ts";
 import { openApiSchemas } from "../schemas.ts";
 import { registerApiRoute } from "../registry.ts";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
@@ -12,7 +12,7 @@ export function registerJobRoutes(registry: OpenAPIRegistry) {
   registerApiRoute(registry, "post", "/clients/{id}/jobs", "jobs", "Create a job for a client", 201, {
     params: openApiSchemas.clientParams,
     body: { schema: openApiSchemas.jobCreate, example: requestExamples.job },
-    response: { schema: openApiSchemas.jobResponse },
+    response: { schema: openApiSchemas.jobResponse, example: responseExamples.job },
     errors: ["BadRequest", "Unauthorized", "NotFound"],
   });
   registerApiRoute(registry, "get", "/jobs", "jobs", "List jobs", 200, {
